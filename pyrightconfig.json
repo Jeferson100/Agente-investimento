@@ -1,0 +1,11 @@
+{
+    "typeCheckingMode": "strict",
+    "reportMissingImports": true,
+    "reportMissingTypeStubs": false,
+    "pythonVersion": "3.12",
+    "strictListInference": true,
+    "strictDictionaryInference": true,
+    "strictParameterNoneValue": true,
+    "reportArgumentType": "none",
+    "reportAttributeAccessIssue": "none"
+}

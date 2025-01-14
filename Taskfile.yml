@@ -1,0 +1,48 @@
+version: '3'
+
+tasks:
+  install:
+    desc: "Update pip and install dependencies"
+    cmds:
+      - pip install uv
+      - uv pip install --upgrade pip
+      - uv pip install -r requirements.txt
+
+  format:
+    desc: "Format code using Black"
+    cmds:
+      - black dados/*.py 
+
+  lint:
+    desc: "Run linting with Pylint"
+    cmds:
+      - pylint --disable=R,C dados/*.py 
+
+  typepyright:
+    desc: "Run type checking with Pyright"
+    cmds:
+      - pyright dados/*.py
+  
+  typemypy:
+    desc: "Run type checking with Mypy"
+    cmds:
+      - mypy dados/*.py 
+  test:
+    desc: "Run tests with pytest"
+    cmds:
+      - python -m pytest -vv --cov=tests/test_*.py
+
+  refactor:
+    desc: "Run formatting and linting"
+    cmds:
+      - task: format
+      - task: lint
+
+  all:
+    desc: "Install, lint, format, test and type check"
+    cmds:
+      - task: install
+      - task: lint
+      - task: format
+      - task: test
+      - task: typepyright
