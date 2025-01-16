@@ -11,22 +11,22 @@ tasks:
   format:
     desc: "Format code using Black"
     cmds:
-      - black dados/*.py 
+      - black coleta_dados/*.py chat_bots/*.py
 
   lint:
     desc: "Run linting with Pylint"
     cmds:
-      - pylint --disable=R,C dados/*.py 
+      - pylint --disable=R,C coleta_dados/*.py chat_bots/*.py
 
   typepyright:
     desc: "Run type checking with Pyright"
     cmds:
-      - pyright dados/*.py
+      - pyright coleta_dados/*.py chat_bots/*.py
   
   typemypy:
     desc: "Run type checking with Mypy"
     cmds:
-      - mypy dados/*.py 
+      - mypy coleta_dados/*.py chat_bots/*.py
   test:
     desc: "Run tests with pytest"
     cmds:

@@ -4,16 +4,16 @@ install:
 		uv pip install -r requirements.txt
 
 format:
-	black dados/*.py 
+	black coleta_dados/*.py chat_bots/*.py
 
 lint:
-	pylint --disable=R,C dados/*.py 
+	pylint --disable=R,C coleta_dados/*.py chat_bots/*.py
 
 typepyright:
-	pyright dados/*.py 
+	pyright coleta_dados/*.py chat_bots/*.py
 
 typemypy:
-	mypy dados/ 
+	mypy coleta_dados/ chat_bots/
 
 test:
 	python -m pytest -vv --cov=tests/test_*.py

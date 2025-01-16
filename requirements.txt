@@ -32,8 +32,9 @@ langchain_linkup
 pytest==7.1.3
 black
 pytest-cov==4.0.0
-pylint
+pylint==1.1.392.post0
 mypy
 pyright
 langchain_tests
 git+https://github.com/Jeferson100/fundamentalist-stock-brazil.git
+pandas-stubs 
