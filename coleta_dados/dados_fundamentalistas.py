@@ -1,6 +1,6 @@
 import pandas as pd
 from typing import Optional
-from .verificador_ticks import VerificadorTicks
+from coleta_dados.verificador_ticks import VerificadorTicks
 
 
 class DadosFundamentalistas:
@@ -13,14 +13,16 @@ class DadosFundamentalistas:
         if VerificadorTicks(tic).verificando_ticks():
             self.tic = tic
         else:
-            print(f"O ticker {tic} não existe ou não está disponível em nossa base.")
+            raise ValueError(
+                f"O ticker {tic} não existe ou não está disponível em nossa base."
+            )
+
         self.data_inicio = data_inicio
         self.data_fim = data_fim
 
     def dados_dre(
         self,
     ) -> pd.DataFrame:
-
         dados_dre: pd.DataFrame = pd.read_csv(
             "https://raw.githubusercontent.com/Jeferson100/fundamentalist-stock-brazil/main/dados/dre.csv"
         )
@@ -29,7 +31,6 @@ class DadosFundamentalistas:
         dados_tic["datas"] = pd.to_datetime(dados_tic["datas"], format="%d/%m/%Y")
 
         if "Unnamed: 0" in dados_tic.columns:
-
             dados_tic = dados_tic.drop(columns="Unnamed: 0")
 
         if self.data_inicio:
@@ -155,7 +156,7 @@ class DadosFundamentalistas:
             ]
         return dados_retornos_margens_tic
 
-    def dados_fundamentalistas_completo(self) -> pd.DataFrame | None:
+    def dados_fundamentalistas_completo(self) -> pd.DataFrame:
         dados_dre = self.dados_dre()
 
         dados_capex = self.dados_capex()

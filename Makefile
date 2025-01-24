@@ -4,13 +4,19 @@ install:
 		uv pip install -r requirements.txt
 
 format:
-	black coleta_dados/*.py chat_bots/*.py
+	black coleta_dados/*.py chat_bots/*.py tratando_dados/*.py
+
+ruff_format:
+	ruff format chat_bots/*.py  coleta_dados/*.py tratando_dados/*.py
 
 lint:
-	pylint --disable=R,C coleta_dados/*.py chat_bots/*.py
+	pylint --disable=R,C coleta_dados/*.py chat_bots/*.py tratando_dados/*.py
+
+ruff_lint:
+	ruff check chat_bots/*.py  coleta_dados/*.py tratando_dados/*.py
 
 typepyright:
-	pyright coleta_dados/*.py chat_bots/*.py
+	pyright coleta_dados/*.py chat_bots/*.py tratando_dados/*.py
 
 typemypy:
 	mypy coleta_dados/ chat_bots/
@@ -20,4 +26,4 @@ test:
 
 refactor: format lint
 
-all: install lint format test typepyright
+all: install format lint typepyright

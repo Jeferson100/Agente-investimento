@@ -11,26 +11,36 @@ tasks:
   format:
     desc: "Format code using Black"
     cmds:
-      - black coleta_dados/*.py chat_bots/*.py
+      - black coleta_dados/*.py chat_bots/*.py tratando_dados/*.py
+
+  format_ruff:
+    desc: "Format code using Ruff"
+    cmds:
+      - ruff format coleta_dados/*.py chat_bots/*.py tratando_dados/*.py
 
   lint:
     desc: "Run linting with Pylint"
     cmds:
-      - pylint --disable=R,C coleta_dados/*.py chat_bots/*.py
+      - pylint --disable=R,C coleta_dados/*.py chat_bots/*.py tratando_dados/*.py
 
+  lint_ruff:
+    desc: "Run linting with Ruff"
+    cmds:
+      - ruff check coleta_dados/*.py chat_bots/*.py tratando_dados/*.py
+  
   typepyright:
     desc: "Run type checking with Pyright"
     cmds:
-      - pyright coleta_dados/*.py chat_bots/*.py
+      - pyright coleta_dados/*.py chat_bots/*.py tratando_dados/*.py
   
   typemypy:
     desc: "Run type checking with Mypy"
     cmds:
-      - mypy coleta_dados/*.py chat_bots/*.py
+      - mypy coleta_dados/*.py chat_bots/*.py tratando_dados/*.py
   test:
     desc: "Run tests with pytest"
     cmds:
-      - python -m pytest -vv --cov=tests/test_*.py
+      - python -m pytest -vv --cov=tests/test_*.py --cov-report=xml
 
   refactor:
     desc: "Run formatting and linting"
@@ -44,5 +54,4 @@ tasks:
       - task: install
       - task: lint
       - task: format
-      - task: test
       - task: typepyright

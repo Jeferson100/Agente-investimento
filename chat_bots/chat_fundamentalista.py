@@ -1,7 +1,9 @@
-from langchain import PromptTemplate
+from langchain_core.prompts import PromptTemplate
 from langchain_groq import ChatGroq
 from langchain_core.output_parsers import StrOutputParser
 from chat_bots import get_secret_key
+from pydantic import SecretStr
+from typing import List
 
 try:
     api_secret_groq = get_secret_key("GROQ_API_KEY")
@@ -10,7 +12,10 @@ except KeyError as exc:
 
 
 def chat_bot_fundamentalistas(
-    query: str, dados: list, api_secret: str = api_secret_groq, temperature: float = 0.5
+    query: str,
+    dados: List[str],
+    api_secret: SecretStr | None = api_secret_groq,
+    temperature: float = 0.5,
 ) -> str:
     prompt = PromptTemplate(
         input_variables=["query", "dados"],
