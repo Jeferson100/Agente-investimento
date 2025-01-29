@@ -11,7 +11,7 @@ except KeyError as exc:
     raise ValueError("API key inválida ou não definida") from exc
 
 
-def chat_bot_fundamentalistas(
+def ChatFundamentalistas(
     query: str,
     dados: List[str],
     api_secret: SecretStr | None = api_secret_groq,
@@ -58,8 +58,8 @@ def chat_bot_fundamentalistas(
 
     model = ChatGroq(
         api_key=api_secret,
-        # model="llama-3.3-70b-versatile",
-        model="llama-3.2-11b-vision-preview",
+        model="llama-3.3-70b-versatile",
+        # model="llama-3.2-11b-vision-preview",
         temperature=temperature,
         stop_sequences=None,
     )

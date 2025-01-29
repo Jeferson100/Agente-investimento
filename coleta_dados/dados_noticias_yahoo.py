@@ -13,13 +13,14 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 class DadosNoticiasBuscadorYahoo:
     def __init__(self, acao: str, options: Options, tipo: str = "relevancia") -> None:
         self.acao = acao
         self.options = options
         self.tipo = tipo
 
-    def navegador_get(self)-> webdriver.Chrome:
+    def navegador_get(self) -> webdriver.Chrome:
         navegador = webdriver.Chrome(options=self.options)
         navegador.get("https://br.search.yahoo.com/?fr2=p:fprd,mkt:br")
         return navegador
@@ -38,13 +39,12 @@ class DadosNoticiasBuscadorYahoo:
         )
         time.sleep(1)
         element_news.click()
-    
+
     def beutfull_soup(self, navegador: webdriver.Chrome) -> BeautifulSoup | None:
-        
         element_text = navegador.find_element(By.XPATH, '//*[@id="main"]')
 
         html = element_text.get_attribute("outerHTML")
-        
+
         if html is not None:
             soup = BeautifulSoup(html, "html.parser")
             return soup
@@ -69,7 +69,6 @@ class DadosNoticiasBuscadorYahoo:
         return dados_titulo
 
     def pegar_fonte(self, soup: BeautifulSoup) -> List[str]:
-        
         fontes = soup.find_all(class_="s-source mr-5 cite-co")
 
         fonte_texto = [fonte.get_text() for fonte in fontes]
@@ -102,7 +101,9 @@ class DadosNoticiasBuscadorYahoo:
         except NoSuchElementException:
             print("Sem mais páginas!")
 
-    def selecionar_relevancia_tempo(self, navegador: webdriver.Chrome, tipo: str = "data") -> None:
+    def selecionar_relevancia_tempo(
+        self, navegador: webdriver.Chrome, tipo: str = "data"
+    ) -> None:
         relevancia_tempo = navegador.find_element(
             By.XPATH, '//*[@id="horizontal-bar"]/ol/li[3]/div/div[2]/a'
         )
@@ -118,20 +119,18 @@ class DadosNoticiasBuscadorYahoo:
 
         texto_sem_acentuacao = unidecode.unidecode(texto).lower()
 
-        if tipo == "data" and "relevancia" in texto_sem_acentuacao:
+        if tipo == "data" and "data" not in texto_sem_acentuacao:
             relevancia_tempo = navegador.find_element(
                 By.XPATH, '//*[@id="horizontal-bar"]/ol/li[3]/div/div[1]/ul/li[2]/a'
             )
             time.sleep(1)
             relevancia_tempo.click()
-        elif tipo == "relevancia" and "data" in texto_sem_acentuacao:
+        elif tipo == "relevancia" and "relevancia" not in texto_sem_acentuacao:
             relevancia_tempo = navegador.find_element(
                 By.XPATH, '//*[@id="horizontal-bar"]/ol/li[3]/div/div[1]/ul/li[1]/a'
             )
             time.sleep(1)
             relevancia_tempo.click()
-        else:
-            print(f"Tipo {tipo} já está selecionado!")
 
     def get_news(self, number_paginas: int) -> Dict[str, List[str]]:
         navegador = self.navegador_get()
@@ -146,6 +145,9 @@ class DadosNoticiasBuscadorYahoo:
         for i in range(1, number_paginas + 1):
             soup = self.beutfull_soup(navegador)
 
+            if not soup:
+                print(f"Erro ao obter o HTML da pagina {i}")
+                break
             links = self.pegando_links(soup)
             if links:
                 dict_dados["links"].extend(links)

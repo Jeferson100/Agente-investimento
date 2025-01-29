@@ -43,8 +43,8 @@ def tratando_dados_fundamentalistas(
     dados.drop(columns=colunas_drop, inplace=True)
 
     dados["datas"] = dados["datas"].astype(str)
-    
-    dados.dropna(axis=1, how='all', inplace=True)
+
+    dados.dropna(axis=1, how="all", inplace=True)
 
     loader = DataFrameLoader(dados, page_content_column="datas")
 
