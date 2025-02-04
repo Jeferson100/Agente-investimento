@@ -4,7 +4,6 @@ from langchain_community.document_transformers.html2text import Html2TextTransfo
 
 class LinksExtractorHtml:
     def extrair_links_html(self, links: str) -> str:
-
         loader = AsyncHtmlLoader([links])
         docs = loader.load()
         html2text = Html2TextTransformer(ignore_images=True, ignore_links=True)

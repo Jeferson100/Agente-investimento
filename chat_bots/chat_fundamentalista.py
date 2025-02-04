@@ -16,6 +16,7 @@ def ChatFundamentalistas(
     dados: List[str],
     api_secret: SecretStr | None = api_secret_groq,
     temperature: float = 0.5,
+    modelo_llm: str = "llama-3.3-70b-versatile",
 ) -> str:
     prompt = PromptTemplate(
         input_variables=["query", "dados"],
@@ -58,7 +59,7 @@ def ChatFundamentalistas(
 
     model = ChatGroq(
         api_key=api_secret,
-        model="llama-3.3-70b-versatile",
+        model=modelo_llm,
         # model="llama-3.2-11b-vision-preview",
         temperature=temperature,
         stop_sequences=None,

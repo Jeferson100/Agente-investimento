@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Any
 from langchain_community.document_loaders import DataFrameLoader
 from coleta_dados import DadosFundamentalistas
 import pandas as pd
@@ -9,7 +9,7 @@ def tratando_dados_fundamentalistas(
     data_inicio: Optional[str] = None,
     data_fim: Optional[str] = None,
     colunas_drop: Optional[List[str]] = None,
-) -> List:
+) -> List[Any]:
     if colunas_drop is None:
         colunas_drop = [
             "acoes_ordinarias",

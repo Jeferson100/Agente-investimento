@@ -19,11 +19,11 @@ typepyright:
 	pyright coleta_dados/*.py chat_bots/*.py tratando_dados/*.py
 
 typemypy:
-	mypy coleta_dados/ chat_bots/
+	mypy coleta_dados/ chat_bots/ tratando_dados/
 
 test:
 	python -m pytest -vv --cov=tests/test_*.py
 
 refactor: format lint
 
-all: install format lint typepyright
+all: install format lint typepyright typemypy ruff_format ruff_lint

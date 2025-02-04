@@ -15,6 +15,7 @@ def ChatSentimento(
     noticia: str,
     api_secret: SecretStr | None = api_secret_groq,
     temperature: float = 0.5,
+    modelo_llm: str = "llama-3.2-11b-vision-preview",
 ) -> str:
     prompt = PromptTemplate(
         input_variables=["query", "noticias"],
@@ -59,7 +60,7 @@ def ChatSentimento(
     model = ChatGroq(
         api_key=api_secret,
         # model="llama-3.3-70b-versatile",
-        model="llama-3.2-11b-vision-preview",
+        model=modelo_llm,
         temperature=temperature,
         stop_sequences=None,
     )

@@ -19,10 +19,11 @@ def ChatLimpaResposta(
     query: str,
     ticke: str,
     api_secret: SecretStr | None = api_secret_groq,
+    modelo_llm: str = "llama-3.2-11b-vision-preview",
 ) -> str:
     model = ChatGroq(
         api_key=api_secret,
-        model="llama-3.2-11b-vision-preview",
+        model=modelo_llm,
         temperature=0.5,
         stop_sequences=None,
     )

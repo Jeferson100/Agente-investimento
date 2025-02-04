@@ -13,16 +13,19 @@ class DadosNoticiasGoogle:
         self.acao = acao
 
     def get_news(self) -> Dict[str, Dict[str, List[str]]]:
+        if api_secret_serper is not None:
+            api_serper = api_secret_serper.get_secret_value()
+            url = f"https://google.serper.dev/news?q={self.acao}&hl=pt-br&apiKey={api_serper}"
+        else:
+            raise ValueError("API key serper inválida ou não definida")
 
-        url = f"https://google.serper.dev/news?q={self.acao}&hl=pt-br&apiKey={api_secret_serper.get_secret_value()}"
-
-        payload = {}
-        headers = {}
+        payload: Dict[str, str] = {}
+        headers: Dict[str, str] = {}
 
         response = requests.request(
-            "GET", url, headers=headers, data=payload, timeout=10
+            "GET", url, headers=headers, data=payload, timeout=20
         )
 
-        data_serper = response.json()
+        data_serper: Dict[str, Dict[str, List[str]]] = response.json()
 
         return data_serper
