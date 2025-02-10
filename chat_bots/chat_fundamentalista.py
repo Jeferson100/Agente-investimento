@@ -3,7 +3,7 @@ from langchain_groq import ChatGroq
 from langchain_core.output_parsers import StrOutputParser
 from chat_bots import get_secret_key
 from pydantic import SecretStr
-from typing import List
+from typing import List, Iterator
 
 try:
     api_secret_groq = get_secret_key("GROQ_API_KEY")
@@ -17,7 +17,8 @@ def ChatFundamentalistas(
     api_secret: SecretStr | None = api_secret_groq,
     temperature: float = 0.5,
     modelo_llm: str = "llama-3.3-70b-versatile",
-) -> str:
+    stream: bool = False,
+) -> str | Iterator[str]:
     prompt = PromptTemplate(
         input_variables=["query", "dados"],
         template="""
@@ -67,6 +68,10 @@ def ChatFundamentalistas(
 
     llm_chain = prompt | model | StrOutputParser()
 
-    response = llm_chain.invoke(input={"query": query, "dados": dados})
+    if stream:
+        response_stream = llm_chain.stream(input={"query": query, "dados": dados})
+        return response_stream
 
-    return response
+    else:
+        response_invoke = llm_chain.invoke(input={"query": query, "dados": dados})
+        return response_invoke

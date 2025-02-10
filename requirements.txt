@@ -48,4 +48,6 @@ yfinance
 unidecode
 finta
 matplotlib
+ipeadatapy
+sidrapy
 

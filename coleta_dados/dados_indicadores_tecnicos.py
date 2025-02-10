@@ -5,8 +5,12 @@ from typing import Dict
 
 
 class DadosIndicadoresTecnicos:
-    def __init__(self, ticker: str) -> None:
+    def __init__(
+        self, ticker: str, periodo: str = "5Y", intervalo: str = "1wk"
+    ) -> None:
         self.ticker = ticker
+        self.periodo = periodo
+        self.intervalo = intervalo
 
     def tratando_ticker(self) -> str:
         ticker_tratado = self.ticker.upper() + ".SA"
@@ -14,7 +18,7 @@ class DadosIndicadoresTecnicos:
 
     def cotacoes_ticker(self) -> pd.DataFrame:
         cotacoes: pd.DataFrame = yf.Ticker(self.tratando_ticker()).history(
-            period="5Y", interval="1d"
+            period=self.periodo, interval=self.intervalo
         )
         return cotacoes
 
