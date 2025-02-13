@@ -50,4 +50,5 @@ finta
 matplotlib
 ipeadatapy
 sidrapy
+types-requests
 

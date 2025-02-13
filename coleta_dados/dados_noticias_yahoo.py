@@ -1,14 +1,15 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
+
 from selenium.common.exceptions import (
     NoSuchElementException,
 )
 from selenium.webdriver.chrome.options import Options
 import time
 import unidecode
-from typing import List, Dict
+from typing import List, Dict, Any
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -52,12 +53,16 @@ class DadosNoticiasBuscadorYahoo:
             print("Erro: não foi possível obter o HTML do elemento")
             return None
 
-    def pegando_links(self, soup: BeautifulSoup) -> List[str]:
+    def pegando_links(self, soup: BeautifulSoup) -> List[Any]:
         # Use o método find_all para encontrar os elementos desejados
         news_articles = soup.find_all("div", class_="NewsArticle")
 
-        dados_link = [links.find("a")["href"] for links in news_articles]
-
+        dados_link = []
+        for article in news_articles:
+            if isinstance(article, BeautifulSoup):
+                link = article.find("a")
+                if link is not None and isinstance(link, Tag) and link.has_attr("href"):
+                    dados_link.append(link.get("href"))
         return dados_link
 
     def pegando_titulo(self, soup: BeautifulSoup) -> List[str]:
