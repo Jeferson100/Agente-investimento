@@ -44,11 +44,12 @@ webdriver-manager==4.0.0
 undetected-chromedriver==3.5.5
 aiohttp==3.11.11
 beautifulsoup4
-yfinance
+yfinance==0.2.54
 unidecode
 finta
 matplotlib
 ipeadatapy
 sidrapy
 types-requests
+tabulate
 
