@@ -71,12 +71,46 @@ class OutrosAtivosNaoOperacionais:
             return float(out_terrenos)
         return 0.0
 
+    def ativo_totais(self) -> float:
+        bala = self.stock.get_balancesheet(freq="yearly")
+        if isinstance(bala, pd.DataFrame):
+            if "TotalAssets" in bala.index:
+                bala = bala.loc["TotalAssets"][0]
+            else:
+                bala = 0
+            if isinstance(bala, pd.Series):
+                return float(bala.iloc[0])
+            return float(bala)
+        return 0.0
+
     def valor_outros_ativos_nao_operacionais(self) -> float:
+        ativos_totais = self.ativo_totais()
+
         inves_adiamtamento = self.investimentos_e_adiantamentos()
+
         outros_ativos_nao = self.outros_ativos_nao_circulantes()
+
         godwill = self.goodwill_outros_ativos_intangiveis()
+
         terrenos = self.terrenos_melhorias()
+
         outros_imove = self.outros_imoveis()
+
+        if outros_imove >= ativos_totais:
+            outros_imove = 0.0
+
+        if terrenos >= ativos_totais:
+            terrenos = 0.0
+
+        if godwill >= ativos_totais:
+            godwill = 0.0
+
+        if outros_ativos_nao >= ativos_totais:
+            outros_ativos_nao = 0.0
+
+        if inves_adiamtamento >= ativos_totais:
+            inves_adiamtamento = 0.0
+
         valor_tota = float(
             pd.Series(
                 [inves_adiamtamento, outros_ativos_nao, godwill, terrenos, outros_imove]

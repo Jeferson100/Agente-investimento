@@ -4,6 +4,7 @@ from .chat_limpa_resposta import ChatLimpaResposta
 from .chat_sentimentalista import ChatSentimento
 from .chat_analise_tecnica import ChatAnaliseTecnica
 from .chat_bots import ChatBot
+from .chat_valuation import ChatValuation
 
 __all__ = [
     "get_secret_key",
@@ -12,4 +13,5 @@ __all__ = [
     "ChatSentimento",
     "ChatAnaliseTecnica",
     "ChatBot",
+    "ChatValuation",
 ]

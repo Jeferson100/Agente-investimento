@@ -24,13 +24,14 @@ class TratandoDadosValuation:
     def tratando_ticker(self) -> str:
         if ".SA" in self.ticker:
             acao = self.ticker
-        acao = f"{self.ticker}.SA"
+        else:
+            acao = f"{self.ticker}.SA"
         return acao
-    
+
     def preco_atual(self) -> float:
         acao = yf.Ticker(self.tratando_ticker())
-        preco = round(acao.history(period="1Y", interval="1d")['Close'][-1],2)
-        return preco
+        preco = round(acao.history(period="1Y", interval="1d")["Close"][-1], 2)
+        return float(preco)
 
     def indicadores_financeiros(self) -> Dict[str, float]:
         ind = IndicadoresFinanceiros(ticker=self.tratando_ticker())
@@ -77,12 +78,12 @@ class TratandoDadosValuation:
     def markdow_metodo_gordon(self) -> tuple[str, str]:
         gordon_dados = self.valuation_metodo_gordon()
         markdow_gordon = pd.DataFrame(gordon_dados, index=[0]).to_markdown()
-        return markdow_gordon, gordon_dados['valuation_acao']
+        return markdow_gordon, gordon_dados["valuation_acao"]
 
     def markdow_fluxo_caixa_descontado(self) -> tuple[str, float]:
         fluxo_caixa, valuation_preco = self.valuation_fluxo_caixa_descontado()
         markdow_fluxo = fluxo_caixa.to_markdown()
-        return markdow_fluxo, valuation_preco['valor_por_acao']
+        return markdow_fluxo, valuation_preco["valor_por_acao"]
 
     def markdow_indicadores_financeiros(self) -> str:
         indicadores = self.indicadores_financeiros()
@@ -91,13 +92,17 @@ class TratandoDadosValuation:
 
     def dados_valuation(self) -> tuple[str, str, str, str]:
         markdow_gordon, preco_gordon = self.markdow_metodo_gordon()
-        markdow_fluxo, markdow_preco = self.markdow_fluxo_caixa_descontado()
+        markdow_fluxo, preco_fluxo = self.markdow_fluxo_caixa_descontado()
         markdow_indicadores = self.markdow_indicadores_financeiros()
         preco_atual = self.preco_atual()
         dict_preco = {
-            "preco_gordon": preco_gordon,
-            "preco_fluxo": markdow_preco,
-            'preco_atual':preco_atual
+            "preco_gordon": str(preco_gordon),
+            "preco_fluxo": str(preco_fluxo),
+            "preco_atual": str(preco_atual),
         }
-        markdow_preco = pd.DataFrame(dict_preco, index=[0]).to_markdown()
+
+        df_preco = pd.DataFrame(dict_preco, index=[0])
+
+        markdow_preco: str = df_preco.to_markdown()
+
         return markdow_gordon, markdow_fluxo, markdow_preco, markdow_indicadores
