@@ -11,7 +11,7 @@ class ModeloFundamentos:
         ticker: str,
         stream: bool = True,
         modelo_llm: str = "deepseek-r1-distill-llama-70b",
-        dados_inicio: str = "2020-01-01",
+        dados_inicio: str = "2021-01-01",
     ) -> None:
         self.ticker = ticker
         self.query = query
