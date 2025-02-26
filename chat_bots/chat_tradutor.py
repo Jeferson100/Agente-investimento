@@ -11,6 +11,8 @@ try:
     api_secret_groq = get_secret_key("GROQ_API_KEY")
 except KeyError as exc:
     raise ValueError("API key inválida ou não definida") from exc
+
+
 def ChatTradutor(
     query: str,
     api_secret: SecretStr | None = api_secret_groq,
@@ -27,8 +29,9 @@ def ChatTradutor(
         input_variables=["dados"],
         template="""
                 
-                Voce recebe um texto em inglês e precisa traduzir para português. Essa e a sua unica missao.
-                De somente o texto traduzido, sem comentario algum.                                    
+                Resuma o seguinte texto em inglês em até 1000 caracteres, mantendo as informações essenciais. 
+                Em seguida, traduza apenas o resumo para o português. O resultado final deve conter somente o texto 
+                resumido e traduzido, sem incluir o texto original ou qualquer outra informação adicional.                                     
                                                                                                    
         REQUESTED ANALYSIS:
         Dados: {dados}
