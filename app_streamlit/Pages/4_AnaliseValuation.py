@@ -12,7 +12,7 @@ from typing import Generator
 
 st.set_page_config(
     page_title="Analise Ações",
-    page_icon="https://s3-symbol-logo.tradingview.com/b3-on-nm--big.svg",
+    page_icon="imagem/analise_valuation.webp",
     layout="centered",
     initial_sidebar_state="expanded",
     menu_items={
@@ -45,14 +45,14 @@ ticker = st.chat_input('Digite o código de negociação da ação (ex: BBDC4):'
 
 with st.sidebar:
     if not ticker:
-        st.image("https://s3-symbol-logo.tradingview.com/b3-on-nm--big.svg", use_column_width=True)
+        st.image("imagem/analise_valuation.webp", use_column_width=True)
     else:
         pegar_logotipo = PegandoLogotipo(ticker=ticker)
         logo_url = pegar_logotipo.pegar_logotipo()
         if logo_url:
             st.image(logo_url, use_column_width=True)
         else:
-            st.image("https://s3-symbol-logo.tradingview.com/b3-on-nm--big.svg", use_column_width=True)
+            st.image("imagem/analise_valuation.webp", use_column_width=True)
         try:
             acao = yf.Ticker(f'{ticker}.SA')
             info = acao.info
@@ -60,7 +60,7 @@ with st.sidebar:
             if resposta_tradutor:
                 #st.sidebar.markdown(resposta_tradutor.split('\n\n')[-1])  # Exibe a resposta no sidebar
                 st.sidebar.markdown(
-                f"<div style='text-align: justify; color: #708090;'><strong>{resposta_tradutor.split('\n\n')[-1]}</strong></div>",
+                f"<div style='text-align: justify; color: #000000;'><strong>{resposta_tradutor.split('\n\n')[-1]}</strong></div>",
         unsafe_allow_html=True
     )
         except Exception as e:
@@ -83,6 +83,39 @@ with st.sidebar:
             + "</strong></div>",
             unsafe_allow_html=True
         )    
+    
+    st.sidebar.markdown("---")
+    
+    st.sidebar.markdown(
+        """
+        <div style="background-color:#FF6347; padding: 10px; border-radius: 5px;">
+            <p style="color: #000000;">🚨 Aviso Importante:</p>
+            <p style="color: #000000;">Os resultados fornecidos por este sistema são meramente informativos e não devem ser considerados como recomendações de investimento.</p>
+            <p style="color: #000000;">Sempre realize sua própria análise antes de tomar qualquer decisão financeira.</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )  
+    
+    st.sidebar.markdown("---")
+    
+    st.markdown("# Contatos")
+    
+    st.sidebar.markdown(
+        """
+        <div style="display: inline-block; margin-right: 10px;">
+            <a href="https://github.com/Jeferson100/Agente-investimento">
+                <img src="https://img.shields.io/badge/github-100000?style=for-the-badge&logo=github">
+            </a>
+        </div>
+        <div style="display: inline-block;">
+            <a href="https://www.linkedin.com/in/jefersonsehnem/">
+                <img src="https://img.shields.io/badge/linkedin-0077B5?style=for-the-badge&logo=linkedin&logoColor=white">
+            </a>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 if ticker:
     messages.append({"role": "user", "content": ticker})
