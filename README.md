@@ -1,27 +1,33 @@
-# Agente-investimento: Ferramenta de Análise de Investimentos Impulsionada por IA
+# 📈 Agente-investimento: Ferramenta de Análise de Investimentos Impulsionada por IA
 
+**Agente-investimento** é um projeto que utiliza **Grandes Modelos de Linguagem (LLMs)** e diversas fontes de dados para fornecer análises abrangentes de ações do mercado brasileiro.  
+A ferramenta integra **Análise Fundamentalista, Análise Técnica, Análise de Sentimento e Valuation**, gerando insights valiosos para investidores.  
 
+## 🚀 Funcionalidades
 
-**Agente-investimento** é um projeto inovador que aproveita o poder dos Grandes Modelos de Linguagem (LLMs) e diversas fontes de dados para fornecer análises abrangentes de ações para o mercado brasileiro. Esta ferramenta integra análise fundamentalista, análise técnica, análise de sentimento e valuation, oferecendo insights valiosos para investidores.
+✅ **Análise Fundamentalista:** Avaliação da saúde financeira de empresas.  
+✅ **Análise Técnica:** Indicadores gráficos e tendências de mercado.  
+✅ **Análise de Sentimento:** Coleta e interpretação de notícias do mercado.  
+✅ **Valuation:** Estimativa do valor intrínseco de uma ação.  
 
-## Funcionalidades
+## 🛠️ Tecnologias Utilizadas
 
--   **Análise Fundamentalista:** Obtenha análises aprofundadas sobre a saúde financeira de uma empresa, seu modelo de negócios e sua posição competitiva.
--   **Análise Técnica:** Analise gráficos de preços de ações e indicadores técnicos para identificar tendências e potenciais oportunidades de negociação.
--   **Análise de Sentimento:** Avalie o sentimento do mercado em relação a uma ação analisando artigos de notícias.
--   **Valuation:** Avalie o valor intrínseco de uma ação utilizando diversas técnicas de valuation.
+- **Python** 🐍 - Linguagem principal do projeto.  
+- **Streamlit** 🎨 - Framework para a interface interativa.  
+- **Groq API** 🤖 - Processamento de linguagem natural com LLMs.  
+- **yfinance** 📊 - Dados de ações do Yahoo Finance.  
+- **finta** 📈 - Cálculo de indicadores técnicos.  
+- **Serper API** 📰 - Coleta de notícias para análise de sentimento.  
+- **Pandas** 📑 - Manipulação de dados.  
+- **Pydantic** ✅ - Validação de dados.  
 
-## Tecnologias Utilizadas
+## 📥 Instalação e Configuração
 
--   **Python:** A linguagem de programação principal para todo o projeto.
--   **Streamlit:** Um framework para criar aplicações web interativas.
--   **Grandes Modelos de Linguagem (LLMs):** A API Groq é utilizada para obter as respostas.
--   **yfinance:** Uma biblioteca para recuperar dados de ações do Yahoo Finance.
--   **finta:** Uma biblioteca para calcular indicadores de análise técnica.
--   **Groq API:** Uma API de alto desempenho para inferência de modelos LLM.
--   **Serper API:** Para coletar notícias e informações para análise de sentimento.
--   **Pandas:** Para manipulação e análise de dados.
--   **Pydantic**: biblioteca para validação de dados.
+1️⃣ **Clone o repositório:**  
+```bash
+git clone https://github.com/Jeferson100/Agente-investimento.git
+cd Agente-investimento
+```	
 
 ## Instalação e Configuração
 
@@ -48,25 +54,12 @@
 
 4.  **Variáveis de Ambiente:**
 
-    *   Crie um arquivo `.env` na raiz do projeto.
-    *   Adicione as seguintes chaves de API e tokens ao arquivo `.env` (substitua pelos seus dados reais):
+    *  Serao necessarias as seguintes variaveis de ambiente:
 
     ```properties
     GROQ_API_KEY="sua_chave_de_api_groq"
     API_KEY_SERPER="sua_chave_de_api_serper"
-    LANGCHAIN_API_KEY="sua_chave_de_api_langsmith" #opcional
-    TAVILY_API_KEY="sua_chave_de_api_tavily" #opcional
-    FIRECRAWL_API_KEY="sua_chave_de_api_firecrawl" #opcional
-    SEARCHAPI_API_KEY="sua_chave_de_api_searchapi" #opcional
-    TOKIN_BRAPI="seu_token_brapi" #opcional
-    ACCESS_TOKEN_TWITTER="seu_token_de_acesso_twitter" #opcional
-    ACCESS_TOKEN_SECRET_TWITTER="seu_token_de_acesso_secreto_twitter" #opcional
-    API_KEY_TWITTER="sua_chave_de_api_twitter" #opcional
-    API_KEY_SECRET_TWITTER="sua_chave_secreta_de_api_twitter" #opcional
-    BEARER_TOKEN_TWITTER="seu_bearer_token_twitter" #opcional
-    LANGCHAIN_TRACING_V2= true #opcional
-    LANGCHAIN_ENDPOINT="https://api.smith.langchain.com" #opcional
-    LANGCHAIN_PROJECT="Bot investimentos" #opcional
+
     ```
 
     *   Certifique-se de criar o arquivo `.env` e preencher as chaves de API necessárias.
@@ -97,8 +90,25 @@
 
 ## Estrutura de Arquivos
 
+```bash
 Agente-investimento/ 
-├── app_streamlit/ # Código do aplicativo Streamlit │ ├── Home.py # Página inicial do aplicativo │ ├── Pages/ # Código para as diferentes páginas de análise │ │ ├── 1_AnaliseFundamentalista.py │ │ ├── 2_AnaliseTecnica.py │ │ ├── 3_AnaliseSentimento.py │ │ └── 4_AnaliseValuation.py │ └── init.py ├── coleta_dados/ # Módulos de coleta de dados │ ├── dados_acoes.py │ ├── dados_balanco.py │ ├── dados_dre.py │ ├── dados_fundamentalistas.py │ ├── dados_indicadores_tecnicos.py │ └── init.py ├── chat_bots/ # Lógica do chatbot │ ├── ChatBot.py │ ├── ChatTradutor.py │ └── init.py ├── juncao_modelos_dados/ # Integração de modelos e dados │ ├── ModeloAnaliseTecnica.py │ ├── ModeloFundamentos.py │ ├── ModeloSentimento.py │ ├── ModeloValuation.py │ └── init.py ├── utils/ # Funções utilitárias │ ├── init.py │ ├── pegar_logotipo.py │ ├── tratamento_dados.py │ ├── tratamento_string.py │ └── verificador_ticks.py ├── .env # Variáveis de ambiente (chaves de API) ├── .gitignore # Arquivo de ignorados do Git ├── requirements.txt # Dependências do projeto ├── README.md # Este arquivo └── imagem/ #imagens
+├── app_streamlit/               # Código do Streamlit
+│   ├── Home.py                  # Página inicial
+│   ├── Pages/                    # Páginas da aplicação
+│   │   ├── 1_AnaliseFundamentalista.py
+│   │   ├── 2_AnaliseTecnica.py
+│   │   ├── 3_AnaliseSentimento.py
+│   │   └── 4_AnaliseValuation.py
+│   └── __init__.py
+├── coleta_dados/                 # Módulos de coleta de dados
+├── chat_bots/                     # Módulos do chatbot
+├── juncao_modelos_dados/          # Modelos de IA e integração de dados
+├── utils/                         # Funções utilitárias
+├── .gitignore                     # Arquivos ignorados pelo Git
+├── requirements.txt               # Dependências do projeto
+├── README.md                      # Este arquivo
+└── imagem/                        # Imagens utilizadas no projeto
+```
 
 ## Páginas do Aplicativo
 
@@ -119,19 +129,31 @@ Agente-investimento/
     -   Considera fatores como lucros, taxas de crescimento e comparáveis de mercado.
     -   Auxilia na identificação de ações potencialmente sobrevalorizadas ou subvalorizadas.
 
-## Contribuindo
+## 🤝 Contribuindo
 
 Contribuições para este projeto são bem-vindas! Se você tem ideias de melhorias ou novos recursos, sinta-se à vontade para abrir uma issue ou enviar um pull request.
 
-## Licença
+## 📜 Licença
 
 Este projeto é licenciado sob a [Licença MIT](LICENSE).
 
-## Aviso Legal
+## ⚠️ Aviso Legal
 
-Esta ferramenta é apenas para fins informativos e não deve ser considerada como aconselhamento financeiro. Sempre realize sua própria pesquisa e consulte um consultor financeiro qualificado antes de tomar qualquer decisão de investimento.
+<div style="background-color:#FF6347; padding: 10px; border-radius: 5px;">
+<p style="color: #000000;">🚨 Aviso Importante:</p>
+<p style="color: #000000;">Os resultados fornecidos por este sistema são meramente informativos e não devem ser considerados como recomendações de investimento.</p>
+<p style="color: #000000;">Sempre realize sua própria análise antes de tomar qualquer decisão financeira.</p>
+</div>
 
-## Contato
+## 📞 Contatos
 
-- [Jeferson Sehnem](https://www.linkedin.com/in/jefersonsehnem/)
-- [Repositório GitHub](https://github.com/Jeferson100/Agente-investimento)
+<div style="display: inline-block; margin-right: 10px;">
+<a href="https://github.com/Jeferson100/Agente-investimento">
+<img src="https://img.shields.io/badge/github-100000?style=for-the-badge&logo=github">
+</a>
+</div>
+<div style="display: inline-block;">
+<a href="https://www.linkedin.com/in/jefersonsehnem/">
+<img src="https://img.shields.io/badge/linkedin-0077B5?style=for-the-badge&logo=linkedin&logoColor=white">
+</a>
+</div>
