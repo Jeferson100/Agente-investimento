@@ -1,5 +1,18 @@
-# 📈 Agente-investimento: Ferramenta de Análise de Investimentos Impulsionada por IA
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.10%2B-blue?style=flat&logo=python" />
+  <img src=https://img.shields.io/badge/LangChain-ffffff?logo=langchain&logoColor=green />
+  <img src="https://img.shields.io/badge/Groq-API-orange?style=flat" />
+  <img src="https://img.shields.io/badge/yFinance-Stock%20Data-green?style=flat" />
+  <img src="https://img.shields.io/badge/Finta-Technical%20Indicators-blueviolet" />
+  <img src="https://img.shields.io/badge/Serper%20API-News%20Sentiment-yellow" />
+  <img src="https://img.shields.io/badge/Pandas-Data%20Analysis-blue?style=flat&logo=pandas" />
+  <img src="https://img.shields.io/badge/Streamlit-Framework-red?style=flat&logo=streamlit" />
+  </p>
+
+ 
+# 📈 Agente-investimento: Ferramenta de Análise de Investimentos Impulsionada por IA
+ 
 **Agente-investimento** é um projeto que utiliza **Grandes Modelos de Linguagem (LLMs)** e diversas fontes de dados para fornecer análises abrangentes de ações do mercado brasileiro.  
 A ferramenta integra **Análise Fundamentalista, Análise Técnica, Análise de Sentimento e Valuation**, gerando insights valiosos para investidores.  
 
@@ -8,53 +21,12 @@ A ferramenta integra **Análise Fundamentalista, Análise Técnica, Análise de 
 ✅ **Análise Fundamentalista:** Avaliação da saúde financeira de empresas.  
 ✅ **Análise Técnica:** Indicadores gráficos e tendências de mercado.  
 ✅ **Análise de Sentimento:** Coleta e interpretação de notícias do mercado.  
-✅ **Valuation:** Estimativa do valor intrínseco de uma ação.  
+✅ **Valuation:** Estimar o valor intrínseco de uma ação pelos metodos de Fluxo de Caixa descontado e pelo metodo de Gordon.  
 
-## 🛠️ Tecnologias Utilizadas
-
-- **Python** 🐍 - Linguagem principal do projeto.  
-- **Streamlit** 🎨 - Framework para a interface interativa.  
-- **Groq API** 🤖 - Processamento de linguagem natural com LLMs.  
-- **yfinance** 📊 - Dados de ações do Yahoo Finance.  
-- **finta** 📈 - Cálculo de indicadores técnicos.  
-- **Serper API** 📰 - Coleta de notícias para análise de sentimento.  
-- **Pandas** 📑 - Manipulação de dados.  
-- **Pydantic** ✅ - Validação de dados.  
-
-## 📥 Instalação e Configuração
-
-1️⃣ **Clone o repositório:**  
-```bash
-git clone https://github.com/Jeferson100/Agente-investimento.git
-cd Agente-investimento
-```	
-
-## Instalação e Configuração
-
-1.  **Clone o Repositório:**
-
-    ```bash
-    git clone https://github.com/Jeferson100/Agente-investimento.git
-    cd Agente-investimento
-    ```
-
-2.  **Crie um Ambiente Virtual (Recomendado):**
-
-    ```bash
-    python3 -m venv .venv
-    source .venv/bin/activate  # Em Linux/macOS
-    .venv\Scripts\activate  # Em Windows
-    ```
-
-3.  **Instale as Dependências:**
-
-    ```bash
-    pip install -r requirements.txt
-    ```
 
 4.  **Variáveis de Ambiente:**
 
-    *  Serao necessarias as seguintes variaveis de ambiente:
+    *  Serao necessarias as seguintes chaves de APIs:
 
     ```properties
     GROQ_API_KEY="sua_chave_de_api_groq"
@@ -93,8 +65,8 @@ cd Agente-investimento
 ```bash
 Agente-investimento/ 
 ├── app_streamlit/               # Código do Streamlit
-│   ├── Home.py                  # Página inicial
-│   ├── Pages/                    # Páginas da aplicação
+│   ├── 1_AnaliseAcao.py                # Página inicial
+│   ├── pages/                    # Páginas da aplicação
 │   │   ├── 1_AnaliseFundamentalista.py
 │   │   ├── 2_AnaliseTecnica.py
 │   │   ├── 3_AnaliseSentimento.py
