@@ -1,4 +1,5 @@
-from typing import Any, LiteralString, Generator, Union
+from typing import Any, LiteralString, Generator, Union, List
+import pandas as pd
 
 
 def generator_to_string(
@@ -42,3 +43,11 @@ def configurar_mensagem(response: str) -> str:
             return parts[1]  # Retorna o que vem depois de "</think>"
 
     return text
+
+
+def retransfromando_pandas(trat: List[Any]) -> pd.DataFrame:
+    df = pd.DataFrame([doc.metadata for doc in trat])
+
+    df["data"] = [doc.page_content for doc in trat]
+
+    return df

@@ -6,6 +6,7 @@ from coleta_dados import (
 from selenium import webdriver
 from typing import List, Dict, Optional
 from chat_bots import ChatLimpaResposta
+from pydantic import SecretStr
 
 
 class TratarDadosNoticias:
@@ -16,20 +17,26 @@ class TratarDadosNoticias:
         self,
         acao: str,
         options: webdriver.ChromeOptions,
+        api_secret_groq: SecretStr | None,
+        api_secret_serper: SecretStr | None,
         number_paginas: int = 1,
         numero_noticias: int = 10,
-    ) -> None:
+    ):
         self.acao = acao
         self.options = options
         self.number_paginas = number_paginas
         self.numero_noticias = numero_noticias
+        self.api_secret_groq = api_secret_groq
+        self.api_secret_serper = api_secret_serper
 
     def get_news_yahoo(self) -> Dict[str, List[str]]:
         dados_noticias = DadosNoticiasBuscadorYahoo(self.acao, self.options)
         return dados_noticias.get_news(self.number_paginas)
 
     def get_news_google(self) -> List[Optional[str]]:
-        clas_noticias_google = DadosNoticiasGoogle(self.acao)
+        clas_noticias_google = DadosNoticiasGoogle(
+            acao=self.acao, api_serper=self.api_secret_serper
+        )
         dados_noticias_google = clas_noticias_google.get_news()
         data_links_google: List[Optional[str]] = []
         for links in dados_noticias_google.get("news", []):
@@ -53,7 +60,7 @@ class TratarDadosNoticias:
         if len(dados_mark) >= self.MAX_HTML_LENGTH:
             dados_mark = dados_mark[: self.TRUNCATE_LENGTH]
 
-        return ChatLimpaResposta(dados_mark, self.acao)
+        return ChatLimpaResposta(dados_mark, self.acao, self.api_secret_groq)
 
     def clean_chat_html(self) -> str:
         try:

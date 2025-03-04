@@ -2,6 +2,13 @@ from tratando_dados import TratarDadosNoticias
 from selenium import webdriver
 from chat_bots import ChatSentimento
 from typing import Iterator
+from chat_bots import get_secret_key
+from pydantic import SecretStr
+
+try:
+    api_groq = get_secret_key("GROQ_API_KEY")
+except KeyError as exc:
+    raise ValueError("API key inválida ou não definida") from exc
 
 
 class ModeloSentimento:
@@ -11,11 +18,15 @@ class ModeloSentimento:
         acao: str,
         modelo_llm: str = "deepseek-r1-distill-llama-70b",
         stream: bool = True,
+        api_secret_groq: SecretStr | None = api_groq,
+        api_secret_serper: SecretStr | None = None,
     ) -> None:
         self.acao = acao
         self.modelo_llm = modelo_llm
         self.query = query
         self.stream = stream
+        self.api_secret_groq = api_secret_groq
+        self.api_secret_serper = api_secret_serper
 
     def option(self) -> webdriver.ChromeOptions:
         chrome_options = webdriver.ChromeOptions()
@@ -29,15 +40,22 @@ class ModeloSentimento:
         return chrome_options
 
     def dados_sentimento(self) -> str:
-        dados_noticias = TratarDadosNoticias(self.acao, self.option())
+        dados_noticias = TratarDadosNoticias(
+            acao=self.acao,
+            options=self.option(),
+            api_secret_groq=self.api_secret_groq,
+            api_secret_serper=self.api_secret_serper,
+        )
         dados_new = dados_noticias.clean_chat_html()
         return dados_new
 
-    def chat_sentimento(self) -> str | Iterator[str]:
+    def chat_sentimento(self) -> tuple[str | Iterator[str], str]:
+        dados_new = self.dados_sentimento()
         response = ChatSentimento(
             query=self.query,
-            noticia=self.dados_sentimento(),
+            noticia=dados_new,
+            api_secret=self.api_secret_groq,
             modelo_llm=self.modelo_llm,
             stream=self.stream,
         )
-        return response
+        return response, dados_new

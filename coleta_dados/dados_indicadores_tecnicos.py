@@ -39,6 +39,13 @@ class DadosIndicadoresTecnicos:
     def pegando_indicadores_tecnicos(self) -> pd.DataFrame:
         cotacoes = self.cotacoes_ticker()
         indicadores = self.indicadores_tecnicos(cotacoes)
-        return pd.concat(
+        pd_indicadores = pd.concat(
             [indicadores[key] for key in indicadores.keys()], axis=1
-        ).dropna()
+        )
+        list_colunas_total_nan = pd_indicadores.columns[
+            pd_indicadores.isnull().all()
+        ].tolist()
+        returno = pd_indicadores.drop(columns=list_colunas_total_nan).dropna()
+        if returno.shape[0] >= 30:
+            returno = returno[-30:]
+        return returno

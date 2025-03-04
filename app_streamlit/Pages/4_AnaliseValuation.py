@@ -1,7 +1,7 @@
 import streamlit as st
 import sys
 import os
-import requests
+import pandas as pd
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(parent_dir)
 from juncao_modelos_dados import ModeloValuation
@@ -20,17 +20,30 @@ st.set_page_config(
     },
 )
 
+if 'groq_api' in st.session_state and st.session_state.groq_api or os.getenv("GROQ_API_KEY"):
+    pass
+else:
+    st.warning("Por favor, retorne à página principal para inserir sua chave de API GROQ.")
+
 if "chat_history_valuation" not in st.session_state:
     st.session_state.chat_history_valuation = []
     
 if "codigos" not in st.session_state:
-    url = "https://raw.githubusercontent.com/Jeferson100/fundamentalist-stock-brazil/main/codigos_rodando/codigos_ibovespa.txt"
-    codigos = requests.get(url)
-    st.session_state.codigos =  sorted(set(filter(None, codigos.text.split('\r\n'))))
+    codigos = pd.read_csv(
+            "https://raw.githubusercontent.com/Jeferson100/fundamentalist-stock-brazil/main/dados/setor.csv",
+            
+        )['tic'].to_list()
+
+    st.session_state.codigos =  sorted(set(filter(None, codigos)))
 
 
 codigos = st.session_state.codigos
 messages = st.session_state.chat_history_valuation
+
+def clear_messages():
+    if "chat_history_valuation" in st.session_state:
+        del st.session_state["chat_history_valuation"]
+    st.rerun()
 
 
 st.title("Modelo de LLM para Análise de Valuation de Ações")
@@ -41,7 +54,6 @@ for message in messages:
 
 
 ticker = st.chat_input('Digite o código de negociação da ação (ex: BBDC4):')
-
 
 with st.sidebar:
     if not ticker:
@@ -56,7 +68,7 @@ with st.sidebar:
         try:
             acao = yf.Ticker(f'{ticker}.SA')
             info = acao.info
-            resposta_tradutor = ChatTradutor(info['longBusinessSummary'])
+            resposta_tradutor = ChatTradutor(info['longBusinessSummary'],api_secret=st.session_state.groq_api)
             if resposta_tradutor:
                 #st.sidebar.markdown(resposta_tradutor.split('\n\n')[-1])  # Exibe a resposta no sidebar
                 st.sidebar.markdown(
@@ -67,22 +79,41 @@ with st.sidebar:
             pass
  
     st.sidebar.markdown("---")
-
-    # Controle da visibilidade dos códigos
-    if 'show_codes' not in st.session_state:
-        st.session_state.show_codes = False
     
-    # Botão para alternar a visibilidade dos códigos
-    if st.sidebar.button("Códigos de Negociação"):
-        st.session_state.show_codes = not st.session_state.show_codes
+    col1, col2,  col3 = st.sidebar.columns(3)
+    
+    with col1:
+        # Controle da visibilidade dos códigos
+        if 'show_codes' not in st.session_state:
+            st.session_state.show_codes = False
+        
+        # Botão para alternar a visibilidade dos códigos
+        if st.button("Códigos de Negociação", help="Mostra os códigos de negociação"):
+            st.session_state.show_codes = not st.session_state.show_codes
+        
+       
+    with col2:
+        if st.button("Limpar Mémoria", help="Limpa o histórico de mensagens", key="limpar_memoria_tecnica"):
+            clear_messages()
+    
+            
+    with col3:
+        data_string = "\n".join(codigos)
+        st.download_button(
+            label="Download dados",  
+            data=data_string, 
+            file_name="dados_llm.md", 
+            mime="text/markdown", 
+            help="Esses dados são os que foram processados pela LLM",
+            )
     
     if st.session_state.show_codes:
-        st.sidebar.markdown(
-            "<div style='max-height: 300px; overflow-y: auto;color: #8B4513;'><strong>"
-            + "\n".join(f"- {codigo}" for codigo in codigos)
-            + "</strong></div>",
-            unsafe_allow_html=True
-        )    
+            st.sidebar.markdown(
+                "<div style='max-height: 300px; overflow-y: auto;color: #8B4513;'><strong>"
+                + "\n".join(f"- {codigo}" for codigo in codigos)
+                + "</strong></div>",
+                unsafe_allow_html=True
+            )    
     
     st.sidebar.markdown("---")
     
@@ -121,7 +152,7 @@ if ticker:
     messages.append({"role": "user", "content": ticker})
     with st.chat_message("user"):
         st.markdown(ticker)
-    fundamentos = ModeloValuation(query=f'O que voce pode me dizer sobre os fundamentos da acao {ticker}', ticker=ticker)
+    fundamentos = ModeloValuation(query=f'O que voce pode me dizer sobre os fundamentos da acao {ticker}', ticker=ticker,api_secret=st.session_state.groq_api)
     response = fundamentos.chat_valuation()
     if response and isinstance(response, Generator):
         response_text, chunks = generator_to_string(response)

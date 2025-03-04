@@ -4,6 +4,7 @@ import os
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(parent_dir)
 from juncao_modelos_dados import ModeloFundamentos
+from pydantic import SecretStr
 
 # CSS para customização
 
@@ -29,27 +30,30 @@ Juntos, esses agentes formam um **ecossistema para análise de investimentos**.
 with st.sidebar:
     st.markdown("# Login APIS:")
     st.write(
-        """Para utilizar o Bot, primeiro faça um cadastro gratuito nos sites abaixo e depois gere as chaves APIs necessárias:"""
+        """Para utilizar o Bot, primeiro faça o cadastro gratuito nos site abaixo e depois gere as chaves API necessária:"""
     )
 
     st.markdown(
         """
     [![Groq API](https://img.shields.io/badge/Create%20Groq%20API%20Key-black?style=flat&logo=groq)](https://console.groq.com/keys)
-    [![Create SEARCHAPI API Key](https://img.shields.io/badge/Create%20SEARCHAPI%20API%20Key-green?style=flat&logo=key)](https://www.searchapi.io/)
     """,
         unsafe_allow_html=True,
     )
     
     if 'groq_api' not in st.session_state:
-        st.session_state['groq_api'] = ''
+        st.session_state['groq_api'] = None
     try:
         if os.getenv("GROQ_API_KEY") is not None:
             groq_api = os.getenv("GROQ_API_KEY")
             st.success("API key GROQ ja existe!", icon="✅")
         else:
-            groq_api = st.text_input("Enter GROQ API token:", type="password")
-            st.session_state['groq_api'] = groq_api
+            # Pede a chave apenas se ainda não estiver salva
+            api_key = st.text_input("Enter GROQ API token:", value=st.session_state.groq_api, type="password")
             
+            if api_key:
+                st.session_state.groq_api = api_key
+                st.success("API key GROQ configurada com sucesso!", icon="✅")
+                    
     except ValueError as e:
         st.error(f"Erro ao utilizar a API: {e}")
         st.stop()

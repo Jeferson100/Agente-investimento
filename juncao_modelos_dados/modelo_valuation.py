@@ -1,6 +1,13 @@
 from tratando_dados import TratandoDadosValuation
 from chat_bots import ChatValuation
 from typing import Iterator
+from chat_bots import get_secret_key
+from pydantic import SecretStr
+
+try:
+    api_secret_groq = get_secret_key("GROQ_API_KEY")
+except KeyError as exc:
+    raise ValueError("API key inválida ou não definida") from exc
 
 
 class ModeloValuation:
@@ -13,6 +20,7 @@ class ModeloValuation:
         calculo_necessidade_capital_de_giro: bool = False,
         stream: bool = True,
         modelo_llm: str = "deepseek-r1-distill-llama-70b",
+        api_secret: SecretStr | None = api_secret_groq,
     ) -> None:
         self.ticker = ticker
         self.anos_projecao = anos_projecao
@@ -21,6 +29,7 @@ class ModeloValuation:
         self.query = query
         self.stream = stream
         self.modelo_llm = modelo_llm
+        self.api_secret = api_secret
 
     def tratando_ticker(self) -> str:
         if ".SA" in self.ticker:
@@ -52,6 +61,7 @@ class ModeloValuation:
             indicadores_valuation_fluxo=markdow_indicadores,
             valuation_metodo_gordon=markdow_gordon,
             valuation_fluxo_caixa=markdow_fluxo,
+            api_secret=self.api_secret,
             modelo_llm=self.modelo_llm,
             stream=self.stream,
         )

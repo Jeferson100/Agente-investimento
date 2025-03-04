@@ -5,10 +5,14 @@ import requests
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(parent_dir)
 from juncao_modelos_dados import ModeloFundamentos
-from utils import PegandoLogotipo, generator_to_string, string_to_generator, configurar_mensagem
+from utils import PegandoLogotipo, generator_to_string, string_to_generator, configurar_mensagem, retransfromando_pandas
 from chat_bots import ChatTradutor
 import yfinance as yf
 from typing import Generator
+import pandas as pd
+from typing import List, Any
+import io
+
 
 
 st.set_page_config(
@@ -20,6 +24,11 @@ st.set_page_config(
         "About": "Analise Ações",
     },
 )
+
+if 'groq_api' in st.session_state and st.session_state.groq_api or os.getenv("GROQ_API_KEY"):
+    pass
+else:
+    st.warning("Por favor, retorne à página principal para inserir sua chave de API GROQ.")
 
 st.markdown(
     """
@@ -39,13 +48,23 @@ if "chat_history_fundamentalista" not in st.session_state:
     st.session_state.chat_history_fundamentalista = []
     
 if "codigos" not in st.session_state:
-    url = "https://raw.githubusercontent.com/Jeferson100/fundamentalist-stock-brazil/main/codigos_rodando/codigos_ibovespa.txt"
-    codigos = requests.get(url)
-    st.session_state.codigos =  sorted(set(filter(None, codigos.text.split('\r\n'))))
+    codigos = pd.read_csv(
+            "https://raw.githubusercontent.com/Jeferson100/fundamentalist-stock-brazil/main/dados/setor.csv",
+            
+        )['tic'].to_list()
 
+    st.session_state.codigos =  sorted(set(filter(None, codigos)))
+
+if "dados_fundamentalistas" not in st.session_state:
+    st.session_state.dados_fundamentalistas = None
 
 codigos = st.session_state.codigos
 messages = st.session_state.chat_history_fundamentalista
+
+def clear_messages():
+    if "chat_history_fundamentalista" in st.session_state:
+        del st.session_state["chat_history_fundamentalista"]
+    st.rerun()
 
 
 st.title("Modelo de LLM para Análise Fundamentalista")
@@ -57,7 +76,6 @@ for message in messages:
 
 
 ticker = st.chat_input('Digite o código de negociação da ação (ex: BBDC4):')
-
 
 with st.sidebar:
     if not ticker:
@@ -72,7 +90,7 @@ with st.sidebar:
         try:
             acao = yf.Ticker(f'{ticker}.SA')
             info = acao.info
-            resposta_tradutor = ChatTradutor(info['longBusinessSummary'])
+            resposta_tradutor = ChatTradutor(info['longBusinessSummary'],api_secret=st.session_state.groq_api)
             if resposta_tradutor:
                 #st.sidebar.markdown(resposta_tradutor.split('\n\n')[-1])  # Exibe a resposta no sidebar
                 st.sidebar.markdown(
@@ -82,23 +100,78 @@ with st.sidebar:
         except Exception as e:
             pass
  
-    st.sidebar.markdown("---")
 
-    # Controle da visibilidade dos códigos
-    if 'show_codes' not in st.session_state:
-        st.session_state.show_codes = False
+if ticker:
+    messages.append({"role": "user", "content": ticker})
+    with st.chat_message("user"):
+        st.markdown(ticker)
+    fundamentos = ModeloFundamentos(query=f'O que voce pode me dizer sobre os fundamentos da acao {ticker}', ticker=ticker,api_secret=st.session_state.groq_api)
+    response, dados_fundamentalistas = fundamentos.chat_fundamentalistas()
+    st.session_state.dados_fundamentalistas = dados_fundamentalistas
+    if response and isinstance(response, Generator):
+        response_text, chunks = generator_to_string(response)
+        response_generator = string_to_generator(chunks)
+        with st.chat_message("assistant"):
+            st.write_stream(response_generator)
+        messages.append({"role": "assistant", "content": configurar_mensagem(response_text)})
+    else:
+        with st.chat_message("assistant"):
+            st.write(response)
+        messages.append({"role": "assistant", "content": response}) 
     
-    # Botão para alternar a visibilidade dos códigos
-    if st.sidebar.button("Códigos de Negociação"):
-        st.session_state.show_codes = not st.session_state.show_codes
     
+with st.sidebar:
+    
+    st.sidebar.markdown("---")
+        
+    col1, col2,  col3 = st.sidebar.columns(3)
+    
+    with col1:
+        # Controle da visibilidade dos códigos
+        if 'show_codes' not in st.session_state:
+            st.session_state.show_codes = False
+        
+        # Botão para alternar a visibilidade dos códigos
+        if st.button("Códigos de Negociação", help="Mostra os códigos de negociação"):
+            st.session_state.show_codes = not st.session_state.show_codes
+        
+    with col2:
+        if st.button("Limpar Mémoria", help="Limpa o histórico de mensagens", key="limpar_memoria_tecnica"):
+            clear_messages()
+    
+            
+    with col3:
+        if 'download_dados_fundamentalista' not in st.session_state:
+            st.session_state.download_dados_fundamentalista = False
+
+        # Botão para alternar a exibição dos dados
+        if st.button("Visualizar dados", help="Visualizar os dados processados pela LLM"):
+            st.session_state.download_dados_fundamentalista = not st.session_state.download_dados_fundamentalista
+
     if st.session_state.show_codes:
+        st.sidebar.markdown("---")
         st.sidebar.markdown(
-            "<div style='max-height: 300px; overflow-y: auto;color: #8B4513;'><strong>"
-            + "\n".join(f"- {codigo}" for codigo in codigos)
-            + "</strong></div>",
-            unsafe_allow_html=True
-        )  
+                "<div style='max-height: 300px; overflow-y: auto;color: #8B4513;'><strong>"
+                + "\n".join(f"- {codigo}" for codigo in codigos)
+                + "</strong></div>",
+                unsafe_allow_html=True
+            )  
+             
+    if st.session_state.download_dados_fundamentalista and st.session_state.dados_fundamentalistas:
+        st.sidebar.markdown("---")
+        dados_fundamentalistas_df = retransfromando_pandas(st.session_state.dados_fundamentalistas)
+        
+        st.dataframe(dados_fundamentalistas_df)
+        
+        st.download_button(
+                label="Download dados",
+                data=dados_fundamentalistas_df.to_csv(index=False),
+                file_name=f"dados_fundamentalistas.csv",
+                mime="text/csv",
+                help="Esses dados são os que foram processados pela LLM",
+            )
+    else:
+        pass
     
     st.sidebar.markdown("---")
     
@@ -132,24 +205,4 @@ with st.sidebar:
         """,
         unsafe_allow_html=True,
     )
-
-if ticker:
-    messages.append({"role": "user", "content": ticker})
-    with st.chat_message("user"):
-        st.markdown(ticker)
-    fundamentos = ModeloFundamentos(query=f'O que voce pode me dizer sobre os fundamentos da acao {ticker}', ticker=ticker)
-    response = fundamentos.chat_fundamentalistas()
-    if response and isinstance(response, Generator):
-        response_text, chunks = generator_to_string(response)
-        response_generator = string_to_generator(chunks)
-        with st.chat_message("assistant"):
-            st.write_stream(response_generator)
-        messages.append({"role": "assistant", "content": configurar_mensagem(response_text)})
-    else:
-        with st.chat_message("assistant"):
-            st.write(response)
-        messages.append({"role": "assistant", "content": response}) 
-    
-    
-
 
