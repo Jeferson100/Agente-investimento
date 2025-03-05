@@ -60,6 +60,9 @@ for message in messages:
 
 ticker = st.chat_input('Digite o código de negociação da ação (ex: BBDC4):')
 
+if isinstance(ticker, str):
+    ticker = ticker = ticker.strip().upper()
+
 with st.sidebar:
     if not ticker:
         st.image("imagem/analise_tecnica.webp", use_column_width=True)

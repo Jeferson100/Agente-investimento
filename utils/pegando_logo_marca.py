@@ -4,8 +4,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
-from chromedriver_py import binary_path
-import os
+from webdriver_manager.core.os_manager import ChromeType
 
 class PegandoLogotipo:
     def __init__(self, ticker: str, driver_firefox: webdriver.Firefox | None = None) -> None:
@@ -25,12 +24,13 @@ class PegandoLogotipo:
         return chrome_options
     
     
-    def sevice(self) -> Service:
-        svc = webdriver.ChromeService(executable_path=binary_path)
+    def service(self) -> Service:
+        svc = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
         return svc
 
     def driver(self) -> webdriver.Chrome:
-        driver = webdriver.Chrome(service=self.sevice(), options=self.options())
+        svc = self.service()
+        driver = webdriver.Chrome(service=svc, options=self.options())
         return driver
 
     def pegar_logotipo(self) -> str | None:
