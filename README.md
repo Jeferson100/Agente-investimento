@@ -6,11 +6,10 @@
   <img src="https://img.shields.io/badge/yFinance-Stock%20Data-green?style=flat" />
   <img src="https://img.shields.io/badge/Finta-Technical%20Indicators-blueviolet" />
   <img src="https://img.shields.io/badge/Serper%20API-News%20Sentiment-yellow" />
-  <img src="https://img.shields.io/badge/Pandas-Data%20Analysis-blue?style=flat&logo=pandas" />
+  <img src="https://img.shields.io/badge/Pandas%20-Dataframe-blue?style=flat&logo=pandas" />
   <img src="https://img.shields.io/badge/Streamlit-Framework-red?style=flat&logo=streamlit" />
   </p>
 
- 
 # 📈 Agente-investimento: Ferramenta de Análise de Investimentos Impulsionada por IA
  
 **Agente-investimento** é um projeto que utiliza **Grandes Modelos de Linguagem (LLMs)** e diversas fontes de dados para fornecer análises abrangentes de ações do mercado brasileiro.  
