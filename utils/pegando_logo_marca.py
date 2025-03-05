@@ -4,13 +4,13 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
-from webdriver_manager.core.os_manager import ChromeType
-
+from chromedriver_py import binary_path
+import os
 
 class PegandoLogotipo:
     def __init__(self, ticker: str) -> None:
         self.ticker = ticker
-
+        
     def options(self) -> webdriver.ChromeOptions:
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument("--headless")
@@ -22,11 +22,13 @@ class PegandoLogotipo:
         chrome_options.add_argument("--disable-features=VizDisplayCompositor")
         
         return chrome_options
+    
+    def sevice(self) -> Service:
+        svc = webdriver.ChromeService(executable_path=binary_path)
+        return svc
 
     def driver(self) -> webdriver.Chrome:
-        driver = webdriver.Chrome(service=Service(
-            ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
-        ), options=self.options())
+        driver = webdriver.Chrome(service=self.sevice(), options=self.options())
         return driver
 
     def pegar_logotipo(self) -> str | None:
