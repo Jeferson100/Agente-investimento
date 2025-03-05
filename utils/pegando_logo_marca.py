@@ -8,8 +8,9 @@ from chromedriver_py import binary_path
 import os
 
 class PegandoLogotipo:
-    def __init__(self, ticker: str) -> None:
+    def __init__(self, ticker: str, driver_firefox: webdriver.Firefox | None = None) -> None:
         self.ticker = ticker
+        self.driver_firefox = driver_firefox
         
     def options(self) -> webdriver.ChromeOptions:
         chrome_options = webdriver.ChromeOptions()
@@ -23,6 +24,7 @@ class PegandoLogotipo:
         
         return chrome_options
     
+    
     def sevice(self) -> Service:
         svc = webdriver.ChromeService(executable_path=binary_path)
         return svc
@@ -32,7 +34,10 @@ class PegandoLogotipo:
         return driver
 
     def pegar_logotipo(self) -> str | None:
-        driver = self.driver()
+        if self.driver_firefox:
+            driver = self.driver_firefox
+        else:
+            driver = self.driver()
         driver.get(f"https://br.tradingview.com/symbols/BMFBOVESPA-{self.ticker}/")
         image_element = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located(

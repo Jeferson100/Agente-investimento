@@ -10,10 +10,9 @@ from chat_bots import ChatTradutor
 import yfinance as yf
 from typing import Generator
 import pandas as pd
-from typing import List, Any
-import io
-
-
+from selenium.common.exceptions import WebDriverException
+from selenium import webdriver
+from selenium.webdriver import FirefoxOptions
 
 st.set_page_config(
     page_title="Analise Ações",
@@ -81,8 +80,22 @@ with st.sidebar:
     if not ticker:
         st.image("imagem/analise_fundamentalista.webp", use_column_width=True)
     else:
-        pegar_logotipo = PegandoLogotipo(ticker=ticker)
-        logo_url = pegar_logotipo.pegar_logotipo()
+        try:
+            pegar_logotipo = PegandoLogotipo(ticker=ticker)
+            logo_url = pegar_logotipo.pegar_logotipo()
+        except WebDriverException as e:
+            @st.cache_resource
+            def installff():
+                os.system('sbase install geckodriver')
+                os.system('ln -s /home/appuser/venv/lib/python3.7/site-packages/seleniumbase/drivers/geckodriver /home/appuser/venv/bin/geckodriver')
+            _ = installff()
+            opts = FirefoxOptions()
+            opts.add_argument("--headless")
+            driver_firefox = webdriver.Firefox(options=opts)
+            pegar_logotipo = PegandoLogotipo(ticker=ticker, driver_firefox=driver_firefox)
+            logo_url = pegar_logotipo.pegar_logotipo()
+        except Exception as e:
+            logo_url = None
         if logo_url:
             st.image(logo_url, use_column_width=True)
         else:
