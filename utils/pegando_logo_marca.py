@@ -3,7 +3,8 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.core.os_manager import ChromeType
 
 
 class PegandoLogotipo:
@@ -19,10 +20,13 @@ class PegandoLogotipo:
         chrome_options.add_argument("--disable-features=NetworkService")
         chrome_options.add_argument("--window-size=1920x1080")
         chrome_options.add_argument("--disable-features=VizDisplayCompositor")
+        
         return chrome_options
 
     def driver(self) -> webdriver.Chrome:
-        driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=self.options())
+        driver = webdriver.Chrome(service=Service(
+            ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
+        ), options=self.options())
         return driver
 
     def pegar_logotipo(self) -> str | None:
