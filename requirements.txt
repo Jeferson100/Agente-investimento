@@ -1,4 +1,4 @@
-crawl4ai==0.3.745
+#crawl4ai==0.3.745
 groq==0.11.0
 ipykernel==6.29.5
 ipython==8.29.0
@@ -22,11 +22,11 @@ Pygments==2.18.0
 python-dotenv==1.0.1
 requests==2.32.3
 streamlit==1.39.0
-tavily-python==0.5.0
-tiktoken==0.8.0
+#tavily-python==0.5.0
+#tiktoken==0.8.0
 tzdata==2024.2
 urllib3==2.2.3
-firecrawl-py==1.6.8
+#firecrawl-py==1.6.8
 linkup-sdk==0.2.3
 langchain_linkup==0.1.5
 pytest==7.1.3

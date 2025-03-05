@@ -2,6 +2,8 @@ from selenium.webdriver.common.by import By
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service as ChromeService
 
 
 class PegandoLogotipo:
@@ -20,7 +22,7 @@ class PegandoLogotipo:
         return chrome_options
 
     def driver(self) -> webdriver.Chrome:
-        driver = webdriver.Chrome(options=self.options())
+        driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=self.options())
         return driver
 
     def pegar_logotipo(self) -> str | None:
