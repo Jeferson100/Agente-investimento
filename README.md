@@ -88,7 +88,8 @@ Antes de começar a utilizar o Agente-Investimento, você precisará obter as se
     *   **Análise Técnica:** Visualize os gráficos e os indicadores técnicos.
     *   **Análise de Sentimento:** Entenda a percepção do mercado sobre a ação.
     *   **Valuation:** Descubra as métricas de valuation e o potencial valor da ação.
-4.  **Download de Dados:** Em cada página, baixe os dados que foram utilizados  pelos modelos de IA em formato `.csv` ou `.md` para análise posterior.
+4.  **Download de Dados:** Em cada página, baixe os dados que foram utilizados pelos modelos de IA para análise posterior.
+
 
 ## Estrutura de Arquivos
 
@@ -176,7 +177,7 @@ Este projeto é licenciado sob a [Licença MIT](LICENSE).
 ## ⚠️ Aviso Legal
 
 <div style="background-color:#FF6347; padding: 10px; border-radius: 5px;">
-<p style="color: #000000;">🚨 Aviso Importante:</p>
+<p style="color:rgb(5, 5, 5);">🚨 Aviso Importante:</p>
 <p style="color: #000000;">Os resultados fornecidos por este sistema são meramente informativos e não devem ser considerados como recomendações de investimento.</p>
 <p style="color: #000000;">Sempre realize sua própria análise antes de tomar qualquer decisão financeira.</p>
 </div>
