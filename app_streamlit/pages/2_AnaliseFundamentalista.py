@@ -94,7 +94,7 @@ with st.sidebar:
             opts = FirefoxOptions()
             opts.add_argument("--headless")
             driver_firefox = webdriver.Firefox(options=opts)
-            pegar_logotipo = PegandoLogotipo(ticker=ticker, driver_firefox=driver_firefox)
+            pegar_logotipo = PegandoLogotipo(ticker=ticker)
             logo_url = pegar_logotipo.pegar_logotipo()
         except Exception as e:
             logo_url = None

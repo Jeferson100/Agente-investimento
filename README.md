@@ -57,14 +57,14 @@
 
 ## ⚙️ Configurações e Uso
 
-### Pré-requisitos
+### 📜✔ Pré-requisitos
 
 Antes de começar a utilizar o Agente-Investimento, você precisará obter as seguintes chaves de API:
 
 *   **Chave de API Groq:**
     *   **Finalidade:** Essencial para interagir com o Grande Modelo de Linguagem (LLM) e obter respostas detalhadas e contextualizadas nas análises e no chatbot.
     *   **Obtenção:**
-        1.  Acesse o site da [Groq](https://groq.com/) e crie uma conta.
+        1.  Acesse o site da [![Groq API](https://img.shields.io/badge/Create%20Groq%20API%20Key-black?style=flat&logo=groq)](https://console.groq.com/keys) e crie uma conta.
         2.  Após o cadastro, vá para a seção de API Keys e gere uma nova chave.
         3.  Copie e guarde a chave gerada, pois ela será necessária para configurar o aplicativo.
     *   **Utilização**: A chave deve ser inserida na primeira execução do aplicativo, no local indicado.
@@ -72,12 +72,12 @@ Antes de começar a utilizar o Agente-Investimento, você precisará obter as se
 *   **Chave de API Serper:**
     *   **Finalidade:** Necessária para realizar a Análise de Sentimento, permitindo a busca e análise de notícias relevantes sobre as ações.
     *   **Obtenção:**
-        1.  Acesse o site da [Serper](https://serper.dev/) e crie uma conta.
+        1.  Acesse o site da [![Groq API](https://img.shields.io/badge/Create%20Serper%20API%20Key-blue?style=flat&logo=groq)](https://serper.dev/api-key) e crie uma conta.
         2.  Após o cadastro, vá para a seção de API Keys (ou similar) e gere uma nova chave.
         3.  Copie e guarde a chave gerada para configurar o aplicativo.
     * **Importante:** Esse modelo utiliza a API Gratuita da Serper, então tem um limite de Requisições mensais.
 
-### Passo a Passo
+### 👣 Passo a Passo
 
 1.  **Chave de API Groq:**
     *   Na primeira execução, insira a sua chave de API Groq.
@@ -91,7 +91,7 @@ Antes de começar a utilizar o Agente-Investimento, você precisará obter as se
 4.  **Download de Dados:** Em cada página, baixe os dados que foram utilizados pelos modelos de IA para análise posterior.
 
 
-## Estrutura de Arquivos
+## 📂 Estrutura de Arquivos
 
 ```bash
 Agente-investimento/ 
