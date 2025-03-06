@@ -10,7 +10,13 @@
   <img src="https://img.shields.io/badge/Streamlit-Framework-red?style=flat&logo=streamlit" alt="Streamlit"/>
 </p>
 
+
+
 <h1 align="center">📈 Agente-Investimento: Seu Analista de Ações com Inteligência Artificial</h1>
+
+<p align="center">
+<img src="imagem/logo_robo.png" alt="Logo Agente-Investimento" width="200"/>
+</p>
 
 <p align="center">
   O <b>Agente-Investimento</b> é uma ferramenta que integra o poder dos <b>Grandes Modelos de Linguagem (LLMs)</b> com dados do mercado financeiro brasileiro para fornecer análises de ações. Ele consolida <b>Análise Fundamentalista</b>, <b>Análise Técnica</b>, <b>Análise de Sentimento</b> e <b>Valuation</b>, tentando capacitar investidores com insights para a tomada de decisão.
