@@ -1,63 +1,81 @@
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Python-3.10%2B-blue?style=flat&logo=python" />
-  <img src=https://img.shields.io/badge/LangChain-ffffff?logo=langchain&logoColor=green />
-  <img src="https://img.shields.io/badge/Groq-API-orange?style=flat" />
-  <img src="https://img.shields.io/badge/yFinance-Stock%20Data-green?style=flat" />
-  <img src="https://img.shields.io/badge/Finta-Technical%20Indicators-blueviolet" />
-  <img src="https://img.shields.io/badge/Serper%20API-News%20Sentiment-yellow" />
-  <img src="https://img.shields.io/badge/Pandas%20-Dataframe-blue?style=flat&logo=pandas" />
-  <img src="https://img.shields.io/badge/Streamlit-Framework-red?style=flat&logo=streamlit" />
-  </p>
+  <img src="https://img.shields.io/badge/Python-3.10%2B-blue?style=flat&logo=python" alt="Python 3.10+"/>
+  <img src=https://img.shields.io/badge/LangChain-ffffff?logo=langchain&logoColor=green alt="LangChain"/>
+  <img src="https://img.shields.io/badge/Groq-API-orange?style=flat" alt="Groq API"/>
+  <img src="https://img.shields.io/badge/yFinance-Stock%20Data-green?style=flat" alt="yFinance"/>
+  <img src="https://img.shields.io/badge/Finta-Technical%20Indicators-blueviolet" alt="Finta"/>
+  <img src="https://img.shields.io/badge/Serper%20API-News%20Sentiment-yellow" alt="Serper API"/>
+  <img src="https://img.shields.io/badge/Pandas%20-Dataframe-blue?style=flat&logo=pandas" alt="Pandas"/>
+  <img src="https://img.shields.io/badge/Streamlit-Framework-red?style=flat&logo=streamlit" alt="Streamlit"/>
+</p>
 
-# 📈 Agente-investimento: Ferramenta de Análise de Investimentos Impulsionada por IA
- 
-**Agente-investimento** é um projeto que utiliza **Grandes Modelos de Linguagem (LLMs)** e diversas fontes de dados para fornecer análises abrangentes de ações do mercado brasileiro.  
-A ferramenta integra **Análise Fundamentalista, Análise Técnica, Análise de Sentimento e Valuation**, gerando insights valiosos para investidores.  
+<h1 align="center">📈 Agente-Investimento: Seu Analista de Ações com Inteligência Artificial</h1>
+
+<p align="center">
+  O <b>Agente-Investimento</b> é uma ferramenta que integra o poder dos <b>Grandes Modelos de Linguagem (LLMs)</b> com dados do mercado financeiro brasileiro para fornecer análises de ações. Ele consolida <b>Análise Fundamentalista</b>, <b>Análise Técnica</b>, <b>Análise de Sentimento</b> e <b>Valuation</b>, tentando capacitar investidores com insights para a tomada de decisão.
+</p>
+
+<p align="center">
+<a href="https://jeferson100-agente-investimen-app-streamlit1-analiseacao-lmfxza.streamlit.app/" target="_blank">
+    <img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg" alt="Streamlit App"/>
+  </a>
+</p>
+
+## ✨ Destaques do Agente-Investimento
+
+*   **Análises Completas:** Obtenha uma visão holística do desempenho de uma ação, combinando diferentes abordagens de análise.
+*   **Inteligência Artificial Avançada:** Utilize o poder dos LLMs para insights mais profundos e contextualizados.
+*   **Dados Precisos:** A ferramenta integra diversas fontes de dados financeiros para garantir informações atualizadas.
+*   **Interface Intuitiva:** Navegue facilmente pelas análises e interaja com a IA através de uma interfacedesenvolvida com Streamlit.
+*   **Mercado Brasileiro:** Focado em ações negociadas na B3 (Bolsa de Valores Brasileira).
 
 ## 🚀 Funcionalidades
 
-✅ **Análise Fundamentalista:** Avaliação da saúde financeira de empresas.  
-✅ **Análise Técnica:** Indicadores gráficos e tendências de mercado.  
-✅ **Análise de Sentimento:** Coleta e interpretação de notícias do mercado.  
-✅ **Valuation:** Estimar o valor intrínseco de uma ação pelos metodos de Fluxo de Caixa descontado e pelo metodo de Gordon.  
+### 📊 Análise Fundamentalista
+
+*   **Saúde Financeira:** Avaliação do desempenho financeiro da empresa, incluindo demonstrações contábeis e balanços patrimoniais.
+*   **Indicadores-Chave:** Análise de indicadores essenciais como P/L (Preço/Lucro), ROE (Retorno sobre o Patrimônio Líquido), EBITDA (Lucros antes de Juros, Impostos, Depreciação e Amortização) e outros.
+*   **Potencial de Crescimento:** Insights sobre a capacidade da empresa de expandir seus negócios e gerar lucros.
+
+### 📉 Análise Técnica
+
+*  **Analise indicadores técnicos:**Analisa indicadores técnicos como médias móveis, RSI, MACD e Bandas de Bollinger.
+*   **Oportunidades de Negociação:** Identifica potenciais oportunidades de negociação com base em padrões gráficos e sinais de indicadores.
+* **Tendências de Mercado:** Compreenda melhor as tendências e movimentos de preço do mercado.
+
+### 📰 Análise de Sentimento
+
+*   **Opinião do Mercado:** Avaliação do sentimento geral do mercado em relação à ação, baseada em notícias e artigos.
+*   **Integração com Serper API:** Utilização da API Serper para agregar notícias relevantes e atuais.
+*   **Pontuação de Sentimento:** Classificação do sentimento como positivo, negativo ou neutro, facilitando a compreensão do cenário.
+
+### 💰 Valuation (Avaliação)
+*   **Valor Intrínseco:** Estimativa do valor intrínseco da ação utilizando técnicas como Fluxo de Caixa Descontado (DCF) e o Modelo de Gordon.
+*   **Fatores Considerados:** Análise de lucros, taxas de crescimento, comparáveis de mercado e outros fatores relevantes.
+*   **Sobre/Subvalorização:** Identificação de ações que podem estar sobrevalorizadas ou subvalorizadas pelo mercado.
+
+## ⚙️ Configurações e Uso
+
+### Pré-requisitos
+
+*   **Chave de API Groq**: Para interação com o LLM.
+*   **Chave de API Serper:** Para a Análise de Sentimento.
 
 
-4.  **Variáveis de Ambiente:**
-
-    *  Serao necessarias as seguintes chaves de APIs:
-
-    ```properties
-    GROQ_API_KEY="sua_chave_de_api_groq"
-    API_KEY_SERPER="sua_chave_de_api_serper"
-
-    ```
-
-    *   Certifique-se de criar o arquivo `.env` e preencher as chaves de API necessárias.
-    * Você deve criar uma conta Groq, uma conta Serper e outras se quiser usar.
-    * Você pode criar uma conta no Langsmith se quiser rastrear os aplicativos.
-
-5.  **Execute o Aplicativo Streamlit:**
-
-    ```bash
-    streamlit run app_streamlit/Home.py
-    ```
-
-    *   Isso iniciará o aplicativo no seu navegador web padrão.
-
-## Uso
+### Passo a Passo
 
 1.  **Chave de API Groq:**
-    -   Na primeira vez que você executar o aplicativo, deverá inserir a API Groq.
-    -   Você não precisará inserir novamente, pois o aplicativo a salvará em sua sessão.
-2.  **Selecione um Ticker:** Digite um código de negociação de ação brasileira (por exemplo, `BBDC4`, `PETR4`) na entrada de chat.
-3.  **Explore as Análises:** Navegue pelas diferentes páginas de análise na barra lateral:
-    -   **Análise Fundamentalista:** Obtenha uma análise abrangente da saúde financeira da empresa.
-    -   **Análise Técnica:** Visualize gráficos e indicadores técnicos.
-    -   **Análise de Sentimento:** Entenda o sentimento do mercado em relação à ação.
-    -   **Valuation:** Explore métricas e avaliações de valuation.
-4. **Interação com o Chat**: Você pode ter uma conversa com a IA, fazendo perguntas sobre o ticker.
-5. **Download dos dados**: Em cada página, você pode baixar os dados em formato `.csv` ou `.md`.
+    *   Na primeira execução, insira a sua chave de API Groq.
+    *   Ela será salva na sessão para evitar que você precise inseri-la novamente.
+2.  **Selecionar Ticker:** Digite o código da ação brasileira (ex: `BBDC4`, `PETR4`, `VALE3`) no campo de busca.
+3.  **Explorar as Análises:** Navegue pelas abas na barra lateral para acessar:
+    *   **Análise Fundamentalista:** Mergulhe nos dados financeiros da empresa.
+    *   **Análise Técnica:** Visualize os gráficos e os indicadores técnicos.
+    *   **Análise de Sentimento:** Entenda a percepção do mercado sobre a ação.
+    *   **Valuation:** Descubra as métricas de valuation e o potencial valor da ação.
+4.  **Interagir com a IA:** Faça perguntas sobre o ticker no chat e obtenha respostas detalhadas.
+5.  **Download de Dados:** Em cada página, baixe os dados em formato `.csv` ou `.md` para análise posterior.
 
 ## Estrutura de Arquivos
 

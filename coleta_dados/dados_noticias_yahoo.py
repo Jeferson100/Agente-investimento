@@ -11,6 +11,10 @@ import time
 import unidecode
 from typing import List, Dict, Any
 from dotenv import load_dotenv
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.core.os_manager import ChromeType
+
 
 load_dotenv()
 
@@ -21,8 +25,12 @@ class DadosNoticiasBuscadorYahoo:
         self.options = options
         self.tipo = tipo
 
+    def service(self) -> Service:
+        svc = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
+        return svc
+
     def navegador_get(self) -> webdriver.Chrome:
-        navegador = webdriver.Chrome(options=self.options)
+        navegador = webdriver.Chrome(service=self.service(), options=self.options)
         navegador.get("https://br.search.yahoo.com/?fr2=p:fprd,mkt:br")
         return navegador
 

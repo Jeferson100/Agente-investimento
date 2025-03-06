@@ -6,11 +6,11 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.core.os_manager import ChromeType
 
+
 class PegandoLogotipo:
-    def __init__(self, ticker: str, driver_firefox: webdriver.Firefox | None = None) -> None:
+    def __init__(self, ticker: str) -> None:
         self.ticker = ticker
-        self.driver_firefox = driver_firefox
-        
+
     def options(self) -> webdriver.ChromeOptions:
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument("--headless")
@@ -20,10 +20,9 @@ class PegandoLogotipo:
         chrome_options.add_argument("--disable-features=NetworkService")
         chrome_options.add_argument("--window-size=1920x1080")
         chrome_options.add_argument("--disable-features=VizDisplayCompositor")
-        
+
         return chrome_options
-    
-    
+
     def service(self) -> Service:
         svc = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
         return svc
@@ -34,10 +33,7 @@ class PegandoLogotipo:
         return driver
 
     def pegar_logotipo(self) -> str | None:
-        if self.driver_firefox:
-            driver = self.driver_firefox
-        else:
-            driver = self.driver()
+        driver = self.driver()
         driver.get(f"https://br.tradingview.com/symbols/BMFBOVESPA-{self.ticker}/")
         image_element = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located(
