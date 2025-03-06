@@ -9,6 +9,12 @@ from pydantic import SecretStr
 # CSS para customização
 
 st.title("Agentes de Inteligência Artificial para Análise de Investimentos")
+
+# Centralizar usando st.image com legenda
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    st.image("imagem/logo_robo.png", width=400)
+
 st.markdown("""
 No mundo dos investimentos, a tomada de decisões embasadas é fundamental para minimizar riscos e maximizar retornos. Para isso, quatro agentes de inteligência artificial foram desenvolvidos, cada um focado em uma abordagem específica de análise:
 
@@ -39,7 +45,7 @@ with st.sidebar:
     """,
         unsafe_allow_html=True,
     )
-    
+
     if 'groq_api' not in st.session_state:
         st.session_state['groq_api'] = None
     try:
