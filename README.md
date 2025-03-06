@@ -40,7 +40,7 @@
 
 ### 📉 Análise Técnica
 
-*  **Analise indicadores técnicos:**Analisa indicadores técnicos como médias móveis, RSI, MACD e Bandas de Bollinger.
+*  **Analise indicadores técnicos:** Analisa indicadores técnicos como médias móveis, RSI, MACD e Bandas de Bollinger.
 *   **Oportunidades de Negociação:** Identifica potenciais oportunidades de negociação com base em padrões gráficos e sinais de indicadores.
 * **Tendências de Mercado:** Compreenda melhor as tendências e movimentos de preço do mercado.
 
@@ -174,23 +174,13 @@ Contribuições para este projeto são bem-vindas! Se você tem ideias de melhor
 
 Este projeto é licenciado sob a [Licença MIT](LICENSE).
 
-## ⚠️ Aviso Legal
+## ⚠️ **AVISO LEGAL** ⚠️
 
-<div style="background-color:#FF6347; padding: 10px; border-radius: 5px;">
-<p style="color:rgb(5, 5, 5);">🚨 Aviso Importante:</p>
-<p style="color: #000000;">Os resultados fornecidos por este sistema são meramente informativos e não devem ser considerados como recomendações de investimento.</p>
-<p style="color: #000000;">Sempre realize sua própria análise antes de tomar qualquer decisão financeira.</p>
-</div>
+🚨 **ATENÇÃO:** Os resultados fornecidos por este sistema são **meramente informativos** e **não** devem ser considerados como recomendações de investimento.  
+📌 Sempre realize sua **própria análise** antes de tomar qualquer decisão financeira.
 
 ## 📞 Contatos
 
-<div style="display: inline-block; margin-right: 10px;">
-<a href="https://github.com/Jeferson100/Agente-investimento">
-<img src="https://img.shields.io/badge/github-100000?style=for-the-badge&logo=github">
-</a>
-</div>
-<div style="display: inline-block;">
-<a href="https://www.linkedin.com/in/jefersonsehnem/">
-<img src="https://img.shields.io/badge/linkedin-0077B5?style=for-the-badge&logo=linkedin&logoColor=white">
-</a>
-</div>
+| GitHub | LinkedIn |
+|--------|---------|
+| [![GitHub](https://img.shields.io/badge/github-100000?style=for-the-badge&logo=github)](https://github.com/Jeferson100/Agente-investimento) | [![LinkedIn](https://img.shields.io/badge/linkedin-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/jefersonsehnem/) |
