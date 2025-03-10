@@ -2,11 +2,14 @@ from coleta_dados import (
     DadosNoticiasBuscadorYahoo,
     LinksExtractorHtml,
     DadosNoticiasGoogle,
+    LinksExtractorBS4,
 )
 from selenium import webdriver
 from typing import List, Dict, Optional
 from chat_bots import ChatLimpaResposta
 from pydantic import SecretStr
+from selenium.common.exceptions import SessionNotCreatedException
+import httpx
 
 
 class TratarDadosNoticias:
@@ -66,13 +69,18 @@ class TratarDadosNoticias:
         try:
             links = self.get_news_yahoo()["links"]
         except KeyError:
-            links = self.get_news_google()  # type: ignore
+            links_optional = self.get_news_google()
+            links = [link for link in links_optional if link is not None]
+        except SessionNotCreatedException:
+            links_optional = self.get_news_google()
+            links = [link for link in links_optional if link is not None]
 
         if len(links) <= 5:
             print(
                 f"Poucas noticias encontrada para o ticker {self.acao} no Yahoo Finance. Buscando noticias no Google"
             )
-            links = self.get_news_google()  # type: ignore
+            links_optional = self.get_news_google()
+            links = [link for link in links_optional if link is not None]
 
         links = [link for link in links if link is not None][: self.numero_noticias]
 
@@ -83,5 +91,39 @@ class TratarDadosNoticias:
                 dados_limpo = self._process_news_content(link)
 
                 dados_news = dados_news + "\n New notice\n" + dados_limpo
+
+        return dados_news
+
+    def clean_chat_html_bs4(self) -> str:
+        try:
+            links = self.get_news_yahoo()["links"]
+        except KeyError:
+            links_optional = self.get_news_google()
+            links = [link for link in links_optional if link is not None]
+        except SessionNotCreatedException:
+            links_optional = self.get_news_google()
+            links = [link for link in links_optional if link is not None]
+
+        if len(links) <= 5:
+            print(
+                f"Poucas noticias encontrada para o ticker {self.acao} no Yahoo Finance. Buscando noticias no Google"
+            )
+            links_optional = self.get_news_google()
+            links = [link for link in links_optional if link is not None]
+
+        links = [link for link in links if link is not None][:10]
+        dados_news = ""
+        text_bs4 = LinksExtractorBS4()
+        for link in links:
+            try:
+                text = text_bs4.clean_text_bs4(url=link)
+                if isinstance(text, str):
+                    if len(text) >= 900:
+                        text = text[150:900]
+                    dados_news = (
+                        dados_news + "\nNew notice\n" + "\n".join(text.split("\n"))
+                    )
+            except httpx.HTTPError:
+                pass
 
         return dados_news

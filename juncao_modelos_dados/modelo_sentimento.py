@@ -46,7 +46,7 @@ class ModeloSentimento:
             api_secret_groq=self.api_secret_groq,
             api_secret_serper=self.api_secret_serper,
         )
-        dados_new = dados_noticias.clean_chat_html()
+        dados_new = dados_noticias.clean_chat_html_bs4()
         return dados_new
 
     def chat_sentimento(self) -> tuple[str | Iterator[str], str]:

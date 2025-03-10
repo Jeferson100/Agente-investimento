@@ -10,8 +10,6 @@
   <img src="https://img.shields.io/badge/Streamlit-Framework-red?style=flat&logo=streamlit" alt="Streamlit"/>
 </p>
 
-
-
 <h1 align="center">📈 Agente-Investimento: Seu Analista de Ações com Inteligência Artificial</h1>
 
 <p align="center">

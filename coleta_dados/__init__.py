@@ -2,6 +2,7 @@ from .dados_fundamentalistas import DadosFundamentalistas
 from .verificador_ticks import VerificadorTicks
 from .dados_noticias_yahoo import DadosNoticiasBuscadorYahoo
 from .dados_text_html import LinksExtractorHtml
+from .dados_text_bs4 import LinksExtractorBS4
 from .dados_noticias_google import DadosNoticiasGoogle
 from .dados_indicadores_tecnicos import DadosIndicadoresTecnicos
 from .fundamentos.indicadores_financeiros import IndicadoresFinanceiros
@@ -19,6 +20,7 @@ __all__ = [
     "VerificadorTicks",
     "DadosNoticiasBuscadorYahoo",
     "LinksExtractorHtml",
+    "LinksExtractorBS4",
     "DadosNoticiasGoogle",
     "DadosIndicadoresTecnicos",
     "IndicadoresFinanceiros",
