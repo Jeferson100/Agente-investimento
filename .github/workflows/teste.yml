@@ -36,5 +36,5 @@ jobs:
         run: |
           make test
         env:
-            API_KEY_SERPE : ${{ secrets.API_KEY_SERPE }}
+            API_KEY_SERPE : ${{ secrets.API_KEY_SERPER }}
             GROQ_API_KEY : ${{ secrets.GROQ_API_KEY }}
