@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup, Tag
 
 from selenium.common.exceptions import (
     NoSuchElementException,
+    SessionNotCreatedException,
 )
 from selenium.webdriver.chrome.options import Options
 import time
@@ -25,12 +26,23 @@ class DadosNoticiasBuscadorYahoo:
         self.options = options
         self.tipo = tipo
 
-    def service(self) -> Service:
+    def service_chromium(self) -> Service:
         svc = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
         return svc
 
+    def service_chrome(self) -> Service:
+        svc = Service(ChromeDriverManager().install())
+        return svc
+
     def navegador_get(self) -> webdriver.Chrome:
-        navegador = webdriver.Chrome(service=self.service(), options=self.options)
+        try:
+            navegador = webdriver.Chrome(
+                service=self.service_chromium(), options=self.options
+            )
+        except SessionNotCreatedException:
+            navegador = webdriver.Chrome(
+                service=self.service_chrome(), options=self.options
+            )
         navegador.get("https://br.search.yahoo.com/?fr2=p:fprd,mkt:br")
         return navegador
 
@@ -67,7 +79,7 @@ class DadosNoticiasBuscadorYahoo:
 
         dados_link = []
         for article in news_articles:
-            if isinstance(article, BeautifulSoup):
+            if isinstance(article, Tag):
                 link = article.find("a")
                 if link is not None and isinstance(link, Tag) and link.has_attr("href"):
                     dados_link.append(link.get("href"))
