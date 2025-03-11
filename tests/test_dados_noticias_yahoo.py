@@ -10,7 +10,7 @@ def options_headless() -> webdriver.ChromeOptions:
 
 def test_get_news() -> None:
     result = DadosNoticiasBuscadorYahoo("PETR4", options_headless()).get_news(
-        number_paginas=1
+        number_paginas=2
     )
     assert isinstance(result, dict)
     assert "links" in result
