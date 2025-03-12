@@ -90,7 +90,7 @@ class TratarDadosNoticias:
             if link:
                 dados_limpo = self._process_news_content(link)
 
-                dados_news = dados_news + "\n New notice\n" + dados_limpo
+                dados_news = dados_news + "\nNew notice\n" + dados_limpo
 
         return dados_news
 
