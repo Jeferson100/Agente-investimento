@@ -1,29 +1,20 @@
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3.10%2B-blue?style=flat&logo=python" alt="Python 3.10+"/>
-  <img src=https://img.shields.io/badge/LangChain-ffffff?logo=langchain&logoColor=green alt="LangChain"/>
-  <img src="https://img.shields.io/badge/Groq-API-orange?style=flat" alt="Groq API"/>
-  <img src="https://img.shields.io/badge/yFinance-Stock%20Data-green?style=flat" alt="yFinance"/>
-  <img src="https://img.shields.io/badge/Finta-Technical%20Indicators-blueviolet" alt="Finta"/>
-  <img src="https://img.shields.io/badge/Serper%20API-News%20Sentiment-yellow" alt="Serper API"/>
-  <img src="https://img.shields.io/badge/Pandas%20-Dataframe-blue?style=flat&logo=pandas" alt="Pandas"/>
-  <img src="https://img.shields.io/badge/Streamlit-Framework-red?style=flat&logo=streamlit" alt="Streamlit"/>
-</p>
-
-<h1 align="center">📈 Agente-Investimento: Seu Analista de Ações com Inteligência Artificial</h1>
-
 <p align="center">
 <img src="imagem/logo_robo.png" alt="Logo Agente-Investimento" width="200"/>
 </p>
 
-<p align="center">
-  O <b>Agente-Investimento</b> é uma ferramenta que integra o poder dos <b>Grandes Modelos de Linguagem (LLMs)</b> com dados do mercado financeiro brasileiro para fornecer análises de ações. Ele consolida <b>Análise Fundamentalista</b>, <b>Análise Técnica</b>, <b>Análise de Sentimento</b> e <b>Valuation</b>, tentando capacitar investidores com insights para a tomada de decisão.
-</p>
+
+<h1 align="center">📈 Agente-Investimento: Seu Analista de Ações com Inteligência Artificial</h1>
+
+| | |
+|-----------|-----------|
+| **Testing**  | [![Unit Test](https://github.com/Jeferson100/Agente-investimento/actions/workflows/teste.yml/badge.svg)](https://github.com/Jeferson100/Agente-investimento/actions/workflows/teste.yml) |
+| **Package**  | ![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=flat&logo=python) ![LangChain](https://img.shields.io/badge/LangChain-ffffff?logo=langchain&logoColor=green) ![Groq](https://img.shields.io/badge/Groq-API-green?style=flat) ![yFinance](https://img.shields.io/badge/yFinance-Stock%20-green) ![Finta](https://img.shields.io/badge/Finta-blueviolet) ![Serper API](https://img.shields.io/badge/Serper%20API-yellow) ![Pandas](https://img.shields.io/badge/Pandas%20-blue?style=flat&logo=pandas) ![Streamlit](https://img.shields.io/badge/Streamlit-green?style=flat&logo=streamlit) |
+| **App Streamlit** | <p align=""><a href="https://jeferson100-agente-investimen-app-streamlit1-analiseacao-lmfxza.streamlit.app/" target="_blank"><img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg" alt="Streamlit App"/></a></p> ||
+| | |
+
 
 <p align="center">
-<a href="https://jeferson100-agente-investimen-app-streamlit1-analiseacao-lmfxza.streamlit.app/" target="_blank">
-    <img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg" alt="Streamlit App"/>
-  </a>
+  O <b>Agente-Investimento</b> é uma ferramenta que integra o poder dos <b>Grandes Modelos de Linguagem (LLMs)</b> com dados do mercado financeiro brasileiro para fornecer análises de ações. Ele consolida <b>Análise Fundamentalista</b>, <b>Análise Técnica</b>, <b>Análise de Sentimento</b> e <b>Valuation</b>, tentando capacitar investidores com insights para a tomada de decisão.
 </p>
 
 ## ✨ Destaques do Agente-Investimento

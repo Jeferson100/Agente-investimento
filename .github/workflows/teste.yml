@@ -1,4 +1,4 @@
-name: Teste Actions
+name: Unit Test
 on:
   push:
   workflow_dispatch:
