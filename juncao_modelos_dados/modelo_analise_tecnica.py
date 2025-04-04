@@ -10,7 +10,7 @@ except KeyError as exc:
     raise ValueError("API key inválida ou não definida") from exc
 
 
-class ModeloAnaliseTecnica:
+class ModeloAnaliseTecnica():
     def __init__(
         self,
         query: str,
