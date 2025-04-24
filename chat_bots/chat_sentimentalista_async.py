@@ -11,7 +11,7 @@ except KeyError as exc:
     raise ValueError("API key inválida ou não definida") from exc
 
 
-def ChatSentimento(
+async def ChatSentimentoAsync(
     query: str,
     noticia: str,
     api_secret: SecretStr | None = api_secret_groq,
@@ -26,7 +26,7 @@ def ChatSentimento(
 
     Available Input:
     - A set of recent news articles (headlines, summaries, or full articles) about the company [COMPANY_NAME].
-    - Put 'Sentiment Analysis' at the beginning of the answer
+    - Put '########Sentiment Analysis#####' at the beginning of the answer
 
     Expected Output:
     1. For each article, determine the predominant sentiment:
@@ -44,7 +44,7 @@ def ChatSentimento(
     Question: {query}
     Financial News Data: {noticia}
 
-    Always respond in Portuguese. Keep your answer concise and include your confidence level.
+    The response should be with the length of 1000 characters.
 
       """,
     )
@@ -63,5 +63,5 @@ def ChatSentimento(
         return response_stream
 
     else:
-        response_invoke = llm_chain.invoke(input={"query": query, "noticia": noticia})
+        response_invoke = await llm_chain.ainvoke(input={"query": query, "noticia": noticia})
         return response_invoke

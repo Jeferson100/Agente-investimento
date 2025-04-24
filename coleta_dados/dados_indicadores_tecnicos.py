@@ -2,6 +2,13 @@ import yfinance as yf
 from finta import TA
 import pandas as pd
 from typing import Dict
+import asyncio
+
+
+import yfinance as yf
+from finta import TA
+import pandas as pd
+from typing import Dict
 
 
 class DadosIndicadoresTecnicos:

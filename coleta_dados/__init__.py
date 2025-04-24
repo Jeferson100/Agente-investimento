@@ -13,6 +13,7 @@ from .fundamentos.outros_ativos_nao_operecionais import OutrosAtivosNaoOperacion
 from .fundamentos.passivos_menos_divida import PassivoTotalMenosDivida
 from .fundamentos.necessidade_capital_giro import NecessidadeCapitalGiro
 from .fundamentos.valuation_fluxo_caixa_descontado import ValuationFluxoCaixaDescontado
+from .dados_noticias_yahoo_async import DadosNoticiasBuscadorYahooAsync
 
 
 __all__ = [
@@ -31,4 +32,5 @@ __all__ = [
     "PassivoTotalMenosDivida",
     "NecessidadeCapitalGiro",
     "ValuationFluxoCaixaDescontado",
+    "DadosNoticiasBuscadorYahooAsync",
 ]

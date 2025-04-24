@@ -1,0 +1,36 @@
+---
+config:
+  flowchart:
+    curve: linear
+---
+graph TD;
+	__start__(<p>__start__</p>)
+	chat_input(chat_input)
+	verificacao_tickets(verificacao_tickets)
+	chatbot(chatbot)
+	analise_investimento(analise_investimento)
+	fundamentals(fundamentals)
+	sentimental(sentimental)
+	valuation(valuation)
+	technical(technical)
+	supervisor(supervisor)
+	__end__([<p>__end__</p>]):::last
+	__start__ --> chat_input;
+	chat_input --> supervisor;
+	chatbot --> __end__;
+	verificacao_tickets -.-> chat_input;
+	verificacao_tickets -.-> supervisor;
+	analise_investimento -.-> supervisor;
+	fundamentals -.-> supervisor;
+	sentimental -.-> supervisor;
+	valuation -.-> supervisor;
+	technical -.-> supervisor;
+	supervisor -.-> fundamentals;
+	supervisor -.-> technical;
+	supervisor -.-> sentimental;
+	supervisor -.-> valuation;
+	supervisor -.-> analise_investimento;
+	supervisor -.-> chatbot;
+	classDef default #fad7de
+	classDef first #ffdfba
+	classDef last #baffc9

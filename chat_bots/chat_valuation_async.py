@@ -12,7 +12,7 @@ except KeyError as exc:
     raise ValueError("API key inválida ou não definida") from exc
 
 
-def ChatValuation(
+async def ChatValuationAsync(
     query: str,
     precos_atual_valuations: str,
     indicadores_valuation_fluxo: str,
@@ -58,7 +58,8 @@ def ChatValuation(
         DCF Valuation: {valuation_fluxo_caixa}
         Gordon Growth Valuation: {valuation_metodo_gordon}
 
-        Always respond in Portuguese. Put 'Valuation Analysis' at the beginning of the answer. Keep your answer concise and include your confidence level.
+       Put '############Valuation Analysis############' at the beginning of the answer. Keep your answer concise and include your confidence level.
+        The response should be with the length of 1000 characters.
         """,
     )
 
@@ -92,7 +93,7 @@ def ChatValuation(
         return response_stream
 
     else:
-        response_invoke = llm_chain.invoke(
+        response_invoke = await llm_chain.ainvoke(
             input={
                 "query": query,
                 "precos_atual_valuations": precos_atual_valuations,

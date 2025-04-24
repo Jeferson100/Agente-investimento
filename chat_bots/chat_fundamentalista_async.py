@@ -11,7 +11,7 @@ except KeyError as exc:
     raise ValueError("API key inválida ou não definida") from exc
 
 
-def ChatFundamentalistas(
+async def ChatFundamentalistasAsync(
     query: str,
     dados: List[str],
     api_secret: SecretStr | None = api_secret_groq,
@@ -22,7 +22,7 @@ def ChatFundamentalistas(
     prompt = PromptTemplate(
         input_variables=["query", "dados"],
         template="""
-    You are a fundamental analyst responsible for evaluating a company's financial health, operational performance, and investment prospects using key financial indicators. Your goal is to provide a concise analysis with actionable recommendations (buy, hold, or sell) along with a confidence level (0-100%).
+                You are a fundamental analyst responsible for evaluating a company's financial health, operational performance, and investment prospects using key financial indicators. Your goal is to provide a concise analysis with actionable recommendations (buy, hold, or sell) along with a confidence level (0-100%).
 
     Indicators provided include:
     - Financial Results: revenue, gross profit, EBIT, EBITDA, net income, earnings per share.
@@ -39,14 +39,13 @@ def ChatFundamentalistas(
     - Generate actionable insights with a clear recommendation (buy, hold, or sell) and justify your decision.
     - Summarize trends and potential future implications.
     - Provide your answer concisely and include your confidence level.
-    - Put 'Fundamental Analysis' at the beginning of the answer
+    - Put '##########Fundamental Analysis########' at the beginning of the answer
 
     REQUESTED ANALYSIS:
     Question: {query}
     Financial Data: {dados}
-
-    Always respond in Portuguese. Keep your answer concise and include your confidence level.
-
+    
+    The response should be with the length of 1000 characters.
       """,
     )
 
@@ -65,5 +64,5 @@ def ChatFundamentalistas(
         return response_stream
 
     else:
-        response_invoke = llm_chain.invoke(input={"query": query, "dados": dados})
+        response_invoke = await llm_chain.ainvoke(input={"query": query, "dados": dados})
         return response_invoke

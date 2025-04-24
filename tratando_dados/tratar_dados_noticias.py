@@ -97,13 +97,10 @@ class TratarDadosNoticias:
     def clean_chat_html_bs4(self) -> str:
         try:
             links = self.get_news_yahoo()["links"]
-        except KeyError:
+        except (KeyError,SessionNotCreatedException):
             links_optional = self.get_news_google()
             links = [link for link in links_optional if link is not None]
-        except SessionNotCreatedException:
-            links_optional = self.get_news_google()
-            links = [link for link in links_optional if link is not None]
-
+    
         if len(links) <= 5:
             print(
                 f"Poucas noticias encontrada para o ticker {self.acao} no Yahoo Finance. Buscando noticias no Google"

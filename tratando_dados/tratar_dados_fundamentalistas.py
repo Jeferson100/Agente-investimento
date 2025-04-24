@@ -4,7 +4,7 @@ from coleta_dados import DadosFundamentalistas
 import pandas as pd
 
 
-def tratando_dados_fundamentalistas(
+async def tratando_dados_fundamentalistas(
     tic: str,
     data_inicio: Optional[str] = None,
     data_fim: Optional[str] = None,
@@ -38,7 +38,7 @@ def tratando_dados_fundamentalistas(
         tic=tic, data_inicio=data_inicio, data_fim=data_fim
     )
 
-    dados: pd.DataFrame = dados_fundamentalistas.dados_fundamentalistas_completo()
+    dados: pd.DataFrame = await dados_fundamentalistas.dados_fundamentalistas_completo()
 
     dados.drop(columns=colunas_drop, inplace=True)
 

@@ -6,6 +6,14 @@ from .chat_analise_tecnica import ChatAnaliseTecnica
 from .chat_bots import ChatBot
 from .chat_valuation import ChatValuation
 from .chat_tradutor import ChatTradutor
+from .chat_fundamentalista_async import ChatFundamentalistasAsync
+from .chat_valuation_async import ChatValuationAsync
+from .chat_analise_tecnica_async import ChatAnaliseTecnicaAsync
+from .chat_sentimentalista_async import ChatSentimentoAsync
+
+
+
+
 
 __all__ = [
     "get_secret_key",
@@ -16,4 +24,8 @@ __all__ = [
     "ChatBot",
     "ChatValuation",
     "ChatTradutor",
+    "ChatFundamentalistasAsync",
+    "ChatValuationAsync",
+    "ChatAnaliseTecnicaAsync",
+    "ChatSentimentoAsync",
 ]

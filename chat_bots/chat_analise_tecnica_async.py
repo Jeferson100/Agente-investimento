@@ -11,7 +11,7 @@ except KeyError as exc:
     raise ValueError("API key inválida ou não definida") from exc
 
 
-def ChatAnaliseTecnica(
+async def ChatAnaliseTecnicaAsync(
     query: str,
     dados: List[str],
     api_secret: SecretStr | None = api_secret_groq,
@@ -43,6 +43,9 @@ def ChatAnaliseTecnica(
     REQUESTED ANALYSIS:
     Question: {query}
     Financial Data: {dados}
+    Put '#########Technical Analysis#######' at the beginning of the answer. keeping your answer concise and including your confidence level.
+    The response should be with the length of 1000 characters.
+
         """,
     )
 
@@ -60,5 +63,5 @@ def ChatAnaliseTecnica(
         return response_stream
 
     else:
-        response_invoke = llm_chain.invoke(input={"query": query, "dados": dados})
+        response_invoke = await llm_chain.ainvoke(input={"query": query, "dados": dados})
         return response_invoke
