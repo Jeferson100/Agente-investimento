@@ -1,19 +1,19 @@
-import unittest
-from unittest.mock import patch, MagicMock
-import pytest
 import datetime
 import os
-from pydantic import SecretStr
-from langchain.schema import Document
+import unittest
+from unittest.mock import MagicMock, patch
 
+import pytest
+from langchain.schema import Document
+from pydantic import SecretStr
 
 from chat_bots import (
     ChatAnaliseTecnica,
     ChatFundamentalistas,
     ChatLimpaResposta,
-    ChatValuation,
     ChatSentimento,
     ChatTradutor,
+    ChatValuation,
 )
 
 

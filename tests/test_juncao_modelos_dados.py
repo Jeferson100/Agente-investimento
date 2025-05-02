@@ -1,14 +1,17 @@
+import asyncio
+import os
+import unittest
+from unittest.mock import MagicMock, patch
+
+import pytest
+from pydantic import SecretStr
+
 from juncao_modelos_dados import (
-    ModeloValuation,
+    ModeloAnaliseTecnica,
     ModeloFundamentos,
     ModeloSentimento,
-    ModeloAnaliseTecnica,
+    ModeloValuation,
 )
-import unittest
-from unittest.mock import patch, MagicMock
-import pytest
-import os
-from pydantic import SecretStr
 
 
 class TestJuncaoModelosDados(unittest.TestCase):
@@ -57,7 +60,7 @@ class TestJuncaoModelosDados(unittest.TestCase):
             stream=False,
         )
 
-        response, dados_fundamentalistas = (
+        response, dados_fundamentalistas = asyncio.run(
             modelo_fundamentos_instance.chat_fundamentalistas()
         )
 

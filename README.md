@@ -85,6 +85,16 @@ Antes de começar a utilizar o Agente-Investimento, você precisará obter as se
     *   **Valuation:** Descubra as métricas de valuation e o potencial valor da ação.
 4.  **Download de Dados:** Em cada página, baixe os dados que foram utilizados pelos modelos de IA para análise posterior.
 
+### 🐳 Executando com Docker
+
+```bash 
+docker build -t agente-investimento-app .
+docker run -p 3000:3000 agente-investimento-app
+
+docker-compose build
+docker-compose up
+```
+
 
 ## 📂 Estrutura de Arquivos
 
@@ -160,6 +170,8 @@ Agente-investimento/
 *   `.gitignore`: Arquivo que especifica os arquivos e pastas que o Git deve ignorar, como arquivos temporários ou confidenciais.
 *   `requirements.txt`: Lista das dependências do projeto, especificando os pacotes Python e suas versões.
 *   `README.md`: Arquivo de documentação principal do projeto, fornecendo informações sobre o objetivo, uso e estrutura do projeto.
+
+
 
 ## 🤝 Contribuindo
 

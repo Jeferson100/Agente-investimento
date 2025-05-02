@@ -1,14 +1,16 @@
+import os
+
+import pandas as pd
+import pytest
+from pydantic import SecretStr
+from selenium import webdriver
+
 from tratando_dados import (
     TratandoDadosIndicadores,
     TratandoDadosValuation,
     TratarDadosNoticias,
     tratando_dados_fundamentalistas,
 )
-import pytest
-from pydantic import SecretStr
-from selenium import webdriver
-import pandas as pd
-import os
 
 api_key_serper = os.getenv("API_KEY_SERPER")
 api_secret_groq = os.getenv("API_SECRET_GROQ")
