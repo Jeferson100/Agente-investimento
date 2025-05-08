@@ -16,7 +16,6 @@ from .fundamentos.valuation_metodo_gordon import ValuationModoloGordon
 from .fundamentos.variacao_receita import VariacaoReceita
 from .verificador_ticks import VerificadorTicks
 
-
 __all__ = [
     "DadosFundamentalistas",
     "VerificadorTicks",

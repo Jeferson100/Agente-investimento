@@ -1,11 +1,10 @@
+import warnings
 from datetime import datetime
 from typing import Dict
 
 import pandas as pd
 import sidrapy
 import yfinance as yf
-
-import warnings
 
 warnings.filterwarnings("ignore")
 

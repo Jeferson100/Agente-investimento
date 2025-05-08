@@ -4,7 +4,6 @@ import pandas as pd
 import pytest
 from pydantic import SecretStr
 from selenium import webdriver
-
 from tratando_dados import (
     TratandoDadosIndicadores,
     TratandoDadosValuation,

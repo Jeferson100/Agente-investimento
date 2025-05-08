@@ -4,8 +4,9 @@ from langchain.chains import LLMChain  # pylint: disable=E0611
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import PromptTemplate
 from langchain_groq import ChatGroq
-from .chat_groq import get_llm
 from pydantic import SecretStr
+
+from .chat_groq import get_llm
 
 
 class ChatBot:
@@ -19,7 +20,6 @@ class ChatBot:
         name_dados: str = "dados",
         temperature: float = 0.5,
         modelo_llm: str = "llama-3.3-70b-versatile",
-        
     ):
         self.query = query
         self.name_query = name_query

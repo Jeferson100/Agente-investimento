@@ -2,9 +2,13 @@ from typing import Iterator, List
 
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import PromptTemplate
-from .chat_groq import get_llm
 from pydantic import SecretStr
 
+from .chat_groq import get_llm
+
+import os
+
+MODEL_ID_TECNICAL = os.getenv("MODEL_ID_TECNICAL")
 
 async def ChatAnaliseTecnicaAsync(
     query: str,

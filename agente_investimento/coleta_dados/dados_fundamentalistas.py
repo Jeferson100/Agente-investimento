@@ -1,13 +1,12 @@
 import asyncio
 import io
+import warnings
 from typing import Optional
 
 import aiohttp
 import pandas as pd
 
 from .verificador_ticks import VerificadorTicks
-
-import warnings
 
 warnings.filterwarnings("ignore")
 
@@ -35,8 +34,11 @@ class DadosFundamentalistas:
             async with session.get(url) as response:
                 content = await response.text()
 
-        # Lê os dados usando pandas a partir do conteúdo retornado
-        dados_dre: pd.DataFrame = pd.read_csv(io.StringIO(content))
+        try:
+            dados_dre: pd.DataFrame = pd.read_csv(io.StringIO(content))
+        except pd.errors.EmptyDataError:
+            print("Erro ao ler {}".format(url))
+            return pd.DataFrame()
 
         # Filtra pelos dados do ticker
         dados_tic = dados_dre[dados_dre["tic"] == self.tic].copy()
@@ -61,8 +63,11 @@ class DadosFundamentalistas:
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as response:
                 content = await response.text()
-
-        dados_capex = pd.read_csv(io.StringIO(content))
+        try:
+            dados_capex = pd.read_csv(io.StringIO(content))
+        except pd.errors.EmptyDataError: 
+            print("Erro ao ler {}".format(url))
+            return pd.DataFrame()
         dados_capex_tic = dados_capex[dados_capex["tic"] == self.tic].copy()
         dados_capex_tic["datas"] = pd.to_datetime(
             dados_capex_tic["datas"], format="%d/%m/%Y"
@@ -83,8 +88,11 @@ class DadosFundamentalistas:
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as response:
                 content = await response.text()
-
-        dados_fluxo_caixa = pd.read_csv(io.StringIO(content))
+        try:
+            dados_fluxo_caixa = pd.read_csv(io.StringIO(content))
+        except pd.errors.EmptyDataError:
+            print("Erro ao ler {}".format(url))
+            return pd.DataFrame()
 
         dados_fluxo_caixa_tic = dados_fluxo_caixa[
             dados_fluxo_caixa["tic"] == self.tic
@@ -110,8 +118,11 @@ class DadosFundamentalistas:
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as response:
                 content = await response.text()
-
-        dados_precos_relativos = pd.read_csv(io.StringIO(content))
+        try:
+            dados_precos_relativos = pd.read_csv(io.StringIO(content))
+        except pd.errors.EmptyDataError:
+            print("Erro ao ler {}".format(url))
+            return pd.DataFrame()
 
         dados_precos_relativos_tic = dados_precos_relativos[
             dados_precos_relativos["tic"] == self.tic
@@ -139,8 +150,11 @@ class DadosFundamentalistas:
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as response:
                 content = await response.text()
-
-        dados_resumo_balanco = pd.read_csv(io.StringIO(content))
+        try:
+            dados_resumo_balanco = pd.read_csv(io.StringIO(content))
+        except pd.errors.EmptyDataError:
+            print("Erro ao ler {}".format(url))
+            return pd.DataFrame()
 
         dados_resumo_balanco_tic = dados_resumo_balanco[
             dados_resumo_balanco["tic"] == self.tic
@@ -168,8 +182,11 @@ class DadosFundamentalistas:
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as response:
                 content = await response.text()
-
-        dados_retornos_margens = pd.read_csv(io.StringIO(content))
+        try:
+            dados_retornos_margens = pd.read_csv(io.StringIO(content))
+        except pd.errors.EmptyDataError:
+            print("Erro ao ler {}".format(url))
+            return pd.DataFrame()
 
         dados_retornos_margens_tic = dados_retornos_margens[
             dados_retornos_margens["tic"] == self.tic
@@ -201,20 +218,30 @@ class DadosFundamentalistas:
             self.dados_resumo_balanco(),
             self.dados_retornos_margens(),
         )
-        (
-            dados_dre,
-            dados_capex,
-            dados_fluxo_caixa,
-            dados_precos_relativos,
-            dados_resumo_balanco,
-            dados_retornos_margens,
-        ) = resultados
-        dados_completo = (
-            dados_dre.merge(dados_capex, on=["datas", "tic"])
-            .merge(dados_fluxo_caixa, on=["datas", "tic"])
-            .merge(dados_precos_relativos, on=["datas", "tic"])
-            .merge(dados_resumo_balanco, on=["datas", "tic"])
-            .merge(dados_retornos_margens, on=["datas", "tic"])
-        )
-        dados_completo = dados_completo.loc[:, ~dados_completo.columns.duplicated()]
-        return dados_completo
+        dataframes = {
+        'dados_dre': resultados[0],
+        'dados_capex': resultados[1],
+        'dados_fluxo_caixa': resultados[2],
+        'dados_precos_relativos': resultados[3],
+        'dados_resumo_balanco': resultados[4],
+        'dados_retornos_margens': resultados[5]
+    }
+    
+        dataframes_validos = {nome: df for nome, df in dataframes.items() if not df.empty}
+    
+        if not dataframes_validos:
+            print("Aviso: Todos os DataFrames estão vazios")
+            return pd.DataFrame()
+
+        try:
+            resultado = list(dataframes_validos.values())[0]
+            
+            for df in list(dataframes_validos.values())[1:]:
+                resultado = resultado.merge(df, on=["datas", "tic"], how='outer')
+            
+            resultado = resultado.loc[:, ~resultado.columns.duplicated()]
+            return resultado
+        
+        except Exception as e:
+            print(f"Erro ao realizar merge dos dados: {str(e)}")
+            return pd.DataFrame()

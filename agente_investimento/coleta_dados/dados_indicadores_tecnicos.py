@@ -1,10 +1,9 @@
+import warnings
 from typing import Dict
 
 import pandas as pd
 import yfinance as yf
 from finta import TA
-
-import warnings
 
 warnings.filterwarnings("ignore")
 

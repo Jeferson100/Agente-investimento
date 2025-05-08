@@ -1,3 +1,4 @@
+import warnings
 from datetime import datetime
 from typing import Any, Dict
 
@@ -6,8 +7,6 @@ import numpy as np
 import pandas as pd
 import yfinance as yf
 from pandas.core.series import Series
-
-import warnings
 
 warnings.filterwarnings("ignore")
 

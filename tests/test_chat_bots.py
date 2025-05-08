@@ -4,9 +4,6 @@ import unittest
 from unittest.mock import MagicMock, patch
 
 import pytest
-from langchain.schema import Document
-from pydantic import SecretStr
-
 from chat_bots import (
     ChatAnaliseTecnica,
     ChatFundamentalistas,
@@ -15,6 +12,8 @@ from chat_bots import (
     ChatTradutor,
     ChatValuation,
 )
+from langchain.schema import Document
+from pydantic import SecretStr
 
 
 class TestChatBots(unittest.TestCase):

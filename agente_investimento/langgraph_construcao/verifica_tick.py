@@ -2,7 +2,7 @@ import pandas as pd
 from langgraph.types import Command
 from typing_extensions import Literal
 
-from .state import State
+from .type_state import State
 
 
 def verificacao_tickets(state: State) -> Command[Literal["chatinput", "supervisor"]]:

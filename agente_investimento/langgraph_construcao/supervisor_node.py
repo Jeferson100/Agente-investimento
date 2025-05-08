@@ -1,12 +1,10 @@
 from typing import Literal
 
-from ..chat_bots import get_llm
-
 from langgraph.types import Command
 from typing_extensions import TypedDict
 
-
-from .state import State
+from ..chat_bots import get_llm
+from .type_state import State
 
 # Defina os métodos de análise disponíveis
 members = [

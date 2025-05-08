@@ -1,11 +1,10 @@
+import warnings
 from datetime import datetime
 from typing import Any, Dict, List, Tuple
 
 import pandas as pd
 
 from .indicadores_financeiros import IndicadoresFinanceiros
-
-import warnings
 
 warnings.filterwarnings("ignore")
 

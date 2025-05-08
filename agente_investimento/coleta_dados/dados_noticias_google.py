@@ -1,11 +1,10 @@
+import warnings
 from typing import Dict, List
 
 import requests
 from pydantic import SecretStr
 
 from ..chat_bots import get_secret_key
-
-import warnings
 
 warnings.filterwarnings("ignore")
 

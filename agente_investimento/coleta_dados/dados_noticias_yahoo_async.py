@@ -1,4 +1,5 @@
 import asyncio
+import warnings
 from typing import Dict, List, Optional
 
 import unidecode
@@ -14,8 +15,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.os_manager import ChromeType
-
-import warnings
 
 warnings.filterwarnings("ignore")
 

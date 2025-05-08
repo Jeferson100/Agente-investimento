@@ -42,7 +42,7 @@ async def tratando_dados_fundamentalistas(
 
     dados: pd.DataFrame = await dados_fundamentalistas.dados_fundamentalistas_completo()
 
-    dados.drop(columns=colunas_drop, inplace=True)
+    dados.drop(columns=colunas_drop, inplace=True, errors="ignore")
 
     dados["datas"] = dados["datas"].astype(str)
 

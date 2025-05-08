@@ -24,4 +24,4 @@ COPY ./app ./app
 EXPOSE 3000
 
 #CMD ["uvicorn", "app.fastapi_main:app", "--host", "0.0.0.0", "--port", "3000"]
-CMD ["venv/bin/python", "-m", "uvicorn", "app.fastapi_main:app", "--host", "0.0.0.0", "--port", "3000"]
+CMD ["venv/bin/python", "-m", "uvicorn", "app.fastapi_postgree_main:app", "--host", "0.0.0.0", "--port", "3000"]

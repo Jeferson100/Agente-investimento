@@ -20,25 +20,25 @@ install:
 		pip install -r requirements.txt
 
 import_format:
-	isort coleta_dados/ chat_bots/ tratando_dados/ juncao_modelos_dados/ langgraph_construcao/ utils/ tests/
+	isort agente_investimento/ app/ tests/ 
 
 format:
-	black coleta_dados/*.py chat_bots/*.py tratando_dados/*.py coleta_dados/fundamentos/*.py juncao_modelos_dados/*.py langgraph_construcao/*.py utils/*.py tests/*.py
+	black agente_investimento/ app/ tests/
 
 ruff_format:
-	ruff format chat_bots/*.py  coleta_dados/*.py tratando_dados/*.py coleta_dados/fundamentos/*.py juncao_modelos_dados/*.py langgraph_construcao/*.py utils/*.py tests/*.py
+	ruff format agente_investimento/ app/ tests/
 
 lint:
-	pylint --disable=R,C coleta_dados/*.py chat_bots/*.py tratando_dados/*.py coleta_dados/fundamentos/*.py juncao_modelos_dados/*.py  langgraph_construcao/*.py utils/*.py tests/*.py
+	pylint --disable=R,C agente_investimento/ app/ tests/
 
 ruff_lint:
-	ruff check chat_bots/*.py  coleta_dados/*.py tratando_dados/*.py coleta_dados/fundamentos/*.py juncao_modelos_dados/*.py langgraph_construcao/*.py utils/*.py tests/*.py
+	ruff check agente_investimento/ app/ tests/
 
 typepyright:
-	pyright coleta_dados/*.py chat_bots/*.py tratando_dados/*.py coleta_dados/fundamentos/*.py juncao_modelos_dados/*.py langgraph_construcao/*.py utils/*.py tests/*.py
+	pyright agente_investimento/ app/ tests/
 
 typemypy:
-	mypy coleta_dados/ chat_bots/ tratando_dados/ juncao_modelos_dados/ langgraph_construcao/ utils/ tests/
+	mypy agente_investimento/ app/ tests/
 
 ## Set up Python interpreter environment
 .PHONY: create_environment

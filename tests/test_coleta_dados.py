@@ -1,9 +1,6 @@
 import os
 
 import pandas as pd
-from pydantic import SecretStr
-from selenium import webdriver
-
 from coleta_dados import (
     DadosFundamentalistas,
     DadosIndicadoresTecnicos,
@@ -11,6 +8,8 @@ from coleta_dados import (
     DadosNoticiasGoogle,
     LinksExtractorBS4,
 )
+from pydantic import SecretStr
+from selenium import webdriver
 
 api_key_serper = os.getenv("API_KEY_SERPER")
 

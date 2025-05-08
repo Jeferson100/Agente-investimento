@@ -11,7 +11,7 @@ from ..juncao_modelos_dados import (
     ModeloSentimentoAsync,
     ModeloValuationAsync,
 )
-from ..langgraph_construcao import State
+from ..langgraph_construcao.type_state import State
 
 
 async def process_technical(state: State) -> Command[Literal["supervisor"]]:
@@ -40,9 +40,9 @@ async def process_technical(state: State) -> Command[Literal["supervisor"]]:
     dados_input = state["dados_input"]
 
     if isinstance(dados_input, list):
-        dados_input = dados_input[0].content # type: ignore
-        
-    response = dados_input + "\n" + response # type: ignore
+        dados_input = dados_input[0].content  # type: ignore
+
+    response = dados_input + "\n" + response  # type: ignore
 
     return Command(
         update={"dados_input": [HumanMessage(content=response, name="tecnica")]},
@@ -73,11 +73,11 @@ async def process_valuation(state: State) -> Command[Literal["supervisor"]]:
     modelo = ModeloValuationAsync(ticker=ticker, query=query)
     response = await modelo.chat_valuation()
     dados_input = state["dados_input"]
-    
-    if isinstance(dados_input, list):
-        dados_input = dados_input[0].content # type: ignore
 
-    response = dados_input + "\n" + response # type: ignore
+    if isinstance(dados_input, list):
+        dados_input = dados_input[0].content  # type: ignore
+
+    response = dados_input + "\n" + response  # type: ignore
     return Command(
         update={"dados_input": [HumanMessage(content=response, name="valuation")]},
         goto="supervisor",
@@ -107,12 +107,12 @@ async def process_sentimetal(state: State) -> Command[Literal["supervisor"]]:
     modelo = ModeloSentimentoAsync(ticker=ticker, query=query)
     response = await modelo.chat_sentimento()
     dados_input = state["dados_input"]
-    
-    if isinstance(dados_input, list):
-        dados_input = dados_input[0].content # type: ignore
 
-    response = dados_input + "\n" + response # type: ignore
-    
+    if isinstance(dados_input, list):
+        dados_input = dados_input[0].content  # type: ignore
+
+    response = dados_input + "\n" + response  # type: ignore
+
     return Command(
         update={"dados_input": [HumanMessage(content=response, name="valuation")]},
         goto="supervisor",
@@ -142,12 +142,12 @@ async def process_fundamental(state: State) -> Command[Literal["supervisor"]]:
     modelo = ModeloFundamentosAsync(ticker=ticker, query=query)
     response = await modelo.chat_fundamentalistas()
     dados_input = state["dados_input"]
-    
+
     if isinstance(dados_input, list):
-        dados_input = dados_input[0].content # type: ignore
-        
-    response = dados_input + "\n" + response # type: ignore
-    
+        dados_input = dados_input[0].content  # type: ignore
+
+    response = dados_input + "\n" + response  # type: ignore
+
     return Command(
         update={"dados_input": [HumanMessage(content=response, name="valuation")]},
         goto="supervisor",
@@ -198,14 +198,13 @@ async def analise_investimento(state: State) -> Command[Literal["supervisor"]]:
     )
 
     # Se dados_input é uma lista, converta para string antes de concatenar
-    if isinstance(dados_input, list): # type: ignore
+    if isinstance(dados_input, list):  # type: ignore
         dados_input = "\n".join(dados_input) if dados_input else ""
-        
-    response = "\n".join(response) # type: ignore
-    
-    # Agora concatena as strings
-    response = f"{dados_input}\n{response}" if dados_input else response # type: ignore
 
+    response = "\n".join(response)  # type: ignore
+
+    # Agora concatena as strings
+    response = f"{dados_input}\n{response}" if dados_input else response  # type: ignore
 
     return Command(
         update={"dados_input": [HumanMessage(content=response)]},  # type: ignore

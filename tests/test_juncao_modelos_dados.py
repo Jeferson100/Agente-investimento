@@ -4,14 +4,13 @@ import unittest
 from unittest.mock import MagicMock, patch
 
 import pytest
-from pydantic import SecretStr
-
 from juncao_modelos_dados import (
     ModeloAnaliseTecnica,
     ModeloFundamentos,
     ModeloSentimento,
     ModeloValuation,
 )
+from pydantic import SecretStr
 
 
 class TestJuncaoModelosDados(unittest.TestCase):

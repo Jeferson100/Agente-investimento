@@ -1,9 +1,8 @@
 import math
+import warnings
 
 import pandas as pd
 import yfinance as yf
-
-import warnings
 
 warnings.filterwarnings("ignore")
 

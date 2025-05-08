@@ -1,12 +1,14 @@
+import asyncio
+import warnings
 from datetime import datetime
+
+import aiohttp
 import ipeadatapy as ip
 import pandas as pd
 import yfinance as yf
-import aiohttp
-import asyncio
-import warnings
 
 warnings.filterwarnings("ignore")
+
 
 class CalculoWACCAsync:
     def __init__(
@@ -19,7 +21,7 @@ class CalculoWACCAsync:
         self.empresa = yf.Ticker(self.ticker)
         self.start_date_retorno = start_date_retorno
         self.end_date_retorno = end_date_retorno
-        
+
     def tratando_ticker(self, ticker: str) -> str:
         if ".SA" in ticker:
             acao = ticker
@@ -49,7 +51,7 @@ class CalculoWACCAsync:
                 yf.download,
                 "^BVSP",
                 start=self.start_date_retorno,
-                end=self.end_date_retorno
+                end=self.end_date_retorno,
             )
 
             if ibov is None or ibov.empty:
@@ -97,7 +99,7 @@ class CalculoWACCAsync:
         juros = await self.juros_livre()
         beta = await self.beta_empresa()
         retorno = await self.retorno_mercado()
-        
+
         cost_of_equity = juros + beta * retorno
         if cost_of_equity is None:
             raise ValueError("Erro: Não foi possível obter o custo do patrimônio.")
@@ -131,7 +133,7 @@ class CalculoWACCAsync:
         despesas = await self.despesas_juros()
         total_divida = await self.total_divida()
         juros = await self.juros_livre()
-        
+
         cost_of_debt = (despesas / total_divida) if total_divida else juros
         return cost_of_debt
 
@@ -150,13 +152,25 @@ class CalculoWACCAsync:
                 self.total_divida(),
                 self.custo_divida(),
                 self.custo_imposto(),
-                self.juros_livre()
+                self.juros_livre(),
             )
-            
-            # Desempacota os resultados
-            valor_mercado, calculo_divida, custo_patrimonio, total_divida, custo_divida, custo_imposto, juros = results
 
-            V = (valor_mercado + calculo_divida) if valor_mercado and calculo_divida else 1
+            # Desempacota os resultados
+            (
+                valor_mercado,
+                calculo_divida,
+                custo_patrimonio,
+                total_divida,
+                custo_divida,
+                custo_imposto,
+                juros,
+            ) = results
+
+            V = (
+                (valor_mercado + calculo_divida)
+                if valor_mercado and calculo_divida
+                else 1
+            )
 
             wacc = (valor_mercado / V * custo_patrimonio) + (
                 total_divida / V * custo_divida * (1 - custo_imposto)

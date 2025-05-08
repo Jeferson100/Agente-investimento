@@ -1,7 +1,7 @@
+import warnings
+
 from langchain_community.document_loaders import AsyncHtmlLoader
 from langchain_community.document_transformers.html2text import Html2TextTransformer
-
-import warnings
 
 warnings.filterwarnings("ignore")
 

@@ -1,4 +1,5 @@
 import time
+import warnings
 from typing import Any, Dict, List
 
 import unidecode
@@ -15,8 +16,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.os_manager import ChromeType
-
-import warnings
 
 warnings.filterwarnings("ignore")
 
@@ -159,7 +158,7 @@ class DadosNoticiasBuscadorYahoo:
             )
             time.sleep(1)
             relevancia_tempo.click()
-    
+
     def get_news_link(self, number_paginas: int) -> List[str]:
         navegador = self.navegador_get()
         self.conectando_pagina(navegador)
@@ -175,7 +174,7 @@ class DadosNoticiasBuscadorYahoo:
 
             self.pular_pagina(navegador, i)
 
-        return links   
+        return links
 
     def get_news(self, number_paginas: int) -> Dict[str, List[str]]:
         navegador = self.navegador_get()

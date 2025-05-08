@@ -3,7 +3,10 @@ from typing import Dict, List, Optional
 import httpx
 from pydantic import SecretStr
 from selenium import webdriver
-from selenium.common.exceptions import SessionNotCreatedException, ElementClickInterceptedException
+from selenium.common.exceptions import (
+    ElementClickInterceptedException,
+    SessionNotCreatedException,
+)
 
 from ..chat_bots import ChatLimpaResposta
 from ..coleta_dados import (

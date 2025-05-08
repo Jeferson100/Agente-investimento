@@ -1,7 +1,7 @@
 from langchain_groq import ChatGroq
+from pydantic import SecretStr
 
 from .verificacao_key import get_secret_key
-from pydantic import SecretStr
 
 try:
     api_secret_groq = get_secret_key("GROQ_API_KEY")

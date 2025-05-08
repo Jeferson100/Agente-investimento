@@ -1,19 +1,15 @@
+import warnings
 from typing import Any, Dict, Union
 
 import numpy as np
 import pandas as pd
 import yfinance as yf
 
+from .calculo_wacc import CalculoWACC
 from .necessidade_capital_giro import NecessidadeCapitalGiro
-from .outros_ativos_nao_operecionais import (
-    OutrosAtivosNaoOperacionais,
-)
+from .outros_ativos_nao_operecionais import OutrosAtivosNaoOperacionais
 from .passivos_menos_divida import PassivoTotalMenosDivida
 from .variacao_receita import VariacaoReceita
-
-from .calculo_wacc import CalculoWACC
-
-import warnings
 
 warnings.filterwarnings("ignore")
 

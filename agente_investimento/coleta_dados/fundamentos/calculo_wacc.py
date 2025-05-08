@@ -1,10 +1,9 @@
+import warnings
 from datetime import datetime
 
 import ipeadatapy as ip
 import pandas as pd
 import yfinance as yf
-
-import warnings
 
 warnings.filterwarnings("ignore")
 
@@ -20,7 +19,7 @@ class CalculoWACC:
         self.empresa = yf.Ticker(self.ticker)
         self.start_date_retorno = start_date_retorno
         self.end_date_retorno = end_date_retorno
-    
+
     def tratando_ticker(self, ticker: str) -> str:
         if ".SA" in ticker:
             acao = ticker
@@ -151,7 +150,10 @@ class CalculoWACC:
             )  # Evita divisão por zero
 
             wacc = (self.valor_mercado() / V * self.custo_patrimonio()) + (
-                self.total_divida() / V * self.custo_divida() * (1 - self.custo_imposto())
+                self.total_divida()
+                / V
+                * self.custo_divida()
+                * (1 - self.custo_imposto())
             )
 
             if wacc <= 0:
