@@ -37,21 +37,11 @@ async def ChatFundamentalistasComparacaoAsync(
 
     Risks & Leverage: debt-to-equity ratio.
 
-    Your Task:
-
-    Compare the financial indicators of the companies.
-
-    Identify each company's relative strengths and weaknesses.
-
-    Determine which company is the most attractive investment and justify your decision.
-
-    Provide a recommendation (buy, hold, or sell) for each company, with a confidence level (0–100%).
-
-    Summarize trends and implications briefly.
+    Task:
+        Analyze the provided technical data {dados} and answer the user's question {query}.
+        Keep your response under 1000 characters and focus on key comparative insights.
 
     Begin your answer with '##########Fundamental Analysis########'.
-
-    Limit your response to 1000 characters.
 
     REQUESTED ANALYSIS:
     Question: {query}

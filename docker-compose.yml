@@ -42,6 +42,14 @@ services:
       - LANGCHAIN_PROJECT=${LANGCHAIN_PROJECT}
       - REDIS_URI=redis://langgraph-redis:6379
       - DB_URI=postgres://postgres:postgres@langgraph-postgres:5432/postgres?sslmode=disable
+      - MODEL_ID_CHAT_IMPUT=${MODEL_ID_CHAT_IMPUT}
+      - MODEL_ID_SUPERVISOR=${MODEL_ID_SUPERVISOR}
+      - MODEL_ID_CHAT_RESPONSE=${MODEL_ID_CHAT_RESPONSE}
+      - MODEL_ID_FUNDAMENTAL=${MODEL_ID_FUNDAMENTAL}
+      - MODEL_ID_SENTIMENTO=${MODEL_ID_SENTIMENTO}
+      - MODEL_ID_VALUATION=${MODEL_ID_VALUATION}
+      - MODEL_ID_TECNICAL=${MODEL_ID_TECNICAL}
+
     volumes:
       - ./agente_investimento:/agente_investimento/agente_investimento
       - ./app:/agente_investimento/app

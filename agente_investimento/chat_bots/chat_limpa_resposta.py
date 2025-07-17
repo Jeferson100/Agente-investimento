@@ -4,12 +4,11 @@ from pydantic import SecretStr
 
 from .chat_groq import get_llm
 
-
-def ChatLimpaResposta(
+async def ChatLimpaResposta(
     query: str,
     ticke: str,
     api_secret: SecretStr | None,
-    modelo_llm: str = "llama-3.2-11b-vision-preview",
+    modelo_llm: str = "llama-3.3-70b-versatile",
 ) -> str:
     model = get_llm(
         api_groq=api_secret,
@@ -25,7 +24,6 @@ def ChatLimpaResposta(
                 Avoid any responses indicating the absence of data or requests for additional input.
                 Please provide detailed information about {tick}, focusing on significant news and updates about the company,
                 without including generic comments, absence of data, or irrelevant information
-                Less than 6500 characters in length.
                 Structured in Markdown format without unnecessary empty lines.
                 
                 Avoid informations how: 
@@ -43,14 +41,15 @@ def ChatLimpaResposta(
         Tick: {tick}
         
         If no information about the company is found in the articles, do not mention it or provide any response. 
-        Present only the extracted information concisely and clearly
-        Always response the questions in Portuguese.
+        Present only the extracted information concisely and clearly.
+        Provide a response with on the maximum of 500 characters.
+
 
       """,
     )
 
     llm_chain = prompt | model | StrOutputParser()
 
-    resposta = llm_chain.invoke(input={"dados": query, "tick": ticke})
+    resposta = await llm_chain.ainvoke(input={"dados": query, "tick": ticke})
 
     return resposta

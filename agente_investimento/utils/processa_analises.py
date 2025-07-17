@@ -33,16 +33,21 @@ async def process_technical(state: State) -> Command[Literal["supervisor"]]:
     print("Entrei nos techincal")
 
     ticker = state["ticker"]
+    if isinstance(ticker, list):
+        ticker = ticker[0]  # type: ignore
     query = state["messages"][-1]
     modelo = ModeloAnaliseTecnicaAsync(ticker=ticker, query=query)
     response = await modelo.chat_analise_tecnica()
 
-    dados_input = state["dados_input"]
+    dados_input = state.get('dados_input', '')
 
-    if isinstance(dados_input, list):
+    if isinstance(dados_input, list) and dados_input:
         dados_input = dados_input[0].content  # type: ignore
 
-    response = dados_input + "\n" + response  # type: ignore
+    if dados_input:
+        response = f"{dados_input}\n{response}"# type: ignore
+    else:
+        response = "/n/n"
 
     return Command(
         update={"dados_input": [HumanMessage(content=response, name="tecnica")]},
@@ -69,15 +74,20 @@ async def process_valuation(state: State) -> Command[Literal["supervisor"]]:
     print("Entrei nos valuation")
 
     ticker = state["ticker"]
+    if isinstance(ticker, list):
+        ticker = ticker[0]  # type: ignore
     query = state["messages"][-1]
     modelo = ModeloValuationAsync(ticker=ticker, query=query)
     response = await modelo.chat_valuation()
-    dados_input = state["dados_input"]
+    dados_input = state.get('dados_input', '')
 
-    if isinstance(dados_input, list):
+    if isinstance(dados_input, list) and dados_input:
         dados_input = dados_input[0].content  # type: ignore
 
-    response = dados_input + "\n" + response  # type: ignore
+    if dados_input:
+        response = f"{dados_input}\n{response}"# type: ignore
+    else:
+        response = "/n/n"
     return Command(
         update={"dados_input": [HumanMessage(content=response, name="valuation")]},
         goto="supervisor",
@@ -103,15 +113,20 @@ async def process_sentimetal(state: State) -> Command[Literal["supervisor"]]:
     print("Entrei nos sentimental")
 
     ticker = state["ticker"]
+    if isinstance(ticker, list):
+        ticker = ticker[0]  # type: ignore
     query = state["messages"][-1]
     modelo = ModeloSentimentoAsync(ticker=ticker, query=query)
     response = await modelo.chat_sentimento()
-    dados_input = state["dados_input"]
+    dados_input = state.get('dados_input', '')
 
-    if isinstance(dados_input, list):
+    if isinstance(dados_input, list) and dados_input:
         dados_input = dados_input[0].content  # type: ignore
 
-    response = dados_input + "\n" + response  # type: ignore
+    if dados_input:
+        response = f"{dados_input}\n{response}"# type: ignore
+    else:
+        response = "/n/n"
 
     return Command(
         update={"dados_input": [HumanMessage(content=response, name="valuation")]},
@@ -138,16 +153,20 @@ async def process_fundamental(state: State) -> Command[Literal["supervisor"]]:
     print("Entrei nos fundamentos")
 
     ticker = state["ticker"]
+    if isinstance(ticker, list):
+        ticker = ticker[0]  # type: ignore
     query = state["messages"][-1]
     modelo = ModeloFundamentosAsync(ticker=ticker, query=query)
     response = await modelo.chat_fundamentalistas()
-    dados_input = state["dados_input"]
+    dados_input = state.get('dados_input', '')
 
-    if isinstance(dados_input, list):
+    if isinstance(dados_input, list) and dados_input:
         dados_input = dados_input[0].content  # type: ignore
 
-    response = dados_input + "\n" + response  # type: ignore
-
+    if dados_input:
+        response = f"{dados_input}\n{response}"# type: ignore
+    else:
+        response = "/n/n"
     return Command(
         update={"dados_input": [HumanMessage(content=response, name="valuation")]},
         goto="supervisor",
@@ -171,6 +190,8 @@ async def analise_investimento(state: State) -> Command[Literal["supervisor"]]:
                          added to 'dados_input', or None if an error occurs.
     """
     ticker = state["ticker"]
+    if isinstance(ticker, list):
+        ticker = ticker[0]  # type: ignore
     dados_input = state.get("dados_input", "")
 
     tecnica = ModeloAnaliseTecnicaAsync(

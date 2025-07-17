@@ -6,9 +6,6 @@ from pydantic import SecretStr
 
 from .chat_groq import get_llm
 
-import os
-
-MODEL_ID_TECNICAL = os.getenv("MODEL_ID_TECNICAL")
 
 async def ChatAnaliseTecnicaAsync(
     query: str,

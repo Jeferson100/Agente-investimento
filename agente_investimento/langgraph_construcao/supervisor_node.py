@@ -6,7 +6,17 @@ from typing_extensions import TypedDict
 from ..chat_bots import get_llm
 from .type_state import State
 
-# Defina os métodos de análise disponíveis
+from typing import Final
+
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+DEFAULT_MODEL: Final = "qwen-qwq-32b"
+
+MODEL_ID_SUPERVISOR: str = os.getenv("MODEL_ID_SUPERVISOR", DEFAULT_MODEL)
+
 members = [
     "fundamentals",
     "technical",
@@ -81,7 +91,7 @@ def supervisor_node(
     messages.append({"role": "system", "content": context_message})
 
     llm = get_llm(
-        model="qwen-qwq-32b",
+        model=MODEL_ID_SUPERVISOR,
         temperature=0,
         stop_sequences=None,
     )

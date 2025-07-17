@@ -5,10 +5,17 @@ from pydantic import SecretStr
 from ..chat_bots import ChatAnaliseTecnica, get_secret_key
 from ..tratando_dados import TratandoDadosIndicadores
 
+import os
+
 try:
     api_secret_groq = get_secret_key("GROQ_API_KEY")
 except KeyError as exc:
     raise ValueError("API key inválida ou não definida") from exc
+
+MODEL_ID_TECNICAL = os.getenv("MODEL_ID_TECNICAL")
+
+if MODEL_ID_TECNICAL is None:
+    print("Modelo tecnica nao definido no .env!")
 
 
 class ModeloAnaliseTecnica:
@@ -26,7 +33,7 @@ class ModeloAnaliseTecnica:
         self.ticker = ticker
         self.periodo = periodo
         self.intervalo = intervalo
-        self.modelo_llm = modelo_llm
+        self.modelo_llm = modelo_llm if MODEL_ID_TECNICAL is not None else modelo_llm
         self.stream = stream
         self.api_secret = api_secret
 

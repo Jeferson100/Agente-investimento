@@ -6,10 +6,17 @@ from selenium import webdriver
 from ..chat_bots import ChatSentimento, get_secret_key
 from ..tratando_dados import TratarDadosNoticias
 
+import os
+
 try:
     api_groq = get_secret_key("GROQ_API_KEY")
 except KeyError as exc:
     raise ValueError("API key inválida ou não definida") from exc
+
+MODEL_ID_SENTIMENTO = os.getenv("MODEL_ID_SENTIMENTO")
+
+if MODEL_ID_SENTIMENTO is None:
+    print("Modelo sentimento nao definido no .env!")
 
 
 class ModeloSentimento:
@@ -23,7 +30,7 @@ class ModeloSentimento:
         api_secret_serper: SecretStr | None = None,
     ) -> None:
         self.acao = acao
-        self.modelo_llm = modelo_llm
+        self.modelo_llm = modelo_llm if MODEL_ID_SENTIMENTO is not None else modelo_llm
         self.query = query
         self.stream = stream
         self.api_secret_groq = api_secret_groq

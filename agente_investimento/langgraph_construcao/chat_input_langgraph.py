@@ -6,6 +6,18 @@ from langchain_core.messages import HumanMessage
 from ..chat_bots import get_llm
 from .type_state import State
 
+from typing import Final
+
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+DEFAULT_MODEL: Final = "meta-llama/llama-4-scout-17b-16e-instruct"
+
+# Obtém o modelo do arquivo .env com valor padrão
+MODEL_ID_CHAT_IMPUT: str = os.getenv("MODEL_ID_CHAT_IMPUT", DEFAULT_MODEL)
+    
 
 async def chat_input(state: State) -> State:
     """
@@ -72,7 +84,9 @@ async def chat_input(state: State) -> State:
 
     last_message = state["messages"][-1]
 
-    llm = get_llm()
+    llm = get_llm(
+        model=MODEL_ID_CHAT_IMPUT, 
+    )
 
     response = await llm.ainvoke(
         [HumanMessage(content=prompt), HumanMessage(content=last_message.content)]

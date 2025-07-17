@@ -42,6 +42,13 @@ class TratatandoDadosFundamentalistasComparacao:
             "preço_capital_giro",
             "preço_fcf",
             "caixa_equivalentes_caixa",
+            "giro_do_ativo_inicial",
+            "retorno_sobre_patrimonio_liquido_inicial",
+            "retorno_sobre_capital_investido_inicial",
+            "fluxo_caixa_financiamento",
+            "fluxo_caixa_investimento",
+            "fluxo_caixa_operacional",   
+            "fluxo_caixa_livre_tres_meses",
         ]
         df = await self.dados_fundamentalistas(tic=tic)
         

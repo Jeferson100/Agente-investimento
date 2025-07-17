@@ -56,7 +56,7 @@ class TratarDadosNoticias:
 
         return data_links_google
 
-    def _process_news_content(self, link: Optional[str]) -> str:
+    async def _process_news_content(self, link: Optional[str]) -> str:
         """Processa o conteúdo HTML de uma notícia."""
         if link is None:
             return ""
@@ -68,9 +68,9 @@ class TratarDadosNoticias:
         if len(dados_mark) >= self.MAX_HTML_LENGTH:
             dados_mark = dados_mark[: self.TRUNCATE_LENGTH]
 
-        return ChatLimpaResposta(dados_mark, self.acao, self.api_secret_groq)
+        return await ChatLimpaResposta(dados_mark, self.acao, self.api_secret_groq)
 
-    def clean_chat_html(self) -> str:
+    async def clean_chat_html(self) -> str:
         try:
             links = self.get_news_yahoo()["links"]
         except KeyError:
@@ -93,7 +93,7 @@ class TratarDadosNoticias:
 
         for link in links:
             if link:
-                dados_limpo = self._process_news_content(link)
+                dados_limpo = await self._process_news_content(link)
 
                 dados_news = dados_news + "\nNew notice\n" + dados_limpo
 

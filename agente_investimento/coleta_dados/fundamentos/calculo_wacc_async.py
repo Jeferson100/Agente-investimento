@@ -2,13 +2,16 @@ import asyncio
 import warnings
 from datetime import datetime
 
-import aiohttp
-import ipeadatapy as ip
 import pandas as pd
 import yfinance as yf
 
+from concurrent.futures import ThreadPoolExecutor
+
+from ..data_cache import DataCache
+
 warnings.filterwarnings("ignore")
 
+cache = DataCache()
 
 class CalculoWACCAsync:
     def __init__(
@@ -18,42 +21,51 @@ class CalculoWACCAsync:
         end_date_retorno: str = datetime.today().strftime("%Y-%m-%d"),
     ):
         self.ticker = self.tratando_ticker(ticker)
-        self.empresa = yf.Ticker(self.ticker)
         self.start_date_retorno = start_date_retorno
         self.end_date_retorno = end_date_retorno
-
+        self.cache = cache # Usa o cache global
+        
     def tratando_ticker(self, ticker: str) -> str:
         if ".SA" in ticker:
             acao = ticker
         else:
             acao = f"{ticker}.SA"
         return acao
+    
+    async def initialize(self):
+        """Pré-carrega todos os dados necessários para evitar múltiplas chamadas."""
+        with ThreadPoolExecutor(max_workers=3) as executor: 
 
+            info_future = executor.submit(self.cache.get_info, self.ticker)
+            dividends_future = executor.submit(self.cache.get_dividends, self.ticker)
+            history_future = executor.submit(self.cache.get_history, self.ticker)
+            
+            # Aguardar a conclusão
+            self.info = info_future.result()
+            self.dividends = dividends_future.result()
+            self.history = history_future.result()
+            
     async def juros_livre(self) -> float:
         try:
-            juros = (
-                ip.timeseries("BMF12_SWAPDI36012")
-                .rename(columns={"VALUE ((% a.a.))": "swaps"})[["swaps"]]
+            cach_juros = self.cache.get_ipea_data("BMF12_SWAPDI36012")
+            df_juros = pd.DataFrame(cach_juros)
+            juros = (df_juros.rename(columns={"VALUE ((% a.a.))": "swaps"})[["swaps"]]
                 .div(100)
                 .iloc[-1]
-                .swaps
-            )
+                .swaps)
             if juros is None:
                 raise ValueError("Erro: Não foi possível obter os juros livres.")
             return float(juros)
         except Exception as e:
             print(f"Erro ao obter juros livres: {e}")
             return 0.1  # Taxa padrão em caso de erro
-
+        
+    
     async def retorno_mercado(self) -> float:
         try:
-            ibov = await asyncio.to_thread(
-                yf.download,
-                "^BVSP",
-                start=self.start_date_retorno,
-                end=self.end_date_retorno,
-            )
-
+            ibov = self.cache.get_dowload("^BVSP")
+            ibov = pd.DataFrame(ibov)
+    
             if ibov is None or ibov.empty:
                 raise ValueError("Erro: Nenhum dado foi baixado para o IBOVESPA.")
 
@@ -70,43 +82,53 @@ class CalculoWACCAsync:
         except Exception as e:
             print(f"Erro ao calcular retorno do mercado: {e}")
             return 0.15  # Retorno padrão em caso de erro
-
-    async def valor_mercado(self) -> float:
-        market_cap = self.empresa.info.get("marketCap", 0)
+    
+    async def valor_mercado(self):
+        """Obtém o valor de mercado da empresa."""
+        # Usa o cache em vez de fazer nova chamada
+        info = self.cache.get_info(self.ticker)
+        market_cap = info.get('marketCap', 0)
         if market_cap is None:
             raise ValueError("Erro: Não foi possível obter os valores de mercado.")
         return float(market_cap)
-
+    
     async def valor_total_empresa(self) -> float:
-        enterprise_value = self.empresa.info.get("enterpriseValue", 0)
+        info = self.cache.get_info(self.ticker)
+        enterprise_value = info.get("enterpriseValue", 0)
         if enterprise_value is None:
             raise ValueError("Erro: Não foi possível obter o valor total da empresa.")
         return float(enterprise_value)
-
+    
     async def calculo_divida(self) -> float:
-        valor_mercado = await self.valor_mercado()
-        valor_total = await self.valor_total_empresa()
+        valor_mercado, valor_total = await asyncio.gather(
+            self.valor_mercado(),
+            self.valor_total_empresa()
+        )
         debt = valor_total - valor_mercado if valor_total and valor_mercado else 0
         return float(debt)
-
+    
     async def beta_empresa(self) -> float:
-        beta = self.empresa.info.get("beta", 1)
+        info = self.cache.get_info(self.ticker)
+        beta = info.get("beta", 1)
         if beta is None:
             raise ValueError("Erro: Não foi possível obter o beta da empresa.")
         return float(beta)
-
+    
     async def custo_patrimonio(self) -> float:
-        juros = await self.juros_livre()
-        beta = await self.beta_empresa()
-        retorno = await self.retorno_mercado()
-
+        
+        juros, beta, retorno = await asyncio.gather(
+            self.juros_livre(),
+            self.beta_empresa(),
+            self.retorno_mercado()
+        )
         cost_of_equity = juros + beta * retorno
         if cost_of_equity is None:
             raise ValueError("Erro: Não foi possível obter o custo do patrimônio.")
         return float(cost_of_equity)
-
+    
     async def despesas_juros(self) -> float:
-        financials = self.empresa.get_financials()
+        
+        financials = self.cache.get_financials(self.ticker)
 
         if not isinstance(financials, pd.DataFrame):
             df_financials = pd.DataFrame.from_dict(financials)
@@ -122,27 +144,31 @@ class CalculoWACCAsync:
             )
 
         return float(df_financials.loc["InterestExpense"].values[0])
-
+    
     async def total_divida(self) -> float:
-        total_debt = self.empresa.info.get("totalDebt", 0)
+        info = self.cache.get_info(self.ticker)
+        total_debt = info.get("totalDebt", 0)
         if total_debt is None:
             raise ValueError("Erro: Não foi possível obter o total da divida.")
         return float(total_debt)
-
+    
     async def custo_divida(self) -> float:
-        despesas = await self.despesas_juros()
-        total_divida = await self.total_divida()
-        juros = await self.juros_livre()
+        despesas, total_divida, juros = await asyncio.gather(
+            self.despesas_juros(),
+            self.total_divida(),
+            self.juros_livre()
+        )
 
         cost_of_debt = (despesas / total_divida) if total_divida else juros
         return cost_of_debt
-
+    
     async def custo_imposto(self) -> float:
-        tax_provision = self.empresa.financials.loc["Tax Provision"].values[0]
-        pretax_income = self.empresa.financials.loc["Pretax Income"].values[0]
+        ticker = self.cache.get_ticker(self.ticker)
+        tax_provision = ticker.financials.loc["Tax Provision"].values[0]
+        pretax_income = ticker.financials.loc["Pretax Income"].values[0]
         tax_rate = tax_provision / pretax_income if pretax_income else 0.30
         return tax_rate
-
+    
     async def wacc(self) -> float:
         try:
             results = await asyncio.gather(

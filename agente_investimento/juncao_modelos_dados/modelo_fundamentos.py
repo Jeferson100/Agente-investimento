@@ -5,10 +5,17 @@ from pydantic import SecretStr
 from ..chat_bots import ChatFundamentalistas, get_secret_key
 from ..tratando_dados import tratando_dados_fundamentalistas
 
+import os
+
 try:
     api_secret_groq = get_secret_key("GROQ_API_KEY")
 except KeyError as exc:
     raise ValueError("API key inválida ou não definida") from exc
+
+MODEL_FUNDAMENTAL = os.getenv("MODEL_ID_FUNDAMENTAL")
+
+if MODEL_FUNDAMENTAL is None:
+    print("Modelo fundamental nao definido no .env!")
 
 
 class ModeloFundamentos:
@@ -24,7 +31,7 @@ class ModeloFundamentos:
         self.ticker = ticker
         self.query = query
         self.stream = stream
-        self.modelo_llm = modelo_llm
+        self.modelo_llm = modelo_llm if MODEL_FUNDAMENTAL is not None else modelo_llm
         self.dados_inicio = dados_inicio
         self.api_secret = api_secret
 

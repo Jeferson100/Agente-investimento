@@ -5,6 +5,17 @@ from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from ..chat_bots import get_llm
 from .type_state import State
 
+from typing import Final
+
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+DEFAULT_MODEL: Final = "meta-llama/llama-4-scout-17b-16e-instruct"
+
+MODEL_ID_CHAT_RESPONSE: str = os.getenv("MODEL_ID_CHAT_RESPONSE", DEFAULT_MODEL)
+
 
 async def chatbot(state: State) -> Dict[str, Any]:
     """
@@ -71,7 +82,7 @@ async def chatbot(state: State) -> Dict[str, Any]:
 
         messages = [system_message, HumanMessage(content=f"{last_message.content}")]
 
-        llm = get_llm()
+        llm = get_llm(model=MODEL_ID_CHAT_RESPONSE)
 
         response = await llm.ainvoke(messages)
 

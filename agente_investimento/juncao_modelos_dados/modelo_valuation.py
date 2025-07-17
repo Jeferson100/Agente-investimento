@@ -5,10 +5,17 @@ from pydantic import SecretStr
 from ..chat_bots import ChatValuation, get_secret_key
 from ..tratando_dados import TratandoDadosValuation
 
+import os
+
 try:
     api_secret_groq = get_secret_key("GROQ_API_KEY")
 except KeyError as exc:
     raise ValueError("API key inválida ou não definida") from exc
+
+MODEL_ID_VALUATION = os.getenv("MODEL_ID_VALUATION")
+
+if MODEL_ID_VALUATION is None:
+    print("Modelo valuation nao definido no .env!")
 
 
 class ModeloValuation:
@@ -29,7 +36,7 @@ class ModeloValuation:
         self.calculo_necessidade_capital_de_giro = calculo_necessidade_capital_de_giro
         self.query = query
         self.stream = stream
-        self.modelo_llm = modelo_llm
+        self.modelo_llm = modelo_llm if MODEL_ID_VALUATION is not None else modelo_llm
         self.api_secret = api_secret
 
     def tratando_ticker(self) -> str:

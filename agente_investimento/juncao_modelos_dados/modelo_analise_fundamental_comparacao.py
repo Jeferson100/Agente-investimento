@@ -4,10 +4,18 @@ from pydantic import SecretStr
 from ..chat_bots import ChatFundamentalistasComparacaoAsync, get_secret_key
 from ..tratando_dados import TratatandoDadosFundamentalistasComparacao
 
+import os
+
 try:
     api_secret_groq = get_secret_key("GROQ_API_KEY")
 except KeyError as exc:
     raise ValueError("API key inválida ou não definida") from exc
+
+
+MODEL_FUNDAMENTAL = os.getenv("MODEL_ID_FUNDAMENTAL")
+
+if MODEL_FUNDAMENTAL is None:
+    print("Modelo fundamental nao definido no .env!")
 
 
 class ModeloFundamentosComparacaoAsync:
@@ -15,14 +23,14 @@ class ModeloFundamentosComparacaoAsync:
         self,
         tickers: List[str],
         query: str,
-        stream: bool = False,
         modelo_llm: str = "meta-llama/llama-4-scout-17b-16e-instruct",
+        stream: bool = False,
         api_secret: SecretStr | None = api_secret_groq,
     ) -> None:
         self.query = query
         self.tickers = tickers
         self.stream = stream
-        self.modelo_llm = modelo_llm
+        self.modelo_llm = modelo_llm if MODEL_FUNDAMENTAL is not None else modelo_llm
         self.api_secret = api_secret
     
     async def dados_fundamentalistas_comparacao(self) -> List[Any]:
@@ -33,12 +41,13 @@ class ModeloFundamentosComparacaoAsync:
         return fudamentos_comparacao
     
     async def chat_fundamentalistas_comparacao(self) -> str | Iterator[str]:
+        print("O modelo usado e o:", self.modelo_llm)
         dados_fundamentalistas = await self.dados_fundamentalistas_comparacao()
         response = await ChatFundamentalistasComparacaoAsync(
             query=self.query,
             dados=dados_fundamentalistas,
             api_secret=self.api_secret,
-            modelo_llm=self.modelo_llm,
+            modelo_llm=self.modelo_llm,  # type: ignore
             stream=self.stream,
         )
         if "</think>" in response:
