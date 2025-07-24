@@ -4,7 +4,6 @@ from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from langchain.schema import HumanMessage
 from langgraph.checkpoint.memory import MemorySaver
-
 sys.path.append("..")
 from agente_investimento import langgraph_main
 

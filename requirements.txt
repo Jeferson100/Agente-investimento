@@ -58,10 +58,9 @@ fastapi
 uvicorn
 langchain-docling
 SQLAlchemy==2.0.40
-psycopg
 langgraph-checkpoint-postgres==2.0.21
 psycopg-pool
-psycopg-binary
+psycopg2-binary
 pyinstrument 
 yfinance_cache
 requests_cache
@@ -69,4 +68,7 @@ better-profanity
 openai==1.77.0
 llm-guard
 openevals
+langgraph-cli==0.3.5
+pyrefly
+chainlit
 

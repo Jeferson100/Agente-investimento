@@ -109,3 +109,7 @@ target-version = "py310"
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 addopts = "-v --cov=agente_investimento"
+
+[tool.pyrefly]
+permissive-ignores = "True"
+use-untyped-imports = "True"

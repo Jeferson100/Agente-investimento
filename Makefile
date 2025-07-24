@@ -40,6 +40,9 @@ typepyright:
 typemypy:
 	mypy agente_investimento/ app/ tests/
 
+typepyrefly:
+	pyrefly check agente_investimento/ app/ tests/
+
 ## Set up Python interpreter environment
 .PHONY: create_environment
 create_environment:

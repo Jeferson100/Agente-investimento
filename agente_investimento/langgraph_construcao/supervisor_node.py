@@ -13,17 +13,12 @@ import os
 
 load_dotenv()
 
-DEFAULT_MODEL: Final = "qwen-qwq-32b"
+DEFAULT_MODEL: Final = "qwen/qwen3-32b"
 
 MODEL_ID_SUPERVISOR: str = os.getenv("MODEL_ID_SUPERVISOR", DEFAULT_MODEL)
 
-members = [
-    "fundamentals",
-    "technical",
-    "sentimental",
-    "valuation",
-    "analise_investimento",
-]
+members = ['fundamentalista', 'tecnico', 'sentimento', 'valuation','analise_investimento']
+
 options = members + ["FINISH"]
 
 system_prompt = (
@@ -38,28 +33,12 @@ system_prompt = (
 class Router(TypedDict):
     """Determina o próximo método de análise. Se nenhum método for necessário, encerra."""
 
-    next: Literal[
-        "fundamentals",
-        "technical",
-        "sentimental",
-        "valuation",
-        "analise_investimento",
-        "FINISH",
-    ]
+    next: Literal['fundamentalista', 'tecnico', 'sentimento', 'valuation','analise_investimento', 'FINISH']
 
 
 def supervisor_node(
     state: State,
-) -> Command[
-    Literal[
-        "fundamentals",
-        "technical",
-        "sentimental",
-        "valuation",
-        "analise_investimento",
-        "chatbot",
-    ]
-]:
+) -> Command[Literal['fundamentalista', 'tecnico', 'sentimento', 'valuation','analise_investimento', 'chatbot_investimento']]:
     """
     Executes the supervisor node, which decides which analysis method should be executed next.
     The supervisor node checks if there are still analysis methods available and, if so,
@@ -78,7 +57,7 @@ def supervisor_node(
 
     if not metodo_analise:
         print("Todos os métodos de análise concluídos")
-        return Command(goto="chatbot")
+        return Command(goto="chatbot_investimento")
 
     messages = [
         {"role": "system", "content": system_prompt},

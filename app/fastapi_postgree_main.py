@@ -10,6 +10,7 @@ from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
 from psycopg.rows import dict_row
 from psycopg_pool import AsyncConnectionPool
 from starlette.config import Config
+import psycopg2
 
 sys.path.append("..")
 from agente_investimento import langgraph_main
@@ -74,7 +75,7 @@ async def chatbot(message: str):
 
         graph = graph_builder.compile(checkpointer=checkpointer)
 
-        config = {"configurable": {"thread_id": "1"}}
+        config = {"configurable": {"thread_id": "2"}}
 
         # Estado inicial para a invocação do grafo
         initial_state = {
@@ -147,6 +148,83 @@ async def return_db(thread_id: str = "1"):
             "details": traceback.format_exc(),
         }
 
+@app.get("/quantidade_linhas/{thread_id}")
+async def quantidade_linhas(thread_id: str = "1"):
+    """
+    Endpoint para retornar a quantidade de linhas do thread_id informado.
+    """
+
+    try:
+        # Conexão
+        conn = psycopg2.connect(
+            dbname="postgres",
+            user="postgres",
+            password="postgres",
+            host="langgraph-postgres",
+            port=5432
+        )
+        cur = conn.cursor()
+        
+        cur.execute(f"SELECT * FROM checkpoints WHERE thread_id = '{thread_id}';")
+        rows = cur.fetchall()
+        number_linhas_restante = len(rows)
+        
+        return {
+            "status": "success",
+            "message": f"Quantidade de linhas para o thread_id {thread_id}: {number_linhas_restante}",
+        }
+    except Exception as e:
+        import traceback
+        return {
+            "status": "error",
+            "message": f"Erro ao contar linhas: {str(e)}",
+            "details": traceback.format_exc(),
+        }
+
+@app.delete("/delete_linhas/{thread_id}/{num_linhas}")
+async def limpar_memoria(thread_id: str = "2", num_linhas: str = "3"):
+    """
+    Endpoint para limpar a memória (checkpoint) do thread_id informado.
+    """
+    try:
+
+        conn = psycopg2.connect(
+            dbname="postgres",
+            user="postgres",
+            password="postgres",
+            host="langgraph-postgres",
+            port=5432
+        )
+        cur = conn.cursor()
+        
+        cur.execute(f"""
+        DELETE FROM checkpoints
+        WHERE ctid IN (
+            SELECT ctid FROM checkpoints
+            WHERE thread_id = '{thread_id}'
+            ORDER BY checkpoint ASC
+            LIMIT {num_linhas if num_linhas.isdigit() else 3}
+        );
+        """)
+        conn.commit()
+        cur.execute(f"SELECT * FROM checkpoints WHERE thread_id = '{thread_id}';")
+        rows = cur.fetchall()
+        number_linhas_restante = len(rows)
+        cur.close()
+        return {
+            "status": "success",
+            "thread_id": thread_id,
+            "message": f"{num_linhas} linhas deletadas com sucesso.",
+            "remaining_rows": number_linhas_restante,
+        }
+    
+    except Exception as e:
+        import traceback
+        return {
+            "status": "error",
+            "message": f"Erro ao limpar memória: {str(e)}",
+            "details": traceback.format_exc(),
+        }
 
 if __name__ == "__main__":
     import uvicorn

@@ -9,6 +9,7 @@ from typing import Final
 
 from dotenv import load_dotenv
 import os
+from langchain_groq import ChatGroq
 
 load_dotenv()
 
@@ -17,7 +18,7 @@ DEFAULT_MODEL: Final = "meta-llama/llama-4-scout-17b-16e-instruct"
 MODEL_ID_CHAT_RESPONSE: str = os.getenv("MODEL_ID_CHAT_RESPONSE", DEFAULT_MODEL)
 
 
-async def chatbot(state: State) -> Dict[str, Any]:
+async def chatbot_investimento(state: State) -> Dict[str, Any]:
     """
     Generates a consolidated investment analysis response using an LLM.
 
@@ -49,40 +50,36 @@ async def chatbot(state: State) -> Dict[str, Any]:
     """
 
     try:
-        system_message = SystemMessage(
+        system_message: SystemMessage = SystemMessage(
             content=f"""
-       Você é um assistente especializado em análise de investimentos no mercado brasileiro.
-        
-        Voce recebe os seguintes dados 
-        <DADOS INPUT>
+        You are an investment analysis agent with over 10 years of experience. You receive the following data.        
+        <INPUT DATA>
         {state["dados_input"]}.
-        <DADOS INPUT>
-        Nesses dados voce recebe informacao de analise técnica, analise fundamentalista, analise de sentimento e analise de valuation de acoes expecificado pelos usuarios.
-        As analises nesses dados estao divididos pelo seguinte caracteres:
-        - #########Technical Analysis#######  = Dentro dessa analise tem analise tecnica da acao.
-        - ##########Fundamental Analysis######## = Dentro dessa analise tem a analise dos balancos da acao.
-        - ############Valuation Analysis############ = Dentro dessa te a estimativa do valuation da acao.
-        - #########Sentiment Analysis##### =  Dentro dessa temos a analise de noticias sobre a acao.
-        
-        Diretrizes:
-        - Seja conciso e direto nas respostas
-        - Use linguagem acessível, mas profissional
-        - Quando não tiver certeza, admita as limitações
-        - Sempre mencione os riscos envolvidos em investimentos
-        - Evite recomendações diretas de compra/venda
-        
-        Voce deve dar o nivel de confianca da analise.
-        Indique se analisando as entradas do agentes, a recomendacao e de compra, venda ou manter a acao.
-    
+        </INPUT DATA>
+        Your task is to analyze the data and answer the user's question {state["messages"]}.
+
+        Guidelines:
+        - Be concise and direct
+        - Use professional but accessible language  
+        - Acknowledge limitations when uncertain
+        - Always mention investment risks
+        - Avoid direct buy/sell recommendations
+
+        ## Investment Analysis
+        - Comment on why you think the stock is good
+
+        *Note:*  
+        If there is insufficient data about the company, respond normally based on a generic conversation.
+        IMPORTANT: ALWAYS PROVIDE THE RESPONSE IN PORTUGUESE (BRAZILIAN PORTUGUESE).
         
         """
         )
 
         last_message = state["messages"][-1]
 
-        messages = [system_message, HumanMessage(content=f"{last_message.content}")]
+        messages: list[HumanMessage | SystemMessage] = [system_message, HumanMessage(content=f"{last_message.content}")]
 
-        llm = get_llm(model=MODEL_ID_CHAT_RESPONSE)
+        llm: ChatGroq = get_llm(model=MODEL_ID_CHAT_RESPONSE)
 
         response = await llm.ainvoke(messages)
 

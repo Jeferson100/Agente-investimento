@@ -22,6 +22,11 @@ try:
 except KeyError as exc:
     raise ValueError("API key inválida ou não definida") from exc
 
+try:
+    api_serper = get_secret_key("API_KEY_SERPER")
+except KeyError as exc:
+    raise ValueError("API key serper inválida ou não definida") from exc
+
 MODEL_ID_SENTIMENTO = os.getenv("MODEL_ID_SENTIMENTO")
 
 if MODEL_ID_SENTIMENTO is None:
@@ -36,7 +41,7 @@ class ModeloSentimentoComparacao:
         modelo_llm: str = "deepseek-r1-distill-llama-70b",
         stream: bool = False,
         api_secret_groq: SecretStr | None = api_groq,
-        api_secret_serper: SecretStr | None = None,
+        api_secret_serper: SecretStr | None = api_serper,
     ) -> None:
         self.tickers = tickers
         self.query = query

@@ -15,6 +15,10 @@ COPY requirements.txt .
 #RUN pip install --no-cache-dir -r requirements.txt
 RUN venv/bin/pip install --no-cache-dir -r requirements.txt
 
+USER root
+
+RUN apt-get update && apt-get install -y libpq-dev gcc
+
 COPY ./agente_investimento ./agente_investimento
 
 COPY Makefile .

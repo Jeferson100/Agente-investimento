@@ -55,21 +55,19 @@ from .coleta_dados.fundamentos.variacao_receita_async import VariacaoReceitaAsyn
 from .coleta_dados.verificador_ticks import VerificadorTicks
 
 # juncao_modelos_dados
-from .juncao_modelos_dados.modelo_analise_tecnica import ModeloAnaliseTecnica
 from .juncao_modelos_dados.modelo_analise_tecnica_async import ModeloAnaliseTecnicaAsync
 from .juncao_modelos_dados.modelo_analise_tecnica_comparacao_async import ModeloAnaliseTecnicaComparacao
-from .juncao_modelos_dados.modelo_fundamentos import ModeloFundamentos
 from .juncao_modelos_dados.modelo_fundamentos_async import ModeloFundamentosAsync
 from .juncao_modelos_dados.modelo_analise_fundamental_comparacao import ModeloFundamentosComparacaoAsync
-from .juncao_modelos_dados.modelo_sentimento import ModeloSentimento
 from .juncao_modelos_dados.modelo_sentimento_async import ModeloSentimentoAsync
-from .juncao_modelos_dados.modelo_valuation import ModeloValuation
 from .juncao_modelos_dados.modelo_valuation_async import ModeloValuationAsync
 from .juncao_modelos_dados.modelo_valuation_comparacao import ModeloValuationComparacao
 from .juncao_modelos_dados.modelo_sentimento_comparacao import ModeloSentimentoComparacao
-from .langgraph_construcao.chat_bot_response import chatbot
-from .langgraph_construcao.chat_input_langgraph import chat_input
+from .langgraph_construcao.chat_bot_response import chatbot_investimento
+from .langgraph_construcao.chat_bot_padrao import chatbot_padrao
 from .langgraph_construcao.langgraph_main import langgraph_main
+from .langgraph_construcao.identifica_metodo_analise import identifica_metodo_analise
+from .langgraph_construcao.identifica_ticks import identifica_ticks
 
 # langgraph_construcao
 from .langgraph_construcao.type_state import State
@@ -100,7 +98,7 @@ from .utils.pegando_logo_marca import PegandoLogotipo
 from .utils.processa_analises import (
     analise_investimento,
     process_fundamental,
-    process_sentimetal,
+    process_sentimento,
     process_technical,
     process_valuation,
 )
@@ -151,11 +149,7 @@ __all__ = [
     "ValuationFluxoCaixaDescontado",
     "ValuationFluxoCaixaDescontadoAsync",
     "DadosNoticiasBuscadorYahooAsync",
-    "ModeloAnaliseTecnica",
     "ModeloAnaliseTecnicaComparacao",
-    "ModeloValuation",
-    "ModeloSentimento",
-    "ModeloFundamentos",
     "ModeloValuationAsync",
     "ModeloValuationComparacao",
     "ModeloSentimentoAsync",
@@ -163,8 +157,8 @@ __all__ = [
     "ModeloFundamentosComparacaoAsync",
     "ModeloAnaliseTecnicaAsync",
     "State",
-    "chatbot",
-    "chat_input",
+    "chatbot_investimento",
+    "chatbot_padrao",
     "verificacao_tickets",
     "supervisor_node",
     "langgraph_main",
@@ -183,9 +177,11 @@ __all__ = [
     "PegandoLogotipo",
     "analise_investimento",
     "process_fundamental",
-    "process_sentimetal",
+    "process_sentimento",
     "process_technical",
     "process_valuation",
     "DataCache",
     "ModeloSentimentoComparacao",
+    "identifica_metodo_analise",
+    "identifica_ticks",
 ]

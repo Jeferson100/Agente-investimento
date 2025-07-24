@@ -12,8 +12,9 @@ except KeyError as exc:
 def get_llm(
     model: str = "meta-llama/llama-4-scout-17b-16e-instruct",
     api_groq: SecretStr | None = api_secret_groq,
-    temperature: float = 0,
+    temperature: float = 0.5,
     stop_sequences: str | None = None,
+    max_tokens=None,
 ) -> ChatGroq:
     """
     Returns a ChatGroq instance.
@@ -23,5 +24,6 @@ def get_llm(
         model=model,
         temperature=temperature,
         stop_sequences=stop_sequences,
+        max_tokens=max_tokens,
     )
     return llm
