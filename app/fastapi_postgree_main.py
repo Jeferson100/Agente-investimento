@@ -75,7 +75,7 @@ async def chatbot(message: str):
 
         graph = graph_builder.compile(checkpointer=checkpointer)
 
-        config = {"configurable": {"thread_id": "2"}}
+        config = {"configurable": {"thread_id": "1"}}
 
         # Estado inicial para a invocação do grafo
         initial_state = {

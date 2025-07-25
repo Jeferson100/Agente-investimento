@@ -1,6 +1,7 @@
 from typing import Any, Dict
 
-from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
+from langchain_core.messages import AIMessage
+from langchain_core.prompts import ChatPromptTemplate
 
 from ..chat_bots import get_llm
 from .type_state import State
@@ -10,6 +11,8 @@ from typing import Final
 from dotenv import load_dotenv
 import os
 from langchain_groq import ChatGroq
+from ..chat_bots import get_llm
+from langchain_core.output_parsers import StrOutputParser
 
 load_dotenv()
 
@@ -50,13 +53,13 @@ async def chatbot_investimento(state: State) -> Dict[str, Any]:
     """
 
     try:
-        system_message: SystemMessage = SystemMessage(
-            content=f"""
+        system_message =(
+        """
         You are an investment analysis agent with over 10 years of experience. You receive the following data.        
         <INPUT DATA>
-        {state["dados_input"]}.
+        {dados_input}.
         </INPUT DATA>
-        Your task is to analyze the data and answer the user's question {state["messages"]}.
+        Your task is to analyze the data and answer the user's question {messages}.
 
         Guidelines:
         - Be concise and direct
@@ -72,19 +75,25 @@ async def chatbot_investimento(state: State) -> Dict[str, Any]:
         If there is insufficient data about the company, respond normally based on a generic conversation.
         IMPORTANT: ALWAYS PROVIDE THE RESPONSE IN PORTUGUESE (BRAZILIAN PORTUGUESE).
         
-        """
-        )
+        """)
+    
 
         last_message = state["messages"][-1]
-
-        messages: list[HumanMessage | SystemMessage] = [system_message, HumanMessage(content=f"{last_message.content}")]
+        dados_input = state.get("dados_input", "")
+        
+        chat_prompt: ChatPromptTemplate = ChatPromptTemplate.from_template(system_message)
 
         llm: ChatGroq = get_llm(model=MODEL_ID_CHAT_RESPONSE)
+        
+        llm_chain = chat_prompt | llm | StrOutputParser()
 
-        response = await llm.ainvoke(messages)
+        response = await llm_chain.ainvoke({
+        "messages": last_message,
+        "dados_input": dados_input}
+        )
 
         return {
-            "messages": [AIMessage(content=response.content)],
+            "messages": [AIMessage(content=response)],
             "ticker": state.get("ticker", ""),
             "method_analysis": state.get("method_analysis", ""),
             "dados_input": state.get("dados_input", ""),

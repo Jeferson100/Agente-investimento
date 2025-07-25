@@ -52,7 +52,7 @@ def identifica_metodo_analise(state: State) -> Command[Literal["identifica_ticks
     Identifies stock tickers from the last message in the state and updates the 'ticker' key.
     """
     print('Entrei no identifica_metodo_analise')
-    messages = state.get('messages', [])
+    messages = state.get('messages', [])[-1]
     if not messages:
         return {"method_analysis": []}  # Retorna lista vazia se não houver mensagens
     # Invoca a chain para identificar os tickers

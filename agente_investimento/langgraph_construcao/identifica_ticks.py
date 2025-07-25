@@ -70,8 +70,8 @@ def identifica_ticks(state: State): #Command[Literal["chatinput", "roteador_anal
     Identifies stock tickers from the last message in the state and updates the 'ticker' key.
     """
     print('Entrei identificacao ticks')
-    messages = state.get('messages', [])
-
+    messages = state.get('messages', [])[-1]
+    
     if not messages:
         return {"ticker": []}  # Retorna lista vazia se não houver mensagens
     
