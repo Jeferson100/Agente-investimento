@@ -71,5 +71,5 @@ openevals
 langgraph-cli==0.3.5
 pyrefly
 chainlit
-nest-asyncio==1.6.0
+#nest-asyncio==1.6.0
 

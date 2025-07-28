@@ -14,8 +14,15 @@
 
 
 <p align="center">
-  O <b>Agente-Investimento</b> é uma ferramenta que integra o poder dos <b>Grandes Modelos de Linguagem (LLMs)</b> com dados do mercado financeiro brasileiro para fornecer análises de ações. Ele consolida <b>Análise Fundamentalista</b>, <b>Análise Técnica</b>, <b>Análise de Sentimento</b> e <b>Valuation</b>, tentando capacitar investidores com insights para a tomada de decisão.
+  O <b>Agente-Investimento</b> é uma ferramenta que integra o poder dos <b>Grandes Modelos de Linguagem (LLMs)</b> com dados do mercado financeiro brasileiro para fornecer análises de ações. Ele consolida <b>Análise Fundamentalista</b>, <b>Análise Técnica</b>, <b>Análise de Sentimento</b> e <b>Valuation</b>, tentando capacitar investidores com insights para a tomada de decisão. 
+
+  Ele criado com a biblioteca [LangChain](https://python.langchain.com/docs/get_started/introduction) e [LangGraph](https://github.com/langchain-ai/langgraph) tendo como fluxograma a seguinte estrutura:
+
+
+ <p align="center">
+<img src="laggraph_imagem.png" alt="Imagem do fluxo langgraph" width="800"/>
 </p>
+
 
 ## ✨ Destaques do Agente-Investimento
 
@@ -105,42 +112,34 @@ O Agente-Investimento pode ser utilizado com o chainlit, atraves do seguinte com
 
 ```bash
 pip install -r requirements.txt
-chainlit run app_streamlit/app_chainlit.py
+chainlit run app/app_chainlit.py
 ```
 
+## 📂 Estrutura do Projeto
 
-
-## 📂 Estrutura de Arquivos
+A estrutura de diretórios do projeto está organizada da seguinte forma:
 
 ```bash
-Agente-investimento/ 
-├── app_streamlit/               # Código do Streamlit
-│   ├── 1_AnaliseAcao.py                # Página inicial
-│   ├── pages/                    # Páginas da aplicação
-│   │   ├── 1_AnaliseFundamentalista.py
-│   │   ├── 2_AnaliseTecnica.py
-│   │   ├── 3_AnaliseSentimento.py
-│   │   └── 4_AnaliseValuation.py
-│   └── __init__.py
-├── coleta_dados/                 # Módulos de coleta de dados
-├── chat_bots/                     # Módulos do chatbot
-├── juncao_modelos_dados/          # Modelos de IA e integração de dados
-├── utils/                         # Funções utilitárias
-├── .gitignore                     # Arquivos ignorados pelo Git
-├── requirements.txt               # Dependências do projeto
-├── README.md                      # Este arquivo
-└── imagem/                        # Imagens utilizadas no projeto
+Agente-investimento/
+├── app/                      # Código das aplicações (Streamlit, Chainlit)
+├── agente_investimento/      # Core do agente e lógica de análise
+│   ├── chat_bots/            # Módulos do chatbot
+│   ├── coleta_dados/         # Módulos de coleta de dados
+│   ├── juncao_modelos_dados/ # Modelos de IA e integração de dados
+│   ├── tratando_dados/       # Scripts para tratamento e limpeza de dados
+│   └── utils/                # Funções utilitárias
+├── imagem/                   # Imagens utilizadas no projeto
+├── testes/                   # Testes unitários e de integração
+├── .env.example              # Arquivo de exemplo para variáveis de ambiente
+├── .gitignore                # Arquivos ignorados pelo Git
+├── docker-compose.yml        # Configuração do Docker Compose
+├── Dockerfile                # Configuração do container Docker
+├── requirements.txt          # Dependências do projeto
+└── README.md                 # Este arquivo
 ```
 
 *   `Agente-investimento/`: Diretório raiz do projeto.
-*   `app_streamlit/`: Código-fonte da aplicação web desenvolvida com Streamlit.
-    *   `1_AnaliseAcao.py`: Página inicial da aplicação Streamlit. Define o ponto de entrada principal, onde o usuário seleciona a ação para análise e navega pelas demais funcionalidades.
-    *   `pages/`: Subdiretório que contém as páginas individuais da aplicação.
-        *   `1_AnaliseFundamentalista.py`: Define a interface e a lógica para a exibição da Análise Fundamentalista da ação.
-        *   `2_AnaliseTecnica.py`: Define a interface e a lógica para a exibição da Análise Técnica da ação, incluindo gráficos e indicadores.
-        *   `3_AnaliseSentimento.py`: Define a interface e a lógica para a exibição da Análise de Sentimento, baseada em notícias da ação.
-        *   `4_AnaliseValuation.py`: Define a interface e a lógica para a exibição do Valuation (Avaliação) da ação, usando modelos financeiros.
-    *   `__init__.py`: Arquivo que marca o diretório `app_streamlit` como um pacote Python, permitindo a importação dos seus módulos.
+* `app/`: Contém os scripts de inicialização das interfaces web (`app_streamlit.py`, `app_chainlit.py`).
 *   `coleta_dados/`: Módulos responsáveis pela coleta dos dados externos de diversas fontes.
     *   `fundamentos/`: Diretório que contém os módulos responsáveis por cálculos e análises relacionados aos fundamentos das empresas.
         *   `calculo_wacc.py`: Módulo que implementa o cálculo do WACC (Custo Médio Ponderado de Capital), uma métrica fundamental para a avaliação financeira de empresas.
@@ -173,6 +172,17 @@ Agente-investimento/
     *   `modelo_fundamentos.py`: Módulo que implementa o modelo de Inteligência Artificial (IA) para realizar a Análise Fundamentalista de ações, integrando os dados financeiros e gerando insights.
     *   `modelo_sentimento.py`: Módulo que implementa o modelo de Inteligência Artificial (IA) para realizar a Análise de Sentimento de notícias sobre ações, integrando os dados coletados e gerando insights.
     *   `modelo_valuation.py`: Módulo que implementa o modelo de Inteligência Artificial (IA) para realizar o Valuation (Avaliação) de ações, integrando os dados financeiros e gerando insights.
+
+* `langraph_construcao/`: Módulo que contém os arquivos responsáveis pela criação e gerenciamento de gráficos e arquivos de dados para o sistema LangGraph.
+    *   `chat_bot_padrao.py`: Módulo que implementa o chatbot padrão do sistema LangGraph, que responde perguntas que foram respondidas pelo chatbot principal.
+    *   `chat_bot_response.py`: Módulo que contém chat bots que respondem perguntas relacionadas aos investimentos.
+    *   `identifica_metodo_analise.py`: Módulo que tenta identificar o tipo de análise que deve ser feita com base nas perguntas do usuário.
+    *   `identifica_ticks.py`: Módulo que tenta identificar os tickers de ações que foram mencionados nas perguntas do usuário.
+    *   `langgraph_main.py`: Módulo principal do sistema LangGraph, que coordena a criação e gerenciamento de gráficos e arquivos de dados.
+    *   `supervisor_node.py`: Módulo que supervisiona qual método de análise deve ser executado a seguir.
+    *   `type_state.py`: Módulo que contém a classe State, que representa o estado do sistema LangGraph e suas transições.
+    *   `verifica_tick.py`: Módulo que verifica se os tickers de ações mencionados nas perguntas do usuário são válidos.
+
 *   `tratando_dados/`: Módulo que contém os arquivos responsáveis pelo tratamento, limpeza e preparação dos dados coletados, deixando-os em um formato adequado para serem utilizados pelos modelos de análise e pelo chatbot.
     *   `tratando_dados_indicadores.py`: Módulo responsável por tratar e formatar os dados de indicadores técnicos, preparando-os para serem utilizados nas análises técnicas.
     *   `tratando_dados_valuation.py`: Módulo responsável por tratar e formatar os dados financeiros, preparando-os para serem utilizados nos modelos de Valuation.
