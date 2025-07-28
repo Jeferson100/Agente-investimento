@@ -27,7 +27,10 @@ empresas_df = pd.read_csv(
 
 # 3. Criação da lista de tickers para o prompt
 empresas_tickers = "\n".join(
-    [f"{empresa} ({ticker})" for empresa, ticker in zip(empresas_df['Empresa'], empresas_df['tic'])]
+    [
+        f"{empresa} ({ticker})"
+        for empresa, ticker in zip(empresas_df["Empresa"], empresas_df["tic"])
+    ]
 )
 
 # 4. Template de Prompt Aprimorado
@@ -53,33 +56,36 @@ User Query: "{messages}"
 
 prompt = ChatPromptTemplate.from_template(template)
 
+
 # 5. Modelo Pydantic mais claro e específico
 class Tickers(BaseModel):
     """A list of identified stock tickers."""
+
     tickers: List[str] = Field(
         ...,
-        description="A list of stock tickers identified from the user's message. For example: ['PETR4', 'VALE3']"
+        description="A list of stock tickers identified from the user's message. For example: ['PETR4', 'VALE3']",
     )
+
 
 # 6. Chain com o LLM e o output estruturado
 llm_identifica_ticker = prompt | llm.with_structured_output(Tickers)
 
+
 # 7. Função para o nó do grafo, agora mais robusta
-def identifica_ticks(state: State): #Command[Literal["chatinput", "roteador_analise"]]:
+def identifica_ticks(
+    state: State,
+):  # Command[Literal["chatinput", "roteador_analise"]]:
     """
     Identifies stock tickers from the last message in the state and updates the 'ticker' key.
     """
-    print('Entrei identificacao ticks')
-    messages = state.get('messages', [])[-1]
-    
+    print("Entrei identificacao ticks")
+    messages = state.get("messages", [])[-1]
+
     if not messages:
         return {"ticker": []}  # Retorna lista vazia se não houver mensagens
-    
 
     # Invoca a chain para identificar os tickers
-    resposta_ticker = llm_identifica_ticker.invoke({
-        "messages": messages,
-        "empresas_tickers": empresas_tickers
-    })
-    return {'ticker': resposta_ticker.tickers} 
-
+    resposta_ticker = llm_identifica_ticker.invoke(
+        {"messages": messages, "empresas_tickers": empresas_tickers}
+    )
+    return {"ticker": resposta_ticker.tickers}

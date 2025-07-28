@@ -41,9 +41,8 @@ class ModeloValuationComparacao:
         self.api_secret = api_secret
 
     def tratando_ticker(self) -> List[str]:
-        acao = [f+".SA" if not f.endswith(".SA") else f for f in self.tickers]
+        acao = [f + ".SA" if not f.endswith(".SA") else f for f in self.tickers]
         return acao
-        
 
     async def dados_valuation(self) -> Dict[str, str]:
         dados_valu = TratandoDadosValuationComparacao(
@@ -52,29 +51,27 @@ class ModeloValuationComparacao:
             taxa_crescimento_perpetuidade=self.taxa_crescimento_perpetuidade,
             calculo_necessidade_capital_de_giro=self.calculo_necessidade_capital_de_giro,
         )
-        valuation_resposta = (
-            await dados_valu.dados_valuation()
-        )
+        valuation_resposta = await dados_valu.dados_valuation()
         return valuation_resposta
-    
+
     async def tratando_dados_valuation(self) -> tuple[Dict[str, str], Dict[str, str]]:
         dados_valuation = await self.dados_valuation()
-        
+
         # Primeiro, preencher os dicionários com os dados
         metodo_gordon = {}
         metodo_fluxo_caixa = {}
-        
+
         # Iterar sobre os dados do valuation e preencher os dicionários
         for ticker, valores in dados_valuation.items():
             metodo_gordon[ticker] = valores[0]  # Primeiro elemento é o método Gordon
-            metodo_fluxo_caixa[ticker] = valores[1]  # Segundo elemento é o fluxo de caixa
-        
+            metodo_fluxo_caixa[ticker] = valores[
+                1
+            ]  # Segundo elemento é o fluxo de caixa
+
         return metodo_gordon, metodo_fluxo_caixa
 
     async def chat_valuation(self) -> str | Iterator[str]:
-        metodo_gordon, metodo_fluxo_caixa = (
-            await self.tratando_dados_valuation()
-        )
+        metodo_gordon, metodo_fluxo_caixa = await self.tratando_dados_valuation()
 
         response = await ChatValuationComparacao(
             query=self.query,

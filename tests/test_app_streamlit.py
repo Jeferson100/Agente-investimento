@@ -8,5 +8,3 @@ def test_no_interaction_1_AnaliseAcao() -> None:
     assert len(at.title) == 1
     assert len(at.markdown) >= 2
     assert len(at.sidebar) == 10
-
-

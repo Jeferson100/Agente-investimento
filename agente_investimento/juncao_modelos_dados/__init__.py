@@ -1,4 +1,3 @@
-
 from .modelo_analise_tecnica_async import ModeloAnaliseTecnicaAsync
 from .modelo_fundamentos_async import ModeloFundamentosAsync
 from .modelo_sentimento_async import ModeloSentimentoAsync
@@ -18,5 +17,4 @@ __all__ = [
     "ModeloSentimentoComparacao",
     "ModeloValuationComparacao",
     "ModeloAnaliseTecnicaComparacao",
-    
 ]

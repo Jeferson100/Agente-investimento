@@ -4,6 +4,7 @@ from pydantic import SecretStr
 
 from .chat_groq import get_llm
 
+
 async def ChatLimpaResposta(
     query: str,
     ticke: str,

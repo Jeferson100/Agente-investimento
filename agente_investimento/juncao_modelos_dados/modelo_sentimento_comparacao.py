@@ -62,7 +62,7 @@ class ModeloSentimentoComparacao:
         return chrome_options
 
     async def dados_sentimento(self) -> str:
-        
+
         dados_noticias = TratarDadosNoticiasComparacao(
             tickers=self.tickers,
             options=self.option(),

@@ -157,6 +157,7 @@ class ValuationFluxoCaixaDescontado:
 
 if __name__ == "__main__":
     from .indicadores_financeiros import IndicadoresFinanceiros
+
     pd.options.display.float_format = "{:.2f}".format
     ind = IndicadoresFinanceiros(ticker="PETR4.SA")
     indicadores_petr = ind.todos_indicadores()

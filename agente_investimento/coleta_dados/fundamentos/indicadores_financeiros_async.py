@@ -88,10 +88,9 @@ class IndicadoresFinanceirosAsync:
         return pd.Series(dtype=float)
 
     async def margem_ebit(self) -> float:
-        
+
         ebit_ultimos_anos, receita_ultimos_anos = await asyncio.gather(
-            self.ebit(),
-            self.receita()
+            self.ebit(), self.receita()
         )
         try:
             margem_ebit = ebit_ultimos_anos / receita_ultimos_anos
@@ -122,8 +121,7 @@ class IndicadoresFinanceirosAsync:
 
     async def percentual_imposto(self) -> float:
         ebit_ultimos_anos, imposto_ultimos_anos = await asyncio.gather(
-            self.ebit(),
-            self.imposto()
+            self.ebit(), self.imposto()
         )
 
         tax_ebit = imposto_ultimos_anos / ebit_ultimos_anos
@@ -171,8 +169,7 @@ class IndicadoresFinanceirosAsync:
 
     async def depreciacao_capex(self) -> float:
         depreciacao_amortizacao, capex = await asyncio.gather(
-            self.depreciacao_amortizacao(),
-            self.capex()
+            self.depreciacao_amortizacao(), self.capex()
         )
 
         depre_capex = depreciacao_amortizacao / capex
@@ -201,12 +198,9 @@ class IndicadoresFinanceirosAsync:
             return 0.1
 
     async def capex_receita(self) -> float:
-        
-        capex, receita = await asyncio.gather(
-            self.capex(),
-            self.receita()
-        )
-    
+
+        capex, receita = await asyncio.gather(self.capex(), self.receita())
+
         capex_recei = capex / receita
 
         capex_recei_resultado = (
@@ -286,8 +280,22 @@ class IndicadoresFinanceirosAsync:
         return valor_necesseidade_capital
 
     async def todos_indicadores(self) -> Dict[str, Any]:
-        
-        margem_ebit, ultima_receita, variacao_receita, depreciacao_capex, capex_receita, wacc, quantidade_acoes, divida_total, caixa, outros_ativos, passivos_menos_divida, necessidade_capital_giro, percentual_imposto= await asyncio.gather(
+
+        (
+            margem_ebit,
+            ultima_receita,
+            variacao_receita,
+            depreciacao_capex,
+            capex_receita,
+            wacc,
+            quantidade_acoes,
+            divida_total,
+            caixa,
+            outros_ativos,
+            passivos_menos_divida,
+            necessidade_capital_giro,
+            percentual_imposto,
+        ) = await asyncio.gather(
             self.margem_ebit(),
             self.ultima_receita(),
             self.variacao_receita_ultimos_anos(),
@@ -300,10 +308,9 @@ class IndicadoresFinanceirosAsync:
             self.outros_ativos_nao_operacionais(),
             self.passivos_totais_divida(),
             self.necessidade_capital_giro(),
-            self.percentual_imposto()
-            
+            self.percentual_imposto(),
         )
-        
+
         return {
             "margemebit": margem_ebit,
             "ultimareceita": ultima_receita,

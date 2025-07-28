@@ -3,8 +3,10 @@ from typing import Dict
 import pandas as pd
 import yfinance as yf
 
-from ..coleta_dados.fundamentos.indicadores_financeiros import IndicadoresFinanceiros 
-from ..coleta_dados.fundamentos.valuation_fluxo_caixa_descontado import ValuationFluxoCaixaDescontado
+from ..coleta_dados.fundamentos.indicadores_financeiros import IndicadoresFinanceiros
+from ..coleta_dados.fundamentos.valuation_fluxo_caixa_descontado import (
+    ValuationFluxoCaixaDescontado,
+)
 from ..coleta_dados.fundamentos.valuation_metodo_gordon import ValuationModoloGordon
 
 

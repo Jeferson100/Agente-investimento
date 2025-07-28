@@ -7,7 +7,7 @@ from typing_extensions import TypedDict
 class State(TypedDict):
     messages: Annotated[list, add_messages]
     ticker: List[str]
-    method_analysis: List[str]  
+    method_analysis: List[str]
     interacao_procura_ticker: int
     next_method: str
     mensagem_sistema: str

@@ -15,5 +15,5 @@ __all__ = [
     "supervisor_node",
     "langgraph_main",
     "chatbot_padrao",
-    "identifica_ticks"
+    "identifica_ticks",
 ]

@@ -9,11 +9,12 @@ warnings.filterwarnings("ignore")
 
 data_cache = DataCache()
 
+
 class NecessidadeCapitalGiroAsync:
     def __init__(self, ticker: str) -> None:
         self.ticker = ticker
         self.cache = data_cache
-        
+
     async def get_balance_sheet(self) -> pd.DataFrame:
         return self.cache.get_balance_sheet(self.ticker)
 
@@ -82,12 +83,13 @@ class NecessidadeCapitalGiroAsync:
         return 0.0
 
     async def ativos_circulantes_operacionais(self) -> float:
-        
-        contas_recebe, estoques, outros_ativos   = await asyncio.gather(
+
+        contas_recebe, estoques, outros_ativos = await asyncio.gather(
             self.contas_receber(),
             self.estoque(),
-            self.outros_ativos_circulantes_operacionais())
-        
+            self.outros_ativos_circulantes_operacionais(),
+        )
+
         if math.isnan(contas_recebe):
             contas_recebe = 0
         if math.isnan(estoques):
@@ -97,10 +99,10 @@ class NecessidadeCapitalGiroAsync:
         return contas_recebe + estoques + outros_ativos
 
     async def passivos_circulantes_operacionais(self) -> float:
-        
+
         contas_pagar, outros_passivos = await asyncio.gather(
             self.contas_pagar_despesas_acumuladas(),
-            self.outros_passivos_circulantes_operacionais()  
+            self.outros_passivos_circulantes_operacionais(),
         )
         if math.isnan(contas_pagar):
             contas_pagar = 0
@@ -111,11 +113,13 @@ class NecessidadeCapitalGiroAsync:
     async def valor_necessidade_capital_giro(self) -> float:
         ativos, passivo = await asyncio.gather(
             self.ativos_circulantes_operacionais(),
-            self.passivos_circulantes_operacionais()
+            self.passivos_circulantes_operacionais(),
         )
         return ativos - passivo
 
-    async def necessidade_capital_giro_ativo_circulante_menos_passivo_circulante(self) -> float:
+    async def necessidade_capital_giro_ativo_circulante_menos_passivo_circulante(
+        self,
+    ) -> float:
         acao = await self.get_balance_sheet()
         if isinstance(acao, pd.DataFrame):
             if "CurrentAssets" in acao.index:

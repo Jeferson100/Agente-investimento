@@ -14,8 +14,8 @@ async def ChatAnaliseTecnicaComparacao(
     dados: List[str],
     api_secret: SecretStr | None,
     temperature: float = 0.5,
-    #modelo_llm: str = "llama-3.3-70b-versatile",
-    modelo_llm: str = "meta-llama/llama-4-scout-17b-16e-instruct",                                                  
+    # modelo_llm: str = "llama-3.3-70b-versatile",
+    modelo_llm: str = "meta-llama/llama-4-scout-17b-16e-instruct",
     stream: bool = False,
 ) -> str | Iterator[str]:
     prompt = PromptTemplate(

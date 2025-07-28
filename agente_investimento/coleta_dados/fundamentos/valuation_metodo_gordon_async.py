@@ -27,7 +27,6 @@ class ValuationModoloGordonAsync:
         self.end_date_retorno = end_date_retorno
         self.dicionario_indicadores: dict[str, Any] = {}
         self.dicionario_indicadores["ticker"] = ticker
-    
 
     async def preco_historico(self) -> Series:  # type: ignore[type-arg]
         preco_his = self.data_cache.get_historical_dez_anos(self.ticker)["Close"]
@@ -38,7 +37,7 @@ class ValuationModoloGordonAsync:
         return preco_his.astype(float)
 
     async def g_sustainable(self) -> float:
-        instanciando_funcao =  self.data_cache.get_info(self.ticker)
+        instanciando_funcao = self.data_cache.get_info(self.ticker)
         try:
             returnOnEquity = instanciando_funcao["returnOnEquity"]
         except KeyError:
@@ -57,7 +56,7 @@ class ValuationModoloGordonAsync:
         return float(g_sust)
 
     async def beta(self) -> float:
-        instanciando_funcao =  self.data_cache.get_info(self.ticker)
+        instanciando_funcao = self.data_cache.get_info(self.ticker)
         try:
             beta_acao = round(instanciando_funcao["beta"], 4)
         except KeyError:
@@ -67,15 +66,20 @@ class ValuationModoloGordonAsync:
         return float(beta_acao)
 
     async def juros_livre(self) -> float:
-        juros = (self.data_cache.get_ipea_data("BMF12_SWAPDI36012").rename(columns={"VALUE ((% a.a.))": "swaps"})[["swaps"]]
+        juros = (
+            self.data_cache.get_ipea_data("BMF12_SWAPDI36012")
+            .rename(columns={"VALUE ((% a.a.))": "swaps"})[["swaps"]]
             .div(100)
             .iloc[-1]
-            .swaps)
+            .swaps
+        )
         self.dicionario_indicadores["juros_livre"] = round(juros, 4)
         return float(juros)
 
     async def retorno_mercado(self) -> float:
-        ibov = self.data_cache.get_history_bovespa(start=self.start_date_retorno, end= self.end_date_retorno)
+        ibov = self.data_cache.get_history_bovespa(
+            start=self.start_date_retorno, end=self.end_date_retorno
+        )
         if ibov is None or ibov.empty:
             raise ValueError("Erro: Nenhum dado foi baixado para o IBOVESPA.")
 
@@ -97,14 +101,11 @@ class ValuationModoloGordonAsync:
 
     async def capm_gordon(self) -> float:
         juros, beta, retorno_mercado, juros_livre = await asyncio.gather(
-            self.juros_livre(),
-            self.beta(),
-            self.retorno_mercado(),
-            self.juros_livre()
+            self.juros_livre(), self.beta(), self.retorno_mercado(), self.juros_livre()
         )
-        
+
         wacc = juros + beta * (retorno_mercado - juros_livre)
-        
+
         self.dicionario_indicadores["capm"] = float(round(wacc, 4))
         return wacc
 
@@ -129,22 +130,19 @@ class ValuationModoloGordonAsync:
         return anual_dividendo
 
     async def d1(self) -> float:
-        instanciando_funcao =  await self.anual_dividendo()
+        instanciando_funcao = await self.anual_dividendo()
         dividendo = instanciando_funcao.median().Dividends
         self.dicionario_indicadores["dividendo_mediano"] = round(dividendo, 3)
         return float(dividendo)
 
     async def preco_acao(self) -> Dict[str, str]:
-        
+
         d1_valor, capm, g_sust, preco_hist = await asyncio.gather(
-            self.d1(),
-            self.capm_gordon(),
-            self.g_sustainable(),
-            self.preco_historico()
+            self.d1(), self.capm_gordon(), self.g_sustainable(), self.preco_historico()
         )
-        
-        pv = d1_valor /(capm - g_sust)
-        
+
+        pv = d1_valor / (capm - g_sust)
+
         preco_atual = preco_hist.values[-1]
 
         self.dicionario_indicadores["valuation_acao"] = round(pv, 2)

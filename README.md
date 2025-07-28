@@ -72,20 +72,11 @@ Antes de começar a utilizar o Agente-Investimento, você precisará obter as se
         3.  Copie e guarde a chave gerada para configurar o aplicativo.
     * **Importante:** Esse modelo utiliza a API Gratuita da Serper, então tem um limite de Requisições mensais.
 
-### 👣 Passo a Passo
-
-1.  **Chave de API Groq:**
-    *   Na primeira execução, insira a sua chave de API Groq.
-    *   Ela será salva na sessão para evitar que você precise inseri-la novamente.
-2.  **Selecionar Ticker:** Digite o código da ação brasileira (ex: `BBDC4`, `PETR4`, `VALE3`) no campo de busca.
-3.  **Explorar as Análises:** Navegue pelas abas na barra lateral para acessar:
-    *   **Análise Fundamentalista:** Mergulhe nos dados financeiros da empresa.
-    *   **Análise Técnica:** Visualize os gráficos e os indicadores técnicos.
-    *   **Análise de Sentimento:** Entenda a percepção do mercado sobre a ação.
-    *   **Valuation:** Descubra as métricas de valuation e o potencial valor da ação.
-4.  **Download de Dados:** Em cada página, baixe os dados que foram utilizados pelos modelos de IA para análise posterior.
+## 🚀 Executando o Bot
 
 ### 🐳 Executando com Docker
+
+O Agente-Investimento pode ser executado em um container Docker, permitindo uma execução simples e consistente.
 
 ```bash 
 docker build -t agente-investimento-app .
@@ -94,6 +85,29 @@ docker run -p 3000:3000 agente-investimento-app
 docker-compose build
 docker-compose up
 ```
+
+### 🚀 Executando com Streamlit
+
+O Agente-Investimento pode ser utilizado com o Streamlit, atraves do seguinte link:
+
+[![Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://streamlit.io)
+
+Tambem pode ser executado localmente, utilizando o seguinte comando:
+
+```bash
+pip install -r requirements.txt
+streamlit run app/app_streamlit.py
+```
+
+### Executando com o chainlit
+
+O Agente-Investimento pode ser utilizado com o chainlit, atraves do seguinte comando:
+
+```bash
+pip install -r requirements.txt
+chainlit run app_streamlit/app_chainlit.py
+```
+
 
 
 ## 📂 Estrutura de Arquivos

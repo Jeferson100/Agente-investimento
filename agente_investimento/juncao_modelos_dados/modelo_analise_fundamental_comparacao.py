@@ -32,14 +32,14 @@ class ModeloFundamentosComparacaoAsync:
         self.stream = stream
         self.modelo_llm = modelo_llm if MODEL_FUNDAMENTAL is not None else modelo_llm
         self.api_secret = api_secret
-    
+
     async def dados_fundamentalistas_comparacao(self) -> List[Any]:
         fudamentos_comparacao = TratatandoDadosFundamentalistasComparacao(
-        self.tickers,
+            self.tickers,
         )
         fudamentos_comparacao = await fudamentos_comparacao.coletando_dados_tickers()
         return fudamentos_comparacao
-    
+
     async def chat_fundamentalistas_comparacao(self) -> str | Iterator[str]:
         print("O modelo usado e o:", self.modelo_llm)
         dados_fundamentalistas = await self.dados_fundamentalistas_comparacao()
@@ -53,5 +53,3 @@ class ModeloFundamentosComparacaoAsync:
         if "</think>" in response:
             response = response.split("</think>")[1]  # type: ignore
         return response
-
-

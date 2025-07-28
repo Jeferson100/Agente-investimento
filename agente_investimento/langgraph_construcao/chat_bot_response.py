@@ -53,8 +53,7 @@ async def chatbot_investimento(state: State) -> Dict[str, Any]:
     """
 
     try:
-        system_message =(
-        """
+        system_message = """
         You are an investment analysis agent with over 10 years of experience. You receive the following data.        
         <INPUT DATA>
         {dados_input}.
@@ -75,21 +74,21 @@ async def chatbot_investimento(state: State) -> Dict[str, Any]:
         If there is insufficient data about the company, respond normally based on a generic conversation.
         IMPORTANT: ALWAYS PROVIDE THE RESPONSE IN PORTUGUESE (BRAZILIAN PORTUGUESE).
         
-        """)
-    
+        """
 
         last_message = state["messages"][-1]
         dados_input = state.get("dados_input", "")
-        
-        chat_prompt: ChatPromptTemplate = ChatPromptTemplate.from_template(system_message)
+
+        chat_prompt: ChatPromptTemplate = ChatPromptTemplate.from_template(
+            system_message
+        )
 
         llm: ChatGroq = get_llm(model=MODEL_ID_CHAT_RESPONSE)
-        
+
         llm_chain = chat_prompt | llm | StrOutputParser()
 
-        response = await llm_chain.ainvoke({
-        "messages": last_message,
-        "dados_input": dados_input}
+        response = await llm_chain.ainvoke(
+            {"messages": last_message, "dados_input": dados_input}
         )
 
         return {

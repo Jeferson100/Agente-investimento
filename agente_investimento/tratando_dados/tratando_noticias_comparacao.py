@@ -16,6 +16,7 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
+
 class TratarDadosNoticiasComparacao:
     MAX_HTML_LENGTH = 7000
     TRUNCATE_LENGTH = 6500
@@ -36,7 +37,7 @@ class TratarDadosNoticiasComparacao:
         self.api_secret_groq = api_secret_groq
         self.api_secret_serper = api_secret_serper
 
-    async def get_news_yahoo(self, ticker:str) -> Dict[str, List[str]]:
+    async def get_news_yahoo(self, ticker: str) -> Dict[str, List[str]]:
         if self.options is None:
             self.options = webdriver.ChromeOptions()
             self.options.add_argument("--headless")
@@ -49,23 +50,23 @@ class TratarDadosNoticiasComparacao:
         dados_noticias = DadosNoticiasBuscadorYahoo(ticker, self.options)
         return await asyncio.to_thread(dados_noticias.get_news, self.number_paginas)
 
-    async def get_news_google(self, ticker:str) -> List[Optional[str]]:
+    async def get_news_google(self, ticker: str) -> List[Optional[str]]:
         clas_noticias_google = DadosNoticiasGoogle(
             acao=ticker, api_serper=self.api_secret_serper
         )
         dados_noticias_google = await asyncio.to_thread(clas_noticias_google.get_news)
         data_links_google: List[Optional[str]] = []
-        
+
         for links in dados_noticias_google.get("news", []):
             if isinstance(links, dict) and "link" in links:
                 data_links_google.append(links.get("link"))
             else:
                 data_links_google.append(None)
-                
+
         data_links_google = [link for link in data_links_google if link is not None]
         return data_links_google
 
-    async def _process_news_content(self, link: Optional[str], ticker:str) -> str:
+    async def _process_news_content(self, link: Optional[str], ticker: str) -> str:
         """Processa o conteúdo HTML de uma notícia de forma assíncrona."""
         if link is None:
             return ""
@@ -78,8 +79,7 @@ class TratarDadosNoticiasComparacao:
 
         return await ChatLimpaResposta(dados_mark, ticker, self.api_secret_groq)
 
-
-    async def clean_chat_html(self,ticker:str) -> str:
+    async def clean_chat_html(self, ticker: str) -> str:
         try:
             links = (await self.get_news_yahoo(ticker=ticker))["links"]
         except KeyError:
@@ -110,11 +110,11 @@ class TratarDadosNoticiasComparacao:
 
         return dados_news
 
-    async def clean_chat_html_bs4(self, ticker:str) -> str:
+    async def clean_chat_html_bs4(self, ticker: str) -> str:
         links_optional = await self.get_news_google(ticker=ticker)
         links = [link for link in links_optional if link is not None][:10]
         text_bs4 = LinksExtractorBS4()
-        
+
         async def process_link(link: str) -> str:
             try:
 
@@ -129,25 +129,30 @@ class TratarDadosNoticiasComparacao:
 
         results = await asyncio.gather(*[process_link(link) for link in links])
         return "".join(results)
-    
+
     async def tickes_news(self) -> str:
         """
         Coleta notícias de forma assíncrona para múltiplos tickers.
-        
+
         Args:
             tickers: Lista de códigos de ações para coletar notícias
-            
+
         Returns:
             str: String concatenada com todas as notícias por ticker
         """
+
         async def process_ticker(ticker: str) -> str:
             news_ticker = f"Noticias sobre {ticker}:\n"
             dados_news = await self.clean_chat_html_bs4(ticker=ticker)
-            dados_news_clean = await ChatLimpaResposta(dados_news, ticker,self.api_secret_groq)
+            dados_news_clean = await ChatLimpaResposta(
+                dados_news, ticker, self.api_secret_groq
+            )
             if "\n</think>\n\n" in dados_news_clean:
-                dados_news_clean = dados_news_clean.split('\n</think>\n\n')[1]
+                dados_news_clean = dados_news_clean.split("\n</think>\n\n")[1]
             return news_ticker + dados_news_clean
-        
-        results = await asyncio.gather(*[process_ticker(ticker) for ticker in self.tickers])
+
+        results = await asyncio.gather(
+            *[process_ticker(ticker) for ticker in self.tickers]
+        )
 
         return "".join(results)

@@ -59,6 +59,6 @@ class PassivoTotalMenosDividaAsync:
         divida_total, passivo_circulante, passivo_nao_circulante = await asyncio.gather(
             self.divida_total(),
             self.passivos_circulante(),
-            self.passivo_nao_circulante()
+            self.passivo_nao_circulante(),
         )
         return passivo_circulante + passivo_nao_circulante - divida_total

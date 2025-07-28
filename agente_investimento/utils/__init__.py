@@ -22,7 +22,7 @@ __all__ = [
     "string_to_generator",
     "retransfromando_pandas",
     "process_fundamental",
-    "process_sentimento", 
+    "process_sentimento",
     "process_technical",
     "process_valuation",
     "analise_investimento",

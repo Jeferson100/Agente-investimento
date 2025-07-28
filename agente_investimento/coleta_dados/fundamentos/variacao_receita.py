@@ -58,7 +58,7 @@ class VariacaoReceita:
         return ipca_mes_doze
 
     def receita_passada_dataframe(self) -> pd.DataFrame:
-        receita_passada = pd.DataFrame(self.financials().loc["TotalRevenue"].iloc[::-1]) 
+        receita_passada = pd.DataFrame(self.financials().loc["TotalRevenue"].iloc[::-1])
         receita_passada["mes_ano"] = (
             pd.to_datetime(receita_passada.index).strftime("%Y-%m").values
         )

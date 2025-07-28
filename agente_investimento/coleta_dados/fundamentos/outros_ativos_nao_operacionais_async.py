@@ -7,13 +7,14 @@ warnings.filterwarnings("ignore")
 
 data_cache = DataCache()
 
+
 class OutrosAtivosNaoOperacionaisAsync:
     def __init__(self, ticker: str):
         self.ticker = ticker
         self.cache = data_cache
 
     async def investimentos_e_adiantamentos(self) -> float:
-        
+
         investimentos_adiantamentos = self.cache.get_balance_sheet(self.ticker)
         if isinstance(investimentos_adiantamentos, pd.DataFrame):
             if "InvestmentsAndAdvances" in investimentos_adiantamentos.index:
@@ -97,9 +98,9 @@ class OutrosAtivosNaoOperacionaisAsync:
             self.outros_ativos_nao_circulantes(),
             self.goodwill_outros_ativos_intangiveis(),
             self.terrenos_melhorias(),
-            self.outros_imoveis()
+            self.outros_imoveis(),
         )
-        
+
         ativos_totais = results[0]
         inves_adiamtamento = results[1]
         outros_ativos_nao = results[2]

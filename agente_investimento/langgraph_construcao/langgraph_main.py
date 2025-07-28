@@ -35,6 +35,3 @@ def langgraph_main() -> StateGraph:
     graph.add_edge("chatbot_padrao", END)
 
     return graph
-
-
-

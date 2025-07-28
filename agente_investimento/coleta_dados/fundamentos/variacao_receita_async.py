@@ -18,7 +18,6 @@ class VariacaoReceitaAsync:
         self.ticker = ticker
         self.data_cache = data_cache
         self.deflacionar_receita = deflacionar_receita
-        
 
     async def financials(self) -> pd.DataFrame:
         raw_financials = self.data_cache.get_financials(self.ticker)
@@ -75,10 +74,9 @@ class VariacaoReceitaAsync:
 
     async def pegando_inflacao_datas_receita(self) -> pd.DataFrame:
         receita_passada, ipca_mes = await asyncio.gather(
-            self.receita_passada_dataframe(),
-            self.modificando_datas_inflacao()
+            self.receita_passada_dataframe(), self.modificando_datas_inflacao()
         )
-        
+
         if (
             ipca_mes is not None
             and not pd.to_datetime(receita_passada.index).month.isin([6, 3, 9]).any()
@@ -92,7 +90,7 @@ class VariacaoReceitaAsync:
 
             receita_passada.reset_index(inplace=True)
         return receita_passada
-    
+
     async def inflacao_acumulada(self, data: pd.DataFrame) -> pd.DataFrame:
         inflacao_acumu = data.copy()
         inflacao_acumu["inflacao_acumulada"] = (
@@ -111,12 +109,12 @@ class VariacaoReceitaAsync:
             * receita_deflacionada["inflacao_acumulada"]
         )
         return receita_deflacionada
-    
+
     async def pct_receita_normal(self, data: pd.DataFrame) -> pd.DataFrame:
         pct_data_normal = data.copy()
         pct_data_normal["receita_pct"] = pct_data_normal["TotalRevenue"].pct_change()
         return pct_data_normal
-    
+
     async def pct_receita_deflacionada(self, data: pd.DataFrame) -> pd.DataFrame:
         pct_dat_deflacionada = data.copy()
         pct_dat_deflacionada["receita_pct_deflacionado"] = pct_dat_deflacionada[

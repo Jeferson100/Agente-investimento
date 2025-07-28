@@ -12,11 +12,15 @@ from .fundamentos.indicadores_financeiros_async import IndicadoresFinanceirosAsy
 from .fundamentos.necessidade_capital_giro import NecessidadeCapitalGiro
 from .fundamentos.necessidade_capital_giro_async import NecessidadeCapitalGiroAsync
 from .fundamentos.outros_ativos_nao_operecionais import OutrosAtivosNaoOperacionais
-from .fundamentos.outros_ativos_nao_operacionais_async import OutrosAtivosNaoOperacionaisAsync
+from .fundamentos.outros_ativos_nao_operacionais_async import (
+    OutrosAtivosNaoOperacionaisAsync,
+)
 from .fundamentos.passivos_menos_divida import PassivoTotalMenosDivida
 from .fundamentos.passivos_menos_divida_async import PassivoTotalMenosDividaAsync
 from .fundamentos.valuation_fluxo_caixa_descontado import ValuationFluxoCaixaDescontado
-from .fundamentos.valuation_fluxo_caixa_descontado_async import ValuationFluxoCaixaDescontadoAsync
+from .fundamentos.valuation_fluxo_caixa_descontado_async import (
+    ValuationFluxoCaixaDescontadoAsync,
+)
 from .fundamentos.valuation_metodo_gordon import ValuationModoloGordon
 from .fundamentos.valuation_metodo_gordon_async import ValuationModoloGordonAsync
 from .fundamentos.variacao_receita import VariacaoReceita

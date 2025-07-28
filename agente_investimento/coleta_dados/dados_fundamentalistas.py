@@ -65,7 +65,7 @@ class DadosFundamentalistas:
                 content = await response.text()
         try:
             dados_capex = pd.read_csv(io.StringIO(content))
-        except pd.errors.EmptyDataError: 
+        except pd.errors.EmptyDataError:
             print("Erro ao ler {}".format(url))
             return pd.DataFrame()
         dados_capex_tic = dados_capex[dados_capex["tic"] == self.tic].copy()
@@ -219,29 +219,31 @@ class DadosFundamentalistas:
             self.dados_retornos_margens(),
         )
         dataframes = {
-        'dados_dre': resultados[0],
-        'dados_capex': resultados[1],
-        'dados_fluxo_caixa': resultados[2],
-        'dados_precos_relativos': resultados[3],
-        'dados_resumo_balanco': resultados[4],
-        'dados_retornos_margens': resultados[5]
-    }
-    
-        dataframes_validos = {nome: df for nome, df in dataframes.items() if not df.empty}
-    
+            "dados_dre": resultados[0],
+            "dados_capex": resultados[1],
+            "dados_fluxo_caixa": resultados[2],
+            "dados_precos_relativos": resultados[3],
+            "dados_resumo_balanco": resultados[4],
+            "dados_retornos_margens": resultados[5],
+        }
+
+        dataframes_validos = {
+            nome: df for nome, df in dataframes.items() if not df.empty
+        }
+
         if not dataframes_validos:
             print("Aviso: Todos os DataFrames estão vazios")
             return pd.DataFrame()
 
         try:
             resultado = list(dataframes_validos.values())[0]
-            
+
             for df in list(dataframes_validos.values())[1:]:
-                resultado = resultado.merge(df, on=["datas", "tic"], how='outer')
-            
+                resultado = resultado.merge(df, on=["datas", "tic"], how="outer")
+
             resultado = resultado.loc[:, ~resultado.columns.duplicated()]
             return resultado
-        
+
         except Exception as e:
             print(f"Erro ao realizar merge dos dados: {str(e)}")
             return pd.DataFrame()

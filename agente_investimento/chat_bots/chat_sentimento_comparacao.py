@@ -7,7 +7,6 @@ from pydantic import SecretStr
 from .chat_groq import get_llm
 
 
-
 async def ChatSentimentoComparacao(
     query: str,
     noticia: str,
