@@ -12,25 +12,61 @@
 | **App Streamlit** | <p align=""><a href="https://jeferson100-agente-investimen-app-streamlit1-analiseacao-lmfxza.streamlit.app/" target="_blank"><img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg" alt="Streamlit App"/></a></p> ||
 | | |
 
-
 <p align="center">
   O <b>Agente-Investimento</b> é uma ferramenta que integra o poder dos <b>Grandes Modelos de Linguagem (LLMs)</b> com dados do mercado financeiro brasileiro para fornecer análises de ações. Ele consolida <b>Análise Fundamentalista</b>, <b>Análise Técnica</b>, <b>Análise de Sentimento</b> e <b>Valuation</b>, tentando capacitar investidores com insights para a tomada de decisão. 
 
-  Ele criado com a biblioteca [LangChain](https://python.langchain.com/docs/get_started/introduction) e [LangGraph](https://github.com/langchain-ai/langgraph) tendo como fluxograma a seguinte estrutura:
+## 🔄 Visão Geral do Fluxo
+
+Ele é desenvolvido com a biblioteca [LangChain](https://python.langchain.com/docs/get_started/introduction) e [LangGraph](https://github.com/langchain-ai/langgraph) tendo como fluxograma a seguinte estrutura:
 
 
  <p align="center">
-<img src="laggraph_imagem.png" alt="Imagem do fluxo langgraph" width="800"/>
+<img src="imagem/laggraph_imagem.png" alt="Imagem do fluxo langgraph" width="800"/>
 </p>
 
+* **`__start__`**
+   Início da interação, onde o usuário inicia a conversa com o chatbot.
 
-## ✨ Destaques do Agente-Investimento
+* **`metodo_analise`**  
+  Identifica o tipo de análise que deve ser feita com base nas perguntas do usuário. Pode ser `fundamentalista`, `tecnico`, `sentimento`,  `valuation`, `sem_analise` ou `analise_investimento`.
 
-*   **Análises Completas:** Obtenha uma visão holística do desempenho de uma ação, combinando diferentes abordagens de análise.
-*   **Inteligência Artificial Avançada:** Utilize o poder dos LLMs para insights mais profundos e contextualizados.
-*   **Dados Precisos:** A ferramenta integra diversas fontes de dados financeiros para garantir informações atualizadas.
-*   **Interface Intuitiva:** Navegue facilmente pelas análises e interaja com a IA através de uma interfacedesenvolvida com Streamlit.
-*   **Mercado Brasileiro:** Focado em ações negociadas na B3 (Bolsa de Valores Brasileira).
+* **`identifica_ticks`**  
+  Tenta identificar as ações que foram mencionados nas perguntas do usuário.
+
+* **`verificacao_tickets` → bifurcação**
+Verifica se os tickers de ações mencionados nas perguntas do usuário são válidos ou inválidos.
+
+   - ✅ Tickets válidos: seguem para o `supervisor`.
+   - ❌ Tickets inválidos: redirecionados para uma resposta padrão via `chatbot_padrao`.
+
+- **`supervisor`**  
+  Centraliza os resultados das análises e decide a próxima etapa:
+  - Após todos os resultados, encaminha diretamente para o `chatbot_investimento`.
+
+- **`tecnico`**  
+  Realiza análise técnica com base em gráficos e indicadores.
+
+- **`fundamentalista`**  
+  Executa análise dos fundamentos da empresa (indicadores contábeis e financeiros).
+
+- **`sentimento`**  
+  Avaliação de sentimento de mercado a partir de notícias.
+
+- **`valuation`**  
+  Estimativa de valor justo da ação usando modelos como DCF ou múltiplos.
+
+- **`analise_investimento`**  
+  Faz todas as análises em um metodo assíncrono e consolida os resultados em uma análise unificada.
+
+- **`chatbot_investimento`**  
+  Apresenta ao usuário o resultado completo da análise.
+
+- **`chatbot_padrao`**  
+  Fornece uma resposta genérica quando não há dados suficientes ou os inputs são inválidos.
+
+- **`__end__`**  
+  Finaliza o fluxo de atendimento.
+
 
 ## 🚀 Funcionalidades
 
