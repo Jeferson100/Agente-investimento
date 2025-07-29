@@ -107,7 +107,9 @@ target-version = "py310"
 
 [tool.ruff.lint.pycodestyle]
 ignore-overlong-task-comments = true
-ignore-one-line-docstrings = true
+max-doc-length = 100
+max-line-length = 500
+#ignore-one-line-docstrings = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -11,11 +11,14 @@ from langchain.schema import HumanMessage
 from langgraph.checkpoint.memory import MemorySaver
 
 
-from agente_investimento import (
-    
-    langgraph_main,
-   
-)
+try:
+    from agente_investimento import (
+        # suas importações
+    )
+except Exception as e:
+    st.error(f"Erro ao carregar o agente: {e}")
+    st.info("Verifique se a GROQ_API_KEY está configurada corretamente.")
+    st.stop()
 
 st.set_page_config(
     page_title="Analise Ações",

@@ -19,7 +19,10 @@ def ChatAnaliseTecnica(
         input_variables=["query", "dados"],
         template="""
             
-            You are a technical analyst specializing in interpreting financial indicators to identify market trends and determine entry/exit points. Based on the following technical data, provide a concise analysis of the current asset situation and recommend a trading strategy (buy, sell, or wait). In your response, please include a confidence level (0-100%) regarding your evaluation.
+            You are a technical analyst specializing in interpreting financial indicators to identify market trends and 
+            determine entry/exit points. Based on the following technical data, provide a concise analysis of the current asset 
+            situation and recommend a trading strategy (buy, sell, or wait). In your response, please include a confidence level (0-100%) 
+            regarding your evaluation.
 
     Available Indicators:
     - Moving Averages (20, 100, 200 periods)
