@@ -40,7 +40,8 @@ def ChatSentimento(
     Question: {query}
     Financial News Data: {noticia}
 
-    Always respond in Portuguese. Keep your answer concise and include your confidence level.
+    Always respond in Portuguese. Keep your answer concise and
+    include your confidence level.
 
       """,
     )
