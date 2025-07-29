@@ -12,9 +12,7 @@ from langgraph.checkpoint.memory import MemorySaver
 
 
 try:
-    from agente_investimento import (
-        # suas importações
-    )
+    from agente_investimento import langgraph_main
 except Exception as e:
     st.error(f"Erro ao carregar o agente: {e}")
     st.info("Verifique se a GROQ_API_KEY está configurada corretamente.")
