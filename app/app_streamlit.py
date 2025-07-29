@@ -11,12 +11,32 @@ from langchain.schema import HumanMessage
 from langgraph.checkpoint.memory import MemorySaver
 
 
-try:
-    from agente_investimento import langgraph_main
-except Exception as e:
-    st.error(f"Erro ao carregar o agente: {e}")
-    st.info("Verifique se a GROQ_API_KEY está configurada corretamente.")
-    st.stop()
+# Função para verificar se as APIs estão configuradas
+def check_api_keys():
+    groq_key = st.session_state.get('groq_api') or os.getenv("GROQ_API_KEY")
+    serper_key = st.session_state.get('serper_api') or os.getenv("API_KEY_SERPER")
+    return groq_key, serper_key
+
+# Só tenta importar se as APIs estão configuradas
+groq_key, serper_key = check_api_keys()
+
+if groq_key:
+    try:
+        from agente_investimento import langgraph_main
+        import_success = True
+    except Exception as e:
+        st.error(f"Erro ao carregar o agente: {e}")
+        st.info("Verifique se a GROQ_API_KEY está configurada corretamente.")
+        api_key = st.text_input(
+                "Enter GROQ API token:",
+                value=st.session_state.groq_api,
+                type="password",
+            )
+
+        if api_key:
+            os.environ["GROQ_API_KEY"] = api_key
+        
+        import_success = False
 
 st.set_page_config(
     page_title="Analise Ações",
