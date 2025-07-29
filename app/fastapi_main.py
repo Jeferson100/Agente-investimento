@@ -58,7 +58,7 @@ async def chatbot(message: str):
     response = await graph.ainvoke(
         initial_state,
         config=config,
-        # stream_mode="values", # O stream_mode pode precisar de tratamento especial em FastAPI
+    # stream_mode="values",O stream_mode pode precisar de tratamento especial em FastAPI
         # dependendo de como você quer lidar com o stream.
         # Para um retorno simples, pode remover ou ajustar.
         # Se precisar de streaming, use StreamingResponse do FastAPI.

@@ -171,7 +171,8 @@ async def quantidade_linhas(thread_id: str = "1"):
 
         return {
             "status": "success",
-            "message": f"Quantidade de linhas para o thread_id {thread_id}: {number_linhas_restante}",
+            "message": f"""Quantidade"" de linhas para o thread_id {thread_id}: 
+                        {number_linhas_restante}""",
         }
     except Exception as e: # pylint: disable=broad-exception-caught
         import traceback

@@ -105,6 +105,10 @@ ignore = []
 line-length = 88
 target-version = "py310"
 
+[tool.ruff.lint.pycodestyle]
+ignore-overlong-task-comments = true
+ignore-one-line-docstrings = true
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]

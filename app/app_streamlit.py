@@ -27,6 +27,17 @@ st.set_page_config(
     },
 )
 
+
+if 'groq_api' in st.session_state and st.session_state.groq_api or os.getenv("GROQ_API_KEY"):
+    pass
+else:
+    st.warning("Por favor, defina a chave API do GROQ.")
+
+if 'serper_api' in st.session_state and st.session_state.serper_api or os.getenv("API_KEY_SERPER"):
+    pass
+else:
+    st.warning("Por favor, defina a chave API do Serper.")
+
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
@@ -59,26 +70,38 @@ with st.sidebar:
 
     st.markdown(
         """
-    No mundo dos investimentos, a tomada de decisões embasadas é fundamental para minimizar riscos e maximizar retornos. Para isso, quatro agentes de inteligência artificial foram desenvolvidos, cada um focado em uma abordagem específica de análise:
+    No mundo dos investimentos, a tomada de decisões embasadas é fundamental para 
+    minimizar 
+    riscos e maximizar retornos. Para isso, quatro agentes de inteligência artificial 
+    foram desenvolvidos, 
+    cada um focado em uma abordagem específica de análise:
 
     ### 📊 Análise Fundamentalista  
-    Examina balanços patrimoniais, demonstrativos financeiros e indicadores-chave como **P/L, ROE e EBITDA** para avaliar a saúde financeira e o potencial de crescimento de uma empresa.  
+    Examina balanços patrimoniais, demonstrativos financeiros e indicadores-chave como 
+    **P/L, ROE e EBITDA** para avaliar a saúde financeira e o potencial de crescimento 
+    de uma empresa.  
 
     ### 📉 Análise Técnica  
-    Interpreta padrões gráficos, médias móveis e indicadores como **RSI** para prever movimentos de preços e auxiliar no **timing** de compra e venda.  
+    Interpreta padrões gráficos, médias móveis e indicadores como **RSI** para prever 
+    movimentos de preços e auxiliar no **timing** de compra e venda.  
 
     ### 📰 Análise de Sentimento  
-    Coleta e processa **notícias** para identificar o sentimento do mercado em relação a uma ação, classificando-o como **positivo, neutro ou negativo**.  
+    Coleta e processa **notícias** para identificar o sentimento do mercado 
+    em relação a uma ação, classificando-o como **positivo, neutro ou negativo**.  
 
     ### 💰 Valuation  
-    Utiliza modelos como **Fluxo de Caixa Descontado (DCF)** e o **Modelo de Gordon** para estimar o valor intrínseco de uma empresa, ajudando investidores a entenderem se uma ação está **sobre ou subavaliada**.  
+    Utiliza modelos como **Fluxo de Caixa Descontado (DCF)** e o **Modelo de Gordon** 
+    para 
+    estimar o valor intrínseco de uma empresa, ajudando investidores a entenderem se 
+    uma ação está **sobre ou subavaliada**.  
 
     Juntos, esses agentes formam um **ecossistema para análise de investimentos**.  
     """
     )
     st.markdown("# Login APIS:")
     st.write(
-        """Para utilizar o Bot, primeiro faça o cadastro gratuito nos site abaixo e depois gere as chaves API necessária:"""
+        """Para utilizar o Bot, primeiro faça o cadastro gratuito nos site abaixo e 
+        depois gere as chaves API necessária:"""
     )
 
     st.markdown(
@@ -189,8 +212,11 @@ with st.sidebar:
         """
         <div style="background-color:#FF6347; padding: 10px; border-radius: 5px;">
             <p style="color: #000000;">🚨 Aviso Importante:</p>
-            <p style="color: #000000;">Os resultados fornecidos por este sistema são meramente informativos e não devem ser considerados como recomendações de investimento.</p>
-            <p style="color: #000000;">Sempre realize sua própria análise antes de tomar qualquer decisão financeira.</p>
+            <p style="color: #000000;">Os resultados fornecidos por este sistema 
+            são meramente informativos e não devem ser considerados como 
+            recomendações de investimento.</p>
+            <p style="color: #000000;">Sempre realize sua própria análise antes de 
+            tomar qualquer decisão financeira.</p>
         </div>
         """,
         unsafe_allow_html=True,
