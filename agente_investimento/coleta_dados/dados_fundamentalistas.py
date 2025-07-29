@@ -244,6 +244,6 @@ class DadosFundamentalistas:
             resultado = resultado.loc[:, ~resultado.columns.duplicated()]
             return resultado
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             print(f"Erro ao realizar merge dos dados: {str(e)}")
             return pd.DataFrame()

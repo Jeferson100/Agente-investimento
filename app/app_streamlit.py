@@ -1,20 +1,21 @@
-import streamlit as st
-import sys
 import os
+import sys
+
+import streamlit as st
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from agente_investimento import (
-    langgraph_main,
-    generator_to_string,
-    string_to_generator,
-    configurar_mensagem,
-)
-from pydantic import SecretStr
-import pandas as pd
-from typing import Generator
-from langgraph.checkpoint.memory import MemorySaver
-from langchain.schema import HumanMessage
 import asyncio
+
+import pandas as pd
+from langchain.schema import HumanMessage
+from langgraph.checkpoint.memory import MemorySaver
+
+
+from agente_investimento import (
+    
+    langgraph_main,
+   
+)
 
 st.set_page_config(
     page_title="Analise Ações",
@@ -54,7 +55,6 @@ for message in messages:
 mensagem_usuario = st.chat_input("Faça sua pergunta:")
 
 with st.sidebar:
-
     st.image("imagem/logo_robo.png", width=400)
 
     st.markdown(

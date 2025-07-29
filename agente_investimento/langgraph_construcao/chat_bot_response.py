@@ -1,18 +1,14 @@
-from typing import Any, Dict
+import os
+from typing import Any, Dict, Final
 
+from dotenv import load_dotenv
 from langchain_core.messages import AIMessage
+from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_groq import ChatGroq
 
 from ..chat_bots import get_llm
 from .type_state import State
-
-from typing import Final
-
-from dotenv import load_dotenv
-import os
-from langchain_groq import ChatGroq
-from ..chat_bots import get_llm
-from langchain_core.output_parsers import StrOutputParser
 
 load_dotenv()
 

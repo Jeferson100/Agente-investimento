@@ -4,7 +4,7 @@ from typing import Dict
 import pandas as pd
 import yfinance as yf
 from finta import TA
-from pandas.core.series import Series
+
 
 warnings.filterwarnings("ignore")
 

@@ -1,3 +1,5 @@
+import os
+import warnings
 from typing import Iterator
 
 from pydantic import SecretStr
@@ -5,10 +7,6 @@ from selenium import webdriver
 
 from ..chat_bots import ChatSentimentoAsync, get_secret_key
 from ..tratando_dados import TratarDadosNoticias
-
-import os
-
-import warnings
 
 warnings.filterwarnings("ignore")
 

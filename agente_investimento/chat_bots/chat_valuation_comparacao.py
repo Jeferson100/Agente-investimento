@@ -1,12 +1,10 @@
-from typing import Iterator
+from typing import Dict, Iterator
 
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import PromptTemplate
 from pydantic import SecretStr
 
 from .chat_groq import get_llm
-
-from typing import Dict
 
 
 async def ChatValuationComparacao(

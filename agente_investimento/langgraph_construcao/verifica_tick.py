@@ -1,11 +1,9 @@
 import pandas as pd
 from langgraph.types import Command
+from pandas import DataFrame
 from typing_extensions import Literal
 
 from .type_state import State
-from pandas import DataFrame
-from typing_extensions import Literal
-from langgraph.types import Command
 
 
 def verificacao_tickets(
@@ -54,7 +52,7 @@ def verificacao_tickets(
         )
 
     if procura_interacao_ticker >= 2:
-        print(f"As ações nao foram encontrados!")
+        print("As ações nao foram encontrados!")
         return Command(
             goto="chatbot_padrao",
             update={

@@ -1,5 +1,5 @@
-from typing import Annotated
-from typing import List
+from typing import Annotated, List
+
 from langgraph.graph.message import add_messages
 from typing_extensions import TypedDict
 

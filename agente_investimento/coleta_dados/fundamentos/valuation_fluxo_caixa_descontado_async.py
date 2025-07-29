@@ -1,6 +1,7 @@
 import warnings
 from datetime import datetime
 from typing import Any, Dict, List, Tuple
+
 import pandas as pd
 
 warnings.filterwarnings("ignore")
@@ -140,10 +141,12 @@ class ValuationFluxoCaixaDescontadoAsync:
             dict_valuation["valor_presente_fluxo"].append(valor_presente_fluxo)
             dict_valuation["data"].append(now.year + anos - 1)
 
-        fluxo_caixa_fluxo_livre, fluxo_caixa_ajustado, valor_por_acao = (
-            await self.calculo_perpetudidade(
-                dict_valuation=dict_valuation, anos=self.anos_projecao
-            )
+        (
+            fluxo_caixa_fluxo_livre,
+            fluxo_caixa_ajustado,
+            valor_por_acao,
+        ) = await self.calculo_perpetudidade(
+            dict_valuation=dict_valuation, anos=self.anos_projecao
         )
 
         dict_perpetuidade = {}

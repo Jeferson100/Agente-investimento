@@ -2,9 +2,9 @@ import logging
 import os
 import sys
 from contextlib import asynccontextmanager
-from typing import Any, AsyncGenerator
+from typing import AsyncGenerator
 
-from fastapi import APIRouter, FastAPI, Request
+from fastapi import APIRouter, Request
 from langchain.schema import HumanMessage
 from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
 from psycopg.rows import dict_row
@@ -26,11 +26,10 @@ CHECKPOINT_URL = config(
     default="postgresql://postgres:postgres@localhost:5433/postgres",
 )
 
-logger.info(f"DB_URI: {CHECKPOINT_URL}")
-
+logger.info(f"DB_URI: {CHECKPOINT_URL}") # pylint: disable=logging-fstring-interpolation
 
 @asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncGenerator:
+async def lifespan() -> AsyncGenerator:
     connection_kwargs = {
         "autocommit": True,
         "prepare_threshold": 0,
@@ -50,7 +49,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator:
 async def chatbot(message: str, request: Request):
     """
     Endpoint do chatbot que recebe uma mensagem e retorna a resposta do LangGraph.
-    """
+    """ # pylint: disable= logging-fstring-interpolation
 
     # Estado inicial para a invocação do grafo
     initial_state = {
@@ -69,7 +68,7 @@ async def chatbot(message: str, request: Request):
     graph = graph_builder.compile(checkpointer=checkpointer)
 
     # Configuração do thread
-    config = {"configurable": {"thread_id": "1"}}
+    inner_config = {"configurable": {"thread_id": "1"}} # pylint: disable=unused-variable
 
     response = await graph.ainvoke(
         initial_state,

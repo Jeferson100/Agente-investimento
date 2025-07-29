@@ -1,9 +1,12 @@
-from typing import Dict, List, Optional
-import httpx
 import asyncio
+import warnings
+from typing import Dict, List, Optional
+
+import httpx
 from pydantic import SecretStr
 from selenium import webdriver
 from selenium.common.exceptions import SessionNotCreatedException
+
 from ..chat_bots import ChatLimpaResposta
 from ..coleta_dados import (
     DadosNoticiasBuscadorYahoo,
@@ -11,8 +14,6 @@ from ..coleta_dados import (
     LinksExtractorBS4,
     LinksExtractorHtml,
 )
-
-import warnings
 
 warnings.filterwarnings("ignore")
 
@@ -117,7 +118,6 @@ class TratarDadosNoticiasComparacao:
 
         async def process_link(link: str) -> str:
             try:
-
                 text = await asyncio.to_thread(text_bs4.clean_text_bs4, url=link)
                 if isinstance(text, str):
                     if len(text) >= 900:

@@ -28,14 +28,13 @@ class PostgresDBConsult:
                 result = conn.execute(text(query), {"limit": limit})
                 return result.fetchall()  # type:ignore
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             print(f"Erro ao recuperar dados: {e}")
             return []
 
     def drop_table(self, tabela: str = "checkpoints") -> None:
         """Apaga a tabela llm_interactions."""
         try:
-
             engine = self.create_db_connection()
 
             # Apagar a tabela
@@ -44,7 +43,7 @@ class PostgresDBConsult:
                 conn.commit()
                 print("Tabela apagada com sucesso!")
 
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             print(f"Erro ao apagar tabela: {e}")
 
     def inspecionar_tabelas(self) -> List[str]:

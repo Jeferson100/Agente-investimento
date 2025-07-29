@@ -1,7 +1,8 @@
+import asyncio
 import math
 import warnings
+
 import pandas as pd
-import asyncio
 
 from ..data_cache import DataCache
 
@@ -83,7 +84,6 @@ class NecessidadeCapitalGiroAsync:
         return 0.0
 
     async def ativos_circulantes_operacionais(self) -> float:
-
         contas_recebe, estoques, outros_ativos = await asyncio.gather(
             self.contas_receber(),
             self.estoque(),
@@ -99,7 +99,6 @@ class NecessidadeCapitalGiroAsync:
         return contas_recebe + estoques + outros_ativos
 
     async def passivos_circulantes_operacionais(self) -> float:
-
         contas_pagar, outros_passivos = await asyncio.gather(
             self.contas_pagar_despesas_acumuladas(),
             self.outros_passivos_circulantes_operacionais(),

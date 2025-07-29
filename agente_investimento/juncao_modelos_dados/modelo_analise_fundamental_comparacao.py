@@ -1,10 +1,11 @@
-from typing import Any, Iterator, List, Optional
+import os
+from typing import Any, Iterator, List
 
-from pydantic import SecretStr
+from pydantic import SecretStr # pylint: disable=import-error
+
+
 from ..chat_bots import ChatFundamentalistasComparacaoAsync, get_secret_key
 from ..tratando_dados import TratatandoDadosFundamentalistasComparacao
-
-import os
 
 try:
     api_secret_groq = get_secret_key("GROQ_API_KEY")

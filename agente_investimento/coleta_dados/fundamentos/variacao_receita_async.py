@@ -1,12 +1,13 @@
+import asyncio
 import warnings
 from datetime import datetime
 from typing import Dict
 
+import aiohttp
 import pandas as pd
 import sidrapy
+
 from ..data_cache import DataCache
-import aiohttp
-import asyncio
 
 warnings.filterwarnings("ignore")
 
@@ -28,7 +29,7 @@ class VariacaoReceitaAsync:
         raise TypeError("Erro: Formato inesperado dos dados financeiros.")
 
     async def pegando_inflacao(self) -> pd.DataFrame | None:
-        async with aiohttp.ClientSession() as session:
+        async with aiohttp.ClientSession() as _: # pylint: disable=consider-using-with
             ipca_raw = await asyncio.to_thread(
                 sidrapy.get_table,
                 table_code="1737",

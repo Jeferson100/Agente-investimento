@@ -1,11 +1,11 @@
-from dotenv import load_dotenv
-import chainlit as cl
 import os
 import sys
-from langgraph.checkpoint.memory import MemorySaver
-from langchain_core.messages import HumanMessage, AIMessageChunk
+
+import chainlit as cl
+from dotenv import load_dotenv
+from langchain_core.messages import HumanMessage
 from langchain_core.runnables.config import RunnableConfig
-from langchain_openai import ChatOpenAI
+from langgraph.checkpoint.memory import MemorySaver
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from agente_investimento import langgraph_main
@@ -20,9 +20,7 @@ graph = graph_builder.compile()
 
 @cl.on_message
 async def main(message: cl.Message):
-    config: RunnableConfig = {
-        "configurable": {"thread_id": cl.context.session.thread_id},
-    }
+    config: RunnableConfig = {"configurable": {"thread_id": cl.context.session.thread_id},} # pylint: disable=unused-variable
 
     response = await graph.ainvoke(
         {"messages": [HumanMessage(content=message.content)]},

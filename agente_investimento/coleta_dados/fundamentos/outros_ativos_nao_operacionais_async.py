@@ -1,6 +1,8 @@
-import warnings
 import asyncio
+import warnings
+
 import pandas as pd
+
 from ..data_cache import DataCache
 
 warnings.filterwarnings("ignore")
@@ -14,7 +16,6 @@ class OutrosAtivosNaoOperacionaisAsync:
         self.cache = data_cache
 
     async def investimentos_e_adiantamentos(self) -> float:
-
         investimentos_adiantamentos = self.cache.get_balance_sheet(self.ticker)
         if isinstance(investimentos_adiantamentos, pd.DataFrame):
             if "InvestmentsAndAdvances" in investimentos_adiantamentos.index:

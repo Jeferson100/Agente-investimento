@@ -1,5 +1,4 @@
 import asyncio
-from collections.abc import Iterator
 from typing import Literal
 
 from langchain.schema import HumanMessage
@@ -199,7 +198,6 @@ async def analise_investimento(state: State) -> Command[Literal["supervisor"]]:
             dados_input = "\n".join(dados_input) if dados_input else ""
     except TypeError:
         if isinstance(dados_input, list):
-
             dados_input = (
                 "\n".join(
                     m.content if hasattr(m, "content") else str(m) for m in dados_input

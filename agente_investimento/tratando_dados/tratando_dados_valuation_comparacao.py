@@ -1,17 +1,14 @@
-from typing import Dict
+import asyncio
+from typing import Dict, List
 
 import pandas as pd
-
-from ..coleta_dados.data_cache import DataCache
 
 from ..coleta_dados import (
     IndicadoresFinanceirosAsync,
     ValuationFluxoCaixaDescontadoAsync,
     ValuationModoloGordonAsync,
 )
-import asyncio
-from typing import List
-
+from ..coleta_dados.data_cache import DataCache
 
 data_cache = DataCache()
 
@@ -126,13 +123,16 @@ class TratandoDadosValuationComparacao:
         ]
         preco_tasks = [self.preco_atual(ticker) for ticker in self.tickers]
 
-        gordon_results, fluxo_results, indicadores_results, preco_results = (
-            await asyncio.gather(
-                asyncio.gather(*gordon_tasks),
-                asyncio.gather(*fluxo_tasks),
-                asyncio.gather(*indicadores_tasks),
-                asyncio.gather(*preco_tasks),
-            )
+        (
+            gordon_results,
+            fluxo_results,
+            indicadores_results,
+            preco_results,
+        ) = await asyncio.gather(
+            asyncio.gather(*gordon_tasks),
+            asyncio.gather(*fluxo_tasks),
+            asyncio.gather(*indicadores_tasks),
+            asyncio.gather(*preco_tasks),
         )
 
         tasks = {}

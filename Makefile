@@ -20,28 +20,28 @@ install:
 		pip install -r requirements.txt
 
 import_format:
-	isort agente_investimento/ app/ tests/ 
+	isort agente_investimento/ app/ 
 
 format:
-	black agente_investimento/ app/ tests/
+	black agente_investimento/ app/ 
 
 ruff_format:
-	ruff format agente_investimento/ app/ tests/
+	ruff format agente_investimento/ app/ 
 
 lint:
-	pylint --disable=R,C agente_investimento/ app/ tests/
+	pylint --disable=R,C agente_investimento/ app/ 
 
 ruff_lint:
-	ruff check agente_investimento/ app/ tests/
+	ruff check agente_investimento/ app/ 
 
 typepyright:
-	pyright agente_investimento/ app/ tests/
+	pyright agente_investimento/ app/ 
 
 typemypy:
-	mypy agente_investimento/ app/ tests/
+	mypy agente_investimento/ app/ 
 
 typepyrefly:
-	pyrefly check agente_investimento/ app/ tests/
+	pyrefly check agente_investimento/ app/ 
 
 ## Set up Python interpreter environment
 .PHONY: create_environment

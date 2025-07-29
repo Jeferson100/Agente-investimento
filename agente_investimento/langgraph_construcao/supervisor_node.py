@@ -1,15 +1,12 @@
-from typing import Literal
+import os
+from typing import Final, Literal
 
+from dotenv import load_dotenv
 from langgraph.types import Command
 from typing_extensions import TypedDict
 
 from ..chat_bots import get_llm
 from .type_state import State
-
-from typing import Final
-
-from dotenv import load_dotenv
-import os
 
 load_dotenv()
 

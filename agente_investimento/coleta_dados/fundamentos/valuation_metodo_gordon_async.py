@@ -1,13 +1,13 @@
+import asyncio
 import warnings
 from datetime import datetime
 from typing import Any, Dict
+
 import numpy as np
 import pandas as pd
 from pandas.core.series import Series
 
 from ..data_cache import DataCache
-
-import asyncio
 
 warnings.filterwarnings("ignore")
 
@@ -136,7 +136,6 @@ class ValuationModoloGordonAsync:
         return float(dividendo)
 
     async def preco_acao(self) -> Dict[str, str]:
-
         d1_valor, capm, g_sust, preco_hist = await asyncio.gather(
             self.d1(), self.capm_gordon(), self.g_sustainable(), self.preco_historico()
         )

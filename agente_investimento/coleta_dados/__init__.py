@@ -11,10 +11,10 @@ from .fundamentos.indicadores_financeiros import IndicadoresFinanceiros
 from .fundamentos.indicadores_financeiros_async import IndicadoresFinanceirosAsync
 from .fundamentos.necessidade_capital_giro import NecessidadeCapitalGiro
 from .fundamentos.necessidade_capital_giro_async import NecessidadeCapitalGiroAsync
-from .fundamentos.outros_ativos_nao_operecionais import OutrosAtivosNaoOperacionais
 from .fundamentos.outros_ativos_nao_operacionais_async import (
     OutrosAtivosNaoOperacionaisAsync,
 )
+from .fundamentos.outros_ativos_nao_operecionais import OutrosAtivosNaoOperacionais
 from .fundamentos.passivos_menos_divida import PassivoTotalMenosDivida
 from .fundamentos.passivos_menos_divida_async import PassivoTotalMenosDividaAsync
 from .fundamentos.valuation_fluxo_caixa_descontado import ValuationFluxoCaixaDescontado

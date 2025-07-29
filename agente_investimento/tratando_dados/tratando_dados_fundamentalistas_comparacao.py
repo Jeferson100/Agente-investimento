@@ -1,8 +1,10 @@
 import asyncio
-from ..coleta_dados import DadosFundamentalistas
-from langchain_community.document_loaders import DataFrameLoader
 from typing import List, Optional
+
 import pandas as pd
+from langchain_community.document_loaders import DataFrameLoader
+
+from ..coleta_dados import DadosFundamentalistas
 
 
 class TratatandoDadosFundamentalistasComparacao:
@@ -72,7 +74,6 @@ class TratatandoDadosFundamentalistasComparacao:
         return df_cleaned
 
     async def transformer_loader(self, tic: str):
-
         dados_drop = await self.drop_columns(tic=tic)
 
         loader = DataFrameLoader(dados_drop, page_content_column="datas")
@@ -82,7 +83,6 @@ class TratatandoDadosFundamentalistasComparacao:
         return dados_load
 
     async def coletando_dados_tickers(self):
-
         resutado_ticks = await asyncio.gather(
             *[self.transformer_loader(tic=tic) for tic in self.tics]
         )

@@ -1,11 +1,10 @@
+import os
 from typing import Any, Iterator, List
 
 from pydantic import SecretStr
 
 from ..chat_bots import ChatAnaliseTecnicaComparacao, get_secret_key
 from ..tratando_dados import TratandoDadosIndicadoresComparacao
-
-import os
 
 try:
     api_secret_groq = get_secret_key("GROQ_API_KEY")

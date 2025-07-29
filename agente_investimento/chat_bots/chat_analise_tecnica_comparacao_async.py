@@ -6,8 +6,6 @@ from pydantic import SecretStr
 
 from .chat_groq import get_llm
 
-import os
-
 
 async def ChatAnaliseTecnicaComparacao(
     query: str,

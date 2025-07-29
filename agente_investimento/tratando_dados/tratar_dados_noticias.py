@@ -4,7 +4,6 @@ import httpx
 from pydantic import SecretStr
 from selenium import webdriver
 from selenium.common.exceptions import (
-    ElementClickInterceptedException,
     SessionNotCreatedException,
 )
 

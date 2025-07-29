@@ -1,11 +1,11 @@
+from .chat_bot_padrao import chatbot_padrao
 from .chat_bot_response import chatbot_investimento
 from .identifica_metodo_analise import identifica_metodo_analise
-from .langgraph_main import langgraph_main
-from .type_state import State
-from .supervisor_node import supervisor_node
-from .verifica_tick import verificacao_tickets
-from .chat_bot_padrao import chatbot_padrao
 from .identifica_ticks import identifica_ticks
+from .langgraph_main import langgraph_main
+from .supervisor_node import supervisor_node
+from .type_state import State
+from .verifica_tick import verificacao_tickets
 
 __all__ = [
     "State",

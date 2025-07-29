@@ -271,9 +271,7 @@ class IndicadoresFinanceiros:
 
     def necessidade_capital_giro(self) -> float:
         necessidade_capital = NecessidadeCapitalGiro(self.ticker)
-        valor_necesseidade_capital = (
-            necessidade_capital.necessidade_capital_giro_ativo_circulante_menos_passivo_circulante()
-        )
+        valor_necesseidade_capital = necessidade_capital.necessidade_capital_giro_ativo_circulante_menos_passivo_circulante()
         return valor_necesseidade_capital
 
     def todos_indicadores(self) -> Dict[str, Any]:

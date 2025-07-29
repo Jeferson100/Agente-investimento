@@ -1,11 +1,10 @@
+import asyncio
 from typing import Any, List
 
 import pandas as pd
 from langchain_community.document_loaders import DataFrameLoader
 
 from ..coleta_dados import DadosIndicadoresTecnicos
-import asyncio
-from typing import List, Any
 
 
 class TratandoDadosIndicadoresComparacao:
@@ -34,7 +33,6 @@ class TratandoDadosIndicadoresComparacao:
         return DataFrameLoader(dados, page_content_column="Date").load()
 
     async def pegando_indicadores_comparacao(self):
-
         resutado_ticks = await asyncio.gather(
             *[self.indicadores_data_loader(ticker=ticker) for ticker in self.tickers]
         )

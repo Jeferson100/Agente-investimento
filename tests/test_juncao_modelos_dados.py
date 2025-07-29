@@ -4,7 +4,7 @@ import unittest
 from unittest.mock import MagicMock, patch
 
 import pytest
-from juncao_modelos_dados import (
+from agente_investimento import (
     ModeloAnaliseTecnica,
     ModeloFundamentos,
     ModeloSentimento,

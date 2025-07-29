@@ -1,7 +1,8 @@
-from ipeadatapy import timeseries
-from functools import lru_cache
-import yfinance as yf
 from datetime import datetime
+from functools import lru_cache
+
+import yfinance as yf
+from ipeadatapy import timeseries
 
 
 class DataCache:
@@ -55,7 +56,7 @@ class DataCache:
     @lru_cache(maxsize=100)
     def get_historical_dez_anos(self, ticker_symbol):
         """Obtém histórico de preços com cache."""
-        cache_key = f"{ticker_symbol}_{"dez_anos"}"
+        cache_key = f"{ticker_symbol}_dez_anos"
         if cache_key not in self.history_cache_dez_anos:
             ticker = self.get_ticker(ticker_symbol)
             self.history_cache_dez_anos[cache_key] = ticker.history(

@@ -1,15 +1,16 @@
+import asyncio
 import warnings
 from typing import Any, Dict, Union
+
 import numpy as np
 import pandas as pd
-import asyncio
+
+from ..data_cache import DataCache
 from .calculo_wacc_async import CalculoWACCAsync
 from .necessidade_capital_giro_async import NecessidadeCapitalGiroAsync
 from .outros_ativos_nao_operacionais_async import OutrosAtivosNaoOperacionaisAsync
 from .passivos_menos_divida_async import PassivoTotalMenosDividaAsync
 from .variacao_receita_async import VariacaoReceitaAsync
-from ..data_cache import DataCache
-
 
 warnings.filterwarnings("ignore")
 
@@ -88,7 +89,6 @@ class IndicadoresFinanceirosAsync:
         return pd.Series(dtype=float)
 
     async def margem_ebit(self) -> float:
-
         ebit_ultimos_anos, receita_ultimos_anos = await asyncio.gather(
             self.ebit(), self.receita()
         )
@@ -198,7 +198,6 @@ class IndicadoresFinanceirosAsync:
             return 0.1
 
     async def capex_receita(self) -> float:
-
         capex, receita = await asyncio.gather(self.capex(), self.receita())
 
         capex_recei = capex / receita
@@ -274,13 +273,10 @@ class IndicadoresFinanceirosAsync:
 
     async def necessidade_capital_giro(self) -> float:
         necessidade_capital = NecessidadeCapitalGiroAsync(self.ticker)
-        valor_necesseidade_capital = (
-            await necessidade_capital.necessidade_capital_giro_ativo_circulante_menos_passivo_circulante()
-        )
+        valor_necesseidade_capital = await necessidade_capital.necessidade_capital_giro_ativo_circulante_menos_passivo_circulante()
         return valor_necesseidade_capital
 
     async def todos_indicadores(self) -> Dict[str, Any]:
-
         (
             margem_ebit,
             ultima_receita,

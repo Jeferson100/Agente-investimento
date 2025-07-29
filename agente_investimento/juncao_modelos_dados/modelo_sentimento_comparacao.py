@@ -1,18 +1,15 @@
-from typing import Iterator
+import os
+import warnings
+from typing import Iterator, List
 
-from pydantic import SecretStr
-from selenium import webdriver
+from pydantic import SecretStr # pylint: disable=import-error
+from selenium import webdriver # pylint: disable=import-error
+
+from agente_investimento.chat_bots import get_secret_key
+from agente_investimento.tratando_dados import TratarDadosNoticiasComparacao
 
 from ..chat_bots import ChatSentimentoComparacao, get_secret_key
 from ..tratando_dados import TratarDadosNoticiasComparacao
-
-from agente_investimento.chat_bots import ChatSentimentoAsync, get_secret_key
-from agente_investimento.tratando_dados import TratarDadosNoticiasComparacao
-
-import os
-from typing import List
-
-import warnings
 
 warnings.filterwarnings("ignore")
 
@@ -62,7 +59,6 @@ class ModeloSentimentoComparacao:
         return chrome_options
 
     async def dados_sentimento(self) -> str:
-
         dados_noticias = TratarDadosNoticiasComparacao(
             tickers=self.tickers,
             options=self.option(),

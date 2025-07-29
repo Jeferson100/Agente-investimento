@@ -7,13 +7,13 @@ from ..utils import (
     process_technical,
     process_valuation,
 )
-from .chat_bot_response import chatbot_investimento
 from .chat_bot_padrao import chatbot_padrao
-from .type_state import State
-from .supervisor_node import supervisor_node
-from .verifica_tick import verificacao_tickets
+from .chat_bot_response import chatbot_investimento
 from .identifica_metodo_analise import identifica_metodo_analise
 from .identifica_ticks import identifica_ticks
+from .supervisor_node import supervisor_node
+from .type_state import State
+from .verifica_tick import verificacao_tickets
 
 
 def langgraph_main() -> StateGraph:

@@ -1,16 +1,15 @@
 import logging
 import os
 import sys
-
+import uvicorn
+import psycopg2
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from langchain.schema import HumanMessage
-from langgraph.checkpoint.postgres import PostgresSaver
 from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
 from psycopg.rows import dict_row
 from psycopg_pool import AsyncConnectionPool
 from starlette.config import Config
-import psycopg2
 
 sys.path.append("..")
 from agente_investimento import langgraph_main
@@ -23,15 +22,15 @@ app = FastAPI(
     version="1.0.0",
 )
 
-config = Config(".env") if os.path.exists(".env") else Config()
+config_env = Config(".env") if os.path.exists(".env") else Config()
 
-CHECKPOINT_URL = config(
+CHECKPOINT_URL = config_env(
     "DB_URI",
     cast=str,
     default="postgresql://postgres:postgres@localhost:5433/postgres",
 )
 
-logger.info(f"DB_URI: {CHECKPOINT_URL}")
+logger.info(f"DB_URI: {CHECKPOINT_URL}") # pylint: disable=logging-fstring-interpolation
 
 connection_kwargs = {
     "autocommit": True,
@@ -75,7 +74,7 @@ async def chatbot(message: str):
 
         graph = graph_builder.compile(checkpointer=checkpointer)
 
-        config = {"configurable": {"thread_id": "1"}}
+        config = {"configurable": {"thread_id": "1"}} # pylint: disable=unused-variable
 
         # Estado inicial para a invocação do grafo
         initial_state = {
@@ -111,7 +110,7 @@ async def check_db():
                 "status": "success",
                 "message": "Conexão com o banco de dados estabelecida com sucesso.",
             }
-    except Exception as e:
+    except Exception as e: # pylint: disable=broad-exception-caught
         import traceback
 
         return {
@@ -134,12 +133,12 @@ async def return_db(thread_id: str = "1"):
         ) as pool:
             checkpointer = AsyncPostgresSaver(pool)  # type:ignore
             await checkpointer.setup()
-            config = {"configurable": {"thread_id": thread_id}}
+            config = {"configurable": {"thread_id": thread_id}} # pylint: disable=unused-variable
             checkpoint = await checkpointer.aget(config)  # type:ignore
             if checkpoint is None:
                 return {"status": "Vazio", "message": "O banco de dados está vazio."}
             return checkpoint
-    except Exception as e:
+    except Exception as e: # pylint: disable=broad-exception-caught
         import traceback
 
         return {
@@ -174,7 +173,7 @@ async def quantidade_linhas(thread_id: str = "1"):
             "status": "success",
             "message": f"Quantidade de linhas para o thread_id {thread_id}: {number_linhas_restante}",
         }
-    except Exception as e:
+    except Exception as e: # pylint: disable=broad-exception-caught
         import traceback
 
         return {
@@ -190,7 +189,6 @@ async def limpar_memoria(thread_id: str = "2", num_linhas: str = "3"):
     Endpoint para limpar a memória (checkpoint) do thread_id informado.
     """
     try:
-
         conn = psycopg2.connect(
             dbname="postgres",
             user="postgres",
@@ -223,7 +221,7 @@ async def limpar_memoria(thread_id: str = "2", num_linhas: str = "3"):
             "remaining_rows": number_linhas_restante,
         }
 
-    except Exception as e:
+    except Exception as e: # pylint: disable=broad-exception-caught
         import traceback
 
         return {
@@ -234,6 +232,5 @@ async def limpar_memoria(thread_id: str = "2", num_linhas: str = "3"):
 
 
 if __name__ == "__main__":
-    import uvicorn
-
+    
     uvicorn.run("fastapi_postgree_main:app", host="0.0.0.0", port=3000, reload=True)

@@ -1,12 +1,9 @@
 import asyncio
 import warnings
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 
 import pandas as pd
-import yfinance as yf
-
-from concurrent.futures import ThreadPoolExecutor
-
 from ..data_cache import DataCache
 
 warnings.filterwarnings("ignore")
@@ -36,15 +33,14 @@ class CalculoWACCAsync:
     async def initialize(self):
         """Pré-carrega todos os dados necessários para evitar múltiplas chamadas."""
         with ThreadPoolExecutor(max_workers=3) as executor:
-
             info_future = executor.submit(self.cache.get_info, self.ticker)
             dividends_future = executor.submit(self.cache.get_dividends, self.ticker)
             history_future = executor.submit(self.cache.get_history, self.ticker)
 
             # Aguardar a conclusão
-            self.info = info_future.result()
-            self.dividends = dividends_future.result()
-            self.history = history_future.result()
+            self.info = info_future.result() # pylint: disable=attribute-defined-outside-init
+            self.dividends = dividends_future.result() # pylint: disable=attribute-defined-outside-init
+            self.history = history_future.result() # pylint: disable=attribute-defined-outside-init
 
     async def juros_livre(self) -> float:
         try:
@@ -59,7 +55,7 @@ class CalculoWACCAsync:
             if juros is None:
                 raise ValueError("Erro: Não foi possível obter os juros livres.")
             return float(juros)
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             print(f"Erro ao obter juros livres: {e}")
             return 0.1  # Taxa padrão em caso de erro
 
@@ -81,7 +77,7 @@ class CalculoWACCAsync:
             retorno_medio = compounded_growth ** (252 / n_periods) - 1
 
             return float(retorno_medio["^BVSP"])
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             print(f"Erro ao calcular retorno do mercado: {e}")
             return 0.15  # Retorno padrão em caso de erro
 
@@ -116,7 +112,6 @@ class CalculoWACCAsync:
         return float(beta)
 
     async def custo_patrimonio(self) -> float:
-
         juros, beta, retorno = await asyncio.gather(
             self.juros_livre(), self.beta_empresa(), self.retorno_mercado()
         )
@@ -126,7 +121,6 @@ class CalculoWACCAsync:
         return float(cost_of_equity)
 
     async def despesas_juros(self) -> float:
-
         financials = self.cache.get_financials(self.ticker)
 
         if not isinstance(financials, pd.DataFrame):
@@ -201,7 +195,7 @@ class CalculoWACCAsync:
 
             if wacc <= 0:
                 wacc = juros
-        except (Exception, ValueError, TypeError, AttributeError) as e:
+        except (Exception, ValueError, TypeError, AttributeError) as e: # pylint: disable=broad-exception-caught
             print(f"Erro ao calcular WACC: {e}")
             wacc = await self.juros_livre()
 
