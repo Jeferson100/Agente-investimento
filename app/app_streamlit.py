@@ -21,35 +21,6 @@ st.set_page_config(
     },
 )
 
-
-"""def check_api_keys():
-    groq_key = st.session_state.get("groq_api") or os.getenv("GROQ_API_KEY")
-    serper_key = st.session_state.get("serper_api") or os.getenv("API_KEY_SERPER")
-    return groq_key, serper_key
-
-
-# Só tenta importar se as APIs estão configuradas
-groq_key, serper_key = check_api_keys()
-
-if groq_key:
-    try:
-        from agente_investimento import langgraph_main
-
-        import_success = True
-    except Exception as e:
-        st.error(f"Erro ao carregar o agente: {e}")
-        st.info("Verifique se a GROQ_API_KEY está configurada corretamente.")
-        api_key = st.text_input(
-            "Enter GROQ API token:",
-            value=st.session_state.groq_api,
-            type="password",
-        )
-
-        if api_key:
-            os.environ["GROQ_API_KEY"] = api_key
-
-        import_success = False"""
-
 @contextmanager
 def temp_env_vars(**kwargs):
     """
@@ -321,43 +292,80 @@ if mensagem_usuario:
     with st.chat_message("user"):
         st.markdown(mensagem_usuario)
     
+    # Verificar se as API keys estão configuradas
     groq_key = st.session_state.get("groq_api")
     serper_key = st.session_state.get("serper_api")
     
     if not groq_key or not serper_key:
-        print("Erro: APIs não configuradas")
+        # Mostrar erro na interface do usuário
+        error_msg = "❌ **Erro: APIs não configuradas**\n\n"
+        if not groq_key:
+            error_msg += "- GROQ API Key não encontrada\n"
+        if not serper_key:
+            error_msg += "- Serper API Key não encontrada\n"
+        error_msg += "\n👆 Configure as chaves na barra lateral para continuar."
+        
+        with st.chat_message("assistant"):
+            st.error(error_msg)
+        
+        messages.append({"role": "assistant", "content": error_msg})
+        st.stop()  # Para a execução aqui
+    
+    # Se chegou até aqui, as APIs estão configuradas
     try:
-        # Usar contexto temporário para a chamada
-        with temp_env_vars(
-            GROQ_API_KEY=groq_key,
-            API_KEY_SERPER=serper_key
-        ):
-            from agente_investimento import langgraph_main
-            
+        with st.spinner("🤖 Processando sua solicitação..."):
+            # Usar contexto temporário para toda a operação
+            with temp_env_vars(
+                GROQ_API_KEY=groq_key,
+                API_KEY_SERPER=serper_key
+            ):
+                # Importar dentro do contexto
+                from agente_investimento import langgraph_main
+                
+                # Criar o grafo
+                graph_builder = langgraph_main()
+                memory = MemorySaver()
+                graph = graph_builder.compile(checkpointer=memory)
+                config = {"configurable": {"thread_id": "1"}}
+                
+                # Estado inicial para a invocação do grafo
+                initial_state = {
+                    "messages": [HumanMessage(content=mensagem_usuario)],
+                    "ticker": "",
+                    "method_analysis": "",
+                    "dados_input": "",
+                    "next": "",
+                }
+                
+                # Executar o grafo usando asyncio.run
+                response = asyncio.run(
+                    graph.ainvoke(initial_state, config=config)
+                )
+                
+                # Extrair a resposta
+                if response and "messages" in response and len(response["messages"]) > 1:
+                    response_text = response["messages"][1].content
+                else:
+                    response_text = "❌ Erro: Não foi possível obter resposta do agente."
+                
+                # Mostrar resposta
+                with st.chat_message("assistant"):
+                    st.write(response_text)
+                
+                messages.append({"role": "assistant", "content": response_text})
+    
+    except ImportError as e:
+        error_msg = f"❌ **Erro de Importação**: {str(e)}\n\nVerifique se o módulo `agente_investimento` está disponível."
+        with st.chat_message("assistant"):
+            st.error(error_msg)
+        messages.append({"role": "assistant", "content": error_msg})
+    
     except Exception as e:
-        print(f"Erro ao processar mensagem: {e}")
-
-    graph_builder = langgraph_main()  # type: ignore
-    memory = MemorySaver()
-    graph = graph_builder.compile(checkpointer=memory)  # Use checkpointer=memory
-    config = {"configurable": {"thread_id": "1"}}
-    # Estado inicial para a invocação do grafo
-    initial_state = {
-        "messages": [HumanMessage(content=mensagem_usuario)],
-        "ticker": "",
-        "method_analysis": "",
-        "dados_input": "",
-        "next": "",
-    }
-    response = asyncio.run(
-        graph.ainvoke(
-            initial_state,
-            config=config,  # type: ignore
-        )
-    )
-
-    response_text = response["messages"][1].content
-
-    with st.chat_message("assistant"):
-        st.write(response_text)
-    messages.append({"role": "assistant", "content": response_text})
+        error_msg = f"❌ **Erro ao processar**: {str(e)}\n\nTente novamente ou verifique suas configurações."
+        with st.chat_message("assistant"):
+            st.error(error_msg)
+        messages.append({"role": "assistant", "content": error_msg})
+        
+        # Log do erro para debug (opcional - remover em produção)
+        if st.checkbox("Mostrar detalhes do erro"):
+            st.exception(e)
