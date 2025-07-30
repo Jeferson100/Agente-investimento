@@ -103,8 +103,8 @@ messages = st.session_state.chat_history
 
 
 def clear_messages():
-    if "chat_history_valuation" in st.session_state:
-        del st.session_state["chat_history_valuation"]
+    if "chat_history" in st.session_state:
+        del st.session_state["chat_history"]
     st.rerun()
 
 
@@ -230,16 +230,22 @@ with st.sidebar:
             key="limpar_memoria_tecnica",
         ):
             clear_messages()
-
     with col3:
-        data_string = "\n".join(codigos)
-        st.download_button(
-            label="Download dados",
-            data=data_string,
-            file_name="dados_llm.md",
-            mime="text/markdown",
-            help="Esses dados são os que foram processados pela LLM",
-        )
+        if "chat_history" in st.session_state:
+            dados_memoria = st.session_state["chat_history"]
+            # Converter a lista de dicionários em uma string formatada
+            dados_formatados = "\n\n".join(
+                [f"**{msg['role'].capitalize()}**: {msg['content']}" for msg in dados_memoria]
+            )
+            st.download_button(
+                label="Download histórico",
+                data=dados_formatados,
+                file_name="dados_llm.md",
+                mime="text/markdown",
+                help="Histórico de converças!",
+            )
+        else:
+            st.warning("Nenhum dado disponível para download.")
 
     if st.session_state.show_codes:
         st.sidebar.markdown(
