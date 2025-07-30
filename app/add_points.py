@@ -26,7 +26,10 @@ CHECKPOINT_URL = config(
     default="postgresql://postgres:postgres@localhost:5433/postgres",
 )
 
-logger.info(f"DB_URI: {CHECKPOINT_URL}") # pylint: disable=logging-fstring-interpolation
+logger.info(
+    f"DB_URI: {CHECKPOINT_URL}"
+)  # pylint: disable=logging-fstring-interpolation
+
 
 @asynccontextmanager
 async def lifespan() -> AsyncGenerator:
@@ -49,7 +52,7 @@ async def lifespan() -> AsyncGenerator:
 async def chatbot(message: str, request: Request):
     """
     Endpoint do chatbot que recebe uma mensagem e retorna a resposta do LangGraph.
-    """ # pylint: disable= logging-fstring-interpolation
+    """  # pylint: disable= logging-fstring-interpolation
 
     # Estado inicial para a invocação do grafo
     initial_state = {
@@ -66,9 +69,6 @@ async def chatbot(message: str, request: Request):
     graph_builder = langgraph_main()
 
     graph = graph_builder.compile(checkpointer=checkpointer)
-
-    # Configuração do thread
-    inner_config = {"configurable": {"thread_id": "1"}} # pylint: disable=unused-variable
 
     response = await graph.ainvoke(
         initial_state,

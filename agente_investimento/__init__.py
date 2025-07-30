@@ -4,7 +4,6 @@ from .chat_bots.chat_analise_tecnica_async import ChatAnaliseTecnicaAsync
 from .chat_bots.chat_analise_tecnica_comparacao_async import (
     ChatAnaliseTecnicaComparacao,
 )
-from .chat_bots.chat_bots import ChatBot
 from .chat_bots.chat_fundamentalista import ChatFundamentalistas
 from .chat_bots.chat_fundamentalista_async import ChatFundamentalistasAsync
 from .chat_bots.chat_fundamentalista_comparacao_async import (
@@ -134,7 +133,6 @@ __all__ = [
     "ChatSentimentoComparacao",
     "ChatAnaliseTecnica",
     "ChatAnaliseTecnicaComparacao",
-    "ChatBot",
     "ChatValuation",
     "ChatValuationComparacao",
     "ChatTradutor",

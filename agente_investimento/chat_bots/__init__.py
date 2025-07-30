@@ -1,7 +1,6 @@
 from .chat_analise_tecnica import ChatAnaliseTecnica
 from .chat_analise_tecnica_async import ChatAnaliseTecnicaAsync
 from .chat_analise_tecnica_comparacao_async import ChatAnaliseTecnicaComparacao
-from .chat_bots import ChatBot
 from .chat_fundamentalista import ChatFundamentalistas
 from .chat_fundamentalista_async import ChatFundamentalistasAsync
 from .chat_fundamentalista_comparacao_async import ChatFundamentalistasComparacaoAsync
@@ -22,7 +21,6 @@ __all__ = [
     "ChatLimpaResposta",
     "ChatSentimento",
     "ChatAnaliseTecnica",
-    "ChatBot",
     "ChatValuation",
     "ChatValuationComparacao",
     "ChatTradutor",

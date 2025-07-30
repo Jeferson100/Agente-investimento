@@ -1,9 +1,9 @@
 import asyncio
-import io
 import warnings
 from typing import Optional
+from urllib.error import HTTPError
 
-import aiohttp
+import time
 import pandas as pd
 
 from .verificador_ticks import VerificadorTicks
@@ -28,17 +28,27 @@ class DadosFundamentalistas:
         self.data_inicio = data_inicio
         self.data_fim = data_fim
 
+    def load_csv_with_retry(
+        self, url: str, max_retries: int = 3, delay: int = 2
+    ) -> pd.DataFrame:
+        """Carrega CSV com retry e delay."""
+        for attempt in range(max_retries):
+            try:
+                df = pd.read_csv(url)
+                return df
+            except HTTPError as e:
+                if e.code == 429:
+                    wait_time = delay * (2**attempt)  # Backoff exponencial
+                    print(f"Rate limit atingido. Aguardando {wait_time}s...")
+                    time.sleep(wait_time)
+                else:
+                    raise e
+        raise Exception(f"Falhou após {max_retries} tentativas")
+
     async def dados_dre(self) -> pd.DataFrame:
         url = "https://raw.githubusercontent.com/Jeferson100/fundamentalist-stock-brazil/main/dados/dre.csv"
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as response:
-                content = await response.text()
 
-        try:
-            dados_dre: pd.DataFrame = pd.read_csv(io.StringIO(content))
-        except pd.errors.EmptyDataError:
-            print("Erro ao ler {}".format(url))
-            return pd.DataFrame()
+        dados_dre = self.load_csv_with_retry(url)
 
         # Filtra pelos dados do ticker
         dados_tic = dados_dre[dados_dre["tic"] == self.tic].copy()
@@ -60,14 +70,7 @@ class DadosFundamentalistas:
 
     async def dados_capex(self) -> pd.DataFrame:
         url = "https://raw.githubusercontent.com/Jeferson100/fundamentalist-stock-brazil/main/dados/capex.csv"
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as response:
-                content = await response.text()
-        try:
-            dados_capex = pd.read_csv(io.StringIO(content))
-        except pd.errors.EmptyDataError:
-            print("Erro ao ler {}".format(url))
-            return pd.DataFrame()
+        dados_capex = self.load_csv_with_retry(url)
         dados_capex_tic = dados_capex[dados_capex["tic"] == self.tic].copy()
         dados_capex_tic["datas"] = pd.to_datetime(
             dados_capex_tic["datas"], format="%d/%m/%Y"
@@ -85,14 +88,8 @@ class DadosFundamentalistas:
 
     async def dados_fluxo_caixa(self) -> pd.DataFrame:
         url = "https://raw.githubusercontent.com/Jeferson100/fundamentalist-stock-brazil/main/dados/fluxo_caixa.csv"
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as response:
-                content = await response.text()
-        try:
-            dados_fluxo_caixa = pd.read_csv(io.StringIO(content))
-        except pd.errors.EmptyDataError:
-            print("Erro ao ler {}".format(url))
-            return pd.DataFrame()
+
+        dados_fluxo_caixa = self.load_csv_with_retry(url)
 
         dados_fluxo_caixa_tic = dados_fluxo_caixa[
             dados_fluxo_caixa["tic"] == self.tic
@@ -115,14 +112,8 @@ class DadosFundamentalistas:
 
     async def dados_precos_relativos(self) -> pd.DataFrame:
         url = "https://raw.githubusercontent.com/Jeferson100/fundamentalist-stock-brazil/main/dados/precos_relativos.csv"
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as response:
-                content = await response.text()
-        try:
-            dados_precos_relativos = pd.read_csv(io.StringIO(content))
-        except pd.errors.EmptyDataError:
-            print("Erro ao ler {}".format(url))
-            return pd.DataFrame()
+
+        dados_precos_relativos = self.load_csv_with_retry(url)
 
         dados_precos_relativos_tic = dados_precos_relativos[
             dados_precos_relativos["tic"] == self.tic
@@ -147,14 +138,8 @@ class DadosFundamentalistas:
 
     async def dados_resumo_balanco(self) -> pd.DataFrame:
         url = "https://raw.githubusercontent.com/Jeferson100/fundamentalist-stock-brazil/main/dados/resumo_balanco.csv"
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as response:
-                content = await response.text()
-        try:
-            dados_resumo_balanco = pd.read_csv(io.StringIO(content))
-        except pd.errors.EmptyDataError:
-            print("Erro ao ler {}".format(url))
-            return pd.DataFrame()
+
+        dados_resumo_balanco = self.load_csv_with_retry(url)
 
         dados_resumo_balanco_tic = dados_resumo_balanco[
             dados_resumo_balanco["tic"] == self.tic
@@ -179,14 +164,8 @@ class DadosFundamentalistas:
 
     async def dados_retornos_margens(self) -> pd.DataFrame:
         url = "https://raw.githubusercontent.com/Jeferson100/fundamentalist-stock-brazil/main/dados/retornos_margens.csv"
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as response:
-                content = await response.text()
-        try:
-            dados_retornos_margens = pd.read_csv(io.StringIO(content))
-        except pd.errors.EmptyDataError:
-            print("Erro ao ler {}".format(url))
-            return pd.DataFrame()
+
+        dados_retornos_margens = self.load_csv_with_retry(url)
 
         dados_retornos_margens_tic = dados_retornos_margens[
             dados_retornos_margens["tic"] == self.tic

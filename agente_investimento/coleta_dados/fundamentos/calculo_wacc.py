@@ -158,7 +158,12 @@ class CalculoWACC:
 
             if wacc <= 0:
                 wacc = self.juros_livre()
-        except (Exception, ValueError, TypeError, AttributeError) as e:  # pylint: disable=broad-exception-caught
+        except (
+            Exception,
+            ValueError,
+            TypeError,
+            AttributeError,
+        ) as e:  # pylint: disable=broad-exception-caught
             print(f"Erro ao calcular o WACC: {e}")
             wacc = self.juros_livre()
 

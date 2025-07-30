@@ -122,8 +122,8 @@ class TratarDadosNoticiasComparacao:
                 if isinstance(text, str):
                     if len(text) >= 900:
                         text = text[150:900]
-                    #return f"\nNew notice\n{'\n'.join(text.split('\n'))}"
-                    return "\nNew notice\n" + '\n'.join(text.split('\n'))
+                    # return f"\nNew notice\n{'\n'.join(text.split('\n'))}"
+                    return "\nNew notice\n" + "\n".join(text.split("\n"))
             except httpx.HTTPError:
                 pass
             return ""

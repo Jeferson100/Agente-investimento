@@ -2,11 +2,8 @@ import os
 import warnings
 from typing import Iterator, List
 
-from pydantic import SecretStr # pylint: disable=import-error
-from selenium import webdriver # pylint: disable=import-error
-
-from agente_investimento.chat_bots import get_secret_key
-from agente_investimento.tratando_dados import TratarDadosNoticiasComparacao
+from pydantic import SecretStr  # pylint: disable=import-error
+from selenium import webdriver  # pylint: disable=import-error
 
 from ..chat_bots import ChatSentimentoComparacao, get_secret_key
 from ..tratando_dados import TratarDadosNoticiasComparacao

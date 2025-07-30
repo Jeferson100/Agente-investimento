@@ -1,8 +1,7 @@
-from datetime import datetime
-from functools import lru_cache
-
-import yfinance as yf
 from ipeadatapy import timeseries
+from functools import lru_cache
+import yfinance as yf
+from datetime import datetime
 
 
 class DataCache:
@@ -28,7 +27,7 @@ class DataCache:
             self.ticker_cache[ticker_symbol] = yf.Ticker(ticker_symbol)
         return self.ticker_cache[ticker_symbol]
 
-    @lru_cache(maxsize=100)
+    @lru_cache(maxsize=100)  # noqa: B019
     def get_info(self, ticker_symbol):
         """Obtém informações do ticker com cache."""
         if ticker_symbol not in self.info_cache:
@@ -36,7 +35,7 @@ class DataCache:
             self.info_cache[ticker_symbol] = ticker.info
         return self.info_cache[ticker_symbol]
 
-    @lru_cache(maxsize=100)
+    @lru_cache(maxsize=100)  # noqa: B019
     def get_dividends(self, ticker_symbol):
         """Obtém dividendos com cache."""
         if ticker_symbol not in self.dividends_cache:
@@ -44,7 +43,7 @@ class DataCache:
             self.dividends_cache[ticker_symbol] = ticker.dividends
         return self.dividends_cache[ticker_symbol]
 
-    @lru_cache(maxsize=100)
+    @lru_cache(maxsize=100)  # noqa: B019
     def get_history(self, ticker_symbol, period="1y"):
         """Obtém histórico de preços com cache."""
         cache_key = f"{ticker_symbol}_{period}"
@@ -53,10 +52,10 @@ class DataCache:
             self.history_cache[cache_key] = ticker.history(period=period)
         return self.history_cache[cache_key]
 
-    @lru_cache(maxsize=100)
+    @lru_cache(maxsize=100)  # noqa: B019
     def get_historical_dez_anos(self, ticker_symbol):
         """Obtém histórico de preços com cache."""
-        cache_key = f"{ticker_symbol}_dez_anos"
+        cache_key = f"{ticker_symbol}_{"dez_anos"}"
         if cache_key not in self.history_cache_dez_anos:
             ticker = self.get_ticker(ticker_symbol)
             self.history_cache_dez_anos[cache_key] = ticker.history(
@@ -64,7 +63,7 @@ class DataCache:
             )
         return self.history_cache_dez_anos[cache_key]
 
-    @lru_cache(maxsize=100)
+    @lru_cache(maxsize=100)  # noqa: B019
     def get_dowload(self, ticker_symbol):
         "Obtem dowload dos dados"
         if ticker_symbol not in self.dowload_cache:
@@ -75,7 +74,7 @@ class DataCache:
             )
         return self.dowload_cache[ticker_symbol]
 
-    @lru_cache(maxsize=100)
+    @lru_cache(maxsize=100)  # noqa: B019
     def get_financials(self, ticker_symbol):
         "Obtem dowload dos dados fincanceiros"
         if ticker_symbol not in self.finances_cache:
@@ -84,14 +83,14 @@ class DataCache:
             ).get_financials()
         return self.finances_cache[ticker_symbol]
 
-    @lru_cache(maxsize=10)
+    @lru_cache(maxsize=10)  # noqa: B019
     def get_ipea_data(self, series_code):
         """Obtém dados do IPEA com cache."""
         if series_code not in self.ipea_cache:
             self.ipea_cache[series_code] = timeseries(series_code)
         return self.ipea_cache[series_code]
 
-    @lru_cache(maxsize=100)
+    @lru_cache(maxsize=100)  # noqa: B019
     def get_balance_sheet(self, ticker_symbol):
         """ "Obtem dados do balanco"""
         if ticker_symbol not in self.balance_sheet_cache:
@@ -100,14 +99,14 @@ class DataCache:
             ).get_balancesheet(freq="yearly")
         return self.balance_sheet_cache[ticker_symbol]
 
-    @lru_cache(maxsize=100)
+    @lru_cache(maxsize=100)  # noqa: B019
     def get_cash_flow(self, ticker_symbol):
         """Obtem dados do fluxo de caixa"""
         if ticker_symbol not in self.cash_flow_cache:
             self.cash_flow_cache[ticker_symbol] = yf.Ticker(ticker_symbol).cashflow
         return self.cash_flow_cache[ticker_symbol]
 
-    @lru_cache(maxsize=100)
+    @lru_cache(maxsize=100)  # noqa: B019
     def get_quarterly_balance_sheet(self, ticker_symbol):
         if ticker_symbol not in self.quarterly_balance_sheet_cache:
             self.quarterly_balance_sheet_cache[ticker_symbol] = yf.Ticker(
@@ -115,7 +114,7 @@ class DataCache:
             ).quarterly_balance_sheet
         return self.quarterly_balance_sheet_cache[ticker_symbol]
 
-    @lru_cache(maxsize=100)
+    @lru_cache(maxsize=100)  # noqa: B019
     def get_history_bovespa(self, start, end):
         """Obtém histórico do índice Bovespa com cache."""
         cache_key = f"bovespa_{start}_{end}"

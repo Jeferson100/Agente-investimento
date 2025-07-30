@@ -29,7 +29,9 @@ empresas_df = pd.read_csv(
 empresas_tickers = "\n".join(
     [
         f"{empresa} ({ticker})"
-        for empresa, ticker in zip(empresas_df["Empresa"], empresas_df["tic"])
+        for empresa, ticker in zip(
+            empresas_df["Empresa"], empresas_df["tic"], strict=True
+        )
     ]
 )
 
@@ -85,7 +87,5 @@ def identifica_ticks(
         return {"ticker": []}  # Retorna lista vazia se não houver mensagens
 
     # Invoca a chain para identificar os tickers
-    resposta_ticker = llm_identifica_ticker.invoke(
-        {"messages": messages, "empresas_tickers": empresas_tickers}
-    )
+    resposta_ticker: Tickers = llm_identifica_ticker.invoke({"messages": messages, "empresas_tickers": empresas_tickers})  # type: ignore
     return {"ticker": resposta_ticker.tickers}

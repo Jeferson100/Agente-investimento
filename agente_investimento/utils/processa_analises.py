@@ -39,7 +39,7 @@ async def process_fundamental(state: State) -> Command[Literal["supervisor"]]:
     if dados_input:
         response = f"{dados_input}\n{response}"
     return Command(
-        update={"dados_input": [HumanMessage(content=response, name="fundamental")]},
+        update={"dados_input": [HumanMessage(content=response, name="fundamental")]},  # type: ignore
         goto="supervisor",
     )
 
@@ -75,7 +75,7 @@ async def process_technical(state: State) -> Command[Literal["supervisor"]]:
     if dados_input:
         response = f"{dados_input}\n{response}"
     return Command(
-        update={"dados_input": [HumanMessage(content=response, name="technical")]},
+        update={"dados_input": [HumanMessage(content=response, name="technical")]},  # type: ignore
         goto="supervisor",
     )
 
@@ -109,7 +109,7 @@ async def process_valuation(state: State) -> Command[Literal["supervisor"]]:
         response = f"{dados_input}\n{response}"
 
     return Command(
-        update={"dados_input": [HumanMessage(content=response, name="valuation")]},
+        update={"dados_input": [HumanMessage(content=response, name="valuation")]},  # type: ignore
         goto="supervisor",
     )
 
@@ -140,7 +140,7 @@ async def process_sentimento(state: State) -> Command[Literal["supervisor"]]:
     if dados_input:
         response = f"{dados_input}\n{response}"
     return Command(
-        update={"dados_input": [HumanMessage(content=response, name="sentimento")]},
+        update={"dados_input": [HumanMessage(content=response, name="sentimento")]},  # type: ignore
         goto="supervisor",
     )
 
@@ -200,7 +200,7 @@ async def analise_investimento(state: State) -> Command[Literal["supervisor"]]:
         if isinstance(dados_input, list):
             dados_input = (
                 "\n".join(
-                    m.content if hasattr(m, "content") else str(m) for m in dados_input
+                    m.content if hasattr(m, "content") else str(m) for m in dados_input  # type: ignore
                 )
                 if dados_input
                 else ""

@@ -20,7 +20,6 @@ graph = graph_builder.compile()
 
 @cl.on_message
 async def main(message: cl.Message):
-    config: RunnableConfig = {"configurable": {"thread_id": cl.context.session.thread_id},} # pylint: disable=unused-variable
 
     response = await graph.ainvoke(
         {"messages": [HumanMessage(content=message.content)]},

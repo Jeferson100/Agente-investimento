@@ -29,7 +29,7 @@ class VariacaoReceitaAsync:
         raise TypeError("Erro: Formato inesperado dos dados financeiros.")
 
     async def pegando_inflacao(self) -> pd.DataFrame | None:
-        async with aiohttp.ClientSession() as _: # pylint: disable=consider-using-with
+        async with aiohttp.ClientSession() as _:  # pylint: disable=consider-using-with
             ipca_raw = await asyncio.to_thread(
                 sidrapy.get_table,
                 table_code="1737",

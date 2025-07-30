@@ -38,9 +38,15 @@ class CalculoWACCAsync:
             history_future = executor.submit(self.cache.get_history, self.ticker)
 
             # Aguardar a conclusão
-            self.info = info_future.result() # pylint: disable=attribute-defined-outside-init
-            self.dividends = dividends_future.result() # pylint: disable=attribute-defined-outside-init
-            self.history = history_future.result() # pylint: disable=attribute-defined-outside-init
+            self.info = (
+                info_future.result()
+            )  # pylint: disable=attribute-defined-outside-init
+            self.dividends = (
+                dividends_future.result()
+            )  # pylint: disable=attribute-defined-outside-init
+            self.history = (
+                history_future.result()
+            )  # pylint: disable=attribute-defined-outside-init
 
     async def juros_livre(self) -> float:
         try:
@@ -195,7 +201,12 @@ class CalculoWACCAsync:
 
             if wacc <= 0:
                 wacc = juros
-        except (Exception, ValueError, TypeError, AttributeError) as e: # pylint: disable=broad-exception-caught
+        except (
+            Exception,
+            ValueError,
+            TypeError,
+            AttributeError,
+        ) as e:  # pylint: disable=broad-exception-caught
             print(f"Erro ao calcular WACC: {e}")
             wacc = await self.juros_livre()
 

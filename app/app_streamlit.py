@@ -13,9 +13,10 @@ from langgraph.checkpoint.memory import MemorySaver
 
 # Função para verificar se as APIs estão configuradas
 def check_api_keys():
-    groq_key = st.session_state.get('groq_api') or os.getenv("GROQ_API_KEY")
-    serper_key = st.session_state.get('serper_api') or os.getenv("API_KEY_SERPER")
+    groq_key = st.session_state.get("groq_api") or os.getenv("GROQ_API_KEY")
+    serper_key = st.session_state.get("serper_api") or os.getenv("API_KEY_SERPER")
     return groq_key, serper_key
+
 
 # Só tenta importar se as APIs estão configuradas
 groq_key, serper_key = check_api_keys()
@@ -23,19 +24,20 @@ groq_key, serper_key = check_api_keys()
 if groq_key:
     try:
         from agente_investimento import langgraph_main
+
         import_success = True
     except Exception as e:
         st.error(f"Erro ao carregar o agente: {e}")
         st.info("Verifique se a GROQ_API_KEY está configurada corretamente.")
         api_key = st.text_input(
-                "Enter GROQ API token:",
-                value=st.session_state.groq_api,
-                type="password",
-            )
+            "Enter GROQ API token:",
+            value=st.session_state.groq_api,
+            type="password",
+        )
 
         if api_key:
             os.environ["GROQ_API_KEY"] = api_key
-        
+
         import_success = False
 
 st.set_page_config(
@@ -49,12 +51,20 @@ st.set_page_config(
 )
 
 
-if 'groq_api' in st.session_state and st.session_state.groq_api or os.getenv("GROQ_API_KEY"):
+if (
+    "groq_api" in st.session_state
+    and st.session_state.groq_api
+    or os.getenv("GROQ_API_KEY")
+):
     pass
 else:
     st.warning("Por favor, defina a chave API do GROQ.")
 
-if 'serper_api' in st.session_state and st.session_state.serper_api or os.getenv("API_KEY_SERPER"):
+if (
+    "serper_api" in st.session_state
+    and st.session_state.serper_api
+    or os.getenv("API_KEY_SERPER")
+):
     pass
 else:
     st.warning("Por favor, defina a chave API do Serper.")
@@ -133,7 +143,7 @@ with st.sidebar:
     )
     st.markdown(
         """
-    [![Serper](https://img.shields.io/badge/Create%20Serper%20API%20Key-blue?style=flat&logo=groq)](https://serper.dev/api-key)
+    [![Serper](https://img.shields.io/badge/Create%20Serper%20API%20Key-blue?style=flat&logo=groq)](https://serper.dev/api-keys)
     """,
         unsafe_allow_html=True,
     )
@@ -267,7 +277,8 @@ if mensagem_usuario:
     messages.append({"role": "user", "content": mensagem_usuario})
     with st.chat_message("user"):
         st.markdown(mensagem_usuario)
-    graph_builder = langgraph_main()
+
+    graph_builder = langgraph_main()  # type: ignore
     memory = MemorySaver()
     graph = graph_builder.compile(checkpointer=memory)  # Use checkpointer=memory
     config = {"configurable": {"thread_id": "1"}}
@@ -282,7 +293,7 @@ if mensagem_usuario:
     response = asyncio.run(
         graph.ainvoke(
             initial_state,
-            config=config,
+            config=config,  # type: ignore
         )
     )
 

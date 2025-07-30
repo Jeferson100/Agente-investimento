@@ -28,17 +28,17 @@ class DadosIndicadoresTecnicos:
         return cotacoes
 
     def indicadores_tecnicos(self, historico: pd.DataFrame) -> Dict[str, pd.DataFrame]:
-        dic_indicadores = {}
-        dic_indicadores["media_20"] = TA.SMA(historico, 20)
-        dic_indicadores["media_100"] = TA.SMA(historico, 100)
-        dic_indicadores["media_200"] = TA.SMA(historico, 200)
-        dic_indicadores["rsi"] = TA.RSI(historico)
-        dic_indicadores["macd"] = TA.MACD(historico)
-        dic_indicadores["bands"] = TA.BBANDS(historico)
-        dic_indicadores["pivots"] = TA.PIVOT(historico)
-        dic_indicadores["vwap"] = TA.VWAP(historico)
-        dic_indicadores["adx"] = TA.ADX(historico)
-        dic_indicadores["sar"] = TA.SAR(historico)
+        dic_indicadores: Dict[str, pd.DataFrame] = {}
+        dic_indicadores["media_20"] = TA.SMA(historico, 20)  # pyrefly: ignore
+        dic_indicadores["media_100"] = TA.SMA(historico, 100)  # pyrefly: ignore
+        dic_indicadores["media_200"] = TA.SMA(historico, 200)  # pyrefly: ignore
+        dic_indicadores["rsi"] = TA.RSI(historico)  # pyrefly: ignore
+        dic_indicadores["macd"] = TA.MACD(historico)  # pyrefly: ignore
+        dic_indicadores["bands"] = TA.BBANDS(historico)  # pyrefly: ignore
+        dic_indicadores["pivots"] = TA.PIVOT(historico)  # pyrefly: ignore
+        dic_indicadores["vwap"] = TA.VWAP(historico)  # pyrefly: ignore
+        dic_indicadores["adx"] = TA.ADX(historico)  # pyrefly: ignore
+        dic_indicadores["sar"] = TA.SAR(historico)  # pyrefly: ignore
         return dic_indicadores
 
     def pegando_indicadores_tecnicos(self) -> pd.DataFrame:

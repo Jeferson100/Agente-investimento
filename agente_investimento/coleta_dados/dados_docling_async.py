@@ -18,7 +18,7 @@ class LinksExtractorDoclingLoaderAsync:
             try:
                 docs = await self.load(link)
                 return docs[0].page_content
-            except Exception as e: # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 print(f"Erro ao carregar o link: {link} - {str(e)}")
                 return ""
 

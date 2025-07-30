@@ -27,7 +27,7 @@ async def chatbot(message: str):
 
     response = await graph.ainvoke(
         initial_state,
-        config=config,
+        config=config,  # type: ignore
         stream_mode="values",
     )
 

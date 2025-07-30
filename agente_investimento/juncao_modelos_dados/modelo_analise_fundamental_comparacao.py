@@ -1,7 +1,7 @@
 import os
 from typing import Any, Iterator, List
 
-from pydantic import SecretStr # pylint: disable=import-error
+from pydantic import SecretStr  # pylint: disable=import-error
 
 
 from ..chat_bots import ChatFundamentalistasComparacaoAsync, get_secret_key
