@@ -1,6 +1,6 @@
 import os
 import sys
-
+from contextlib import contextmanager
 import streamlit as st
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -11,8 +11,18 @@ from langchain.schema import HumanMessage
 from langgraph.checkpoint.memory import MemorySaver
 
 
-# Função para verificar se as APIs estão configuradas
-def check_api_keys():
+st.set_page_config(
+    page_title="Analise Ações",
+    page_icon="imagem/logo_robo.png",
+    layout="centered",
+    initial_sidebar_state="expanded",
+    menu_items={
+        "About": "Analise Ações",
+    },
+)
+
+
+"""def check_api_keys():
     groq_key = st.session_state.get("groq_api") or os.getenv("GROQ_API_KEY")
     serper_key = st.session_state.get("serper_api") or os.getenv("API_KEY_SERPER")
     return groq_key, serper_key
@@ -38,18 +48,57 @@ if groq_key:
         if api_key:
             os.environ["GROQ_API_KEY"] = api_key
 
-        import_success = False
+        import_success = False"""
 
-st.set_page_config(
-    page_title="Analise Ações",
-    page_icon="imagem/logo_robo.png",
-    layout="centered",
-    initial_sidebar_state="expanded",
-    menu_items={
-        "About": "Analise Ações",
-    },
-)
+@contextmanager
+def temp_env_vars(**kwargs):
+    """
+    Context manager que cria variáveis de ambiente temporárias.
+    Restaura os valores originais ao sair do contexto.
+    """
+    # Salva valores originais
+    original_values = {}
+    for key in kwargs:
+        original_values[key] = os.environ.get(key)
+    
+    # Define novos valores
+    for key, value in kwargs.items():
+        if value is not None:
+            os.environ[key] = str(value)
+        elif key in os.environ:
+            del os.environ[key]
+    
+    try:
+        yield
+    finally:
+        # Restaura valores originais
+        for key, original_value in original_values.items():
+            if original_value is not None:
+                os.environ[key] = original_value
+            elif key in os.environ:
+                del os.environ[key]
 
+
+def import_agent_with_temp_keys():
+    """
+    Importa o agente usando as chaves temporárias do session_state
+    """
+    groq_key = st.session_state.get("groq_api")
+    serper_key = st.session_state.get("serper_api")
+    
+    if not groq_key or not serper_key:
+        return None, "APIs não configuradas"
+    
+    try:
+        # Usar contexto temporário apenas para importação
+        with temp_env_vars(
+            GROQ_API_KEY=groq_key,
+            API_KEY_SERPER=serper_key
+        ):
+            from agente_investimento import langgraph_main
+            return langgraph_main, None
+    except Exception as e:
+        return None, f"Erro ao importar agente: {e}"
 
 if (
     "groq_api" in st.session_state
@@ -167,9 +216,6 @@ with st.sidebar:
             )
 
             if api_key:
-                os.environ["GROQ_API_KEY"] = api_key
-
-            if api_key:
                 st.session_state.groq_api = api_key
                 st.success("API key GROQ configurada com sucesso!", icon="✅")
 
@@ -184,9 +230,6 @@ with st.sidebar:
                 value=st.session_state.serper_api,
                 type="password",
             )
-
-            if serper_api:
-                os.environ["API_KEY_SERPER"] = serper_api
 
             if serper_api:
                 st.session_state.serper_api = serper_api
@@ -277,6 +320,22 @@ if mensagem_usuario:
     messages.append({"role": "user", "content": mensagem_usuario})
     with st.chat_message("user"):
         st.markdown(mensagem_usuario)
+    
+    groq_key = st.session_state.get("groq_api")
+    serper_key = st.session_state.get("serper_api")
+    
+    if not groq_key or not serper_key:
+        print("Erro: APIs não configuradas")
+    try:
+        # Usar contexto temporário para a chamada
+        with temp_env_vars(
+            GROQ_API_KEY=groq_key,
+            API_KEY_SERPER=serper_key
+        ):
+            from agente_investimento import langgraph_main
+            
+    except Exception as e:
+        print(f"Erro ao processar mensagem: {e}")
 
     graph_builder = langgraph_main()  # type: ignore
     memory = MemorySaver()
