@@ -158,8 +158,8 @@ class CalculoWACC:
 
             if wacc <= 0:
                 wacc = self.juros_livre()
-        except (
-            Exception,
+        except ( # pylint: disable=broad-exception-caught
+            Exception, 
             ValueError,
             TypeError,
             AttributeError,
