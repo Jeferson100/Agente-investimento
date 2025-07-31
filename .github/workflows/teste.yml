@@ -24,6 +24,8 @@ jobs:
         run: |
           uv venv
           source .venv/bin/activate
+      - name: Copia os arquivos do repo para o ambiente virtual
+        uses: actions/checkout@v4
       - name: Instalar o biblioteca
         run: |
           make uv_install
