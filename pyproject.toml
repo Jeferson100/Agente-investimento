@@ -97,7 +97,7 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools]
 packages = ["agente_investimento"]
 [tool.setuptools.package-dir]
-"agente_investimento" = "./agente_investimento/langgraph_construcao/langgraph_main.py"
+"agente_investimento" = "agente_investimento"
 
 [tool.ruff]
 select = ["E", "F", "B"]
