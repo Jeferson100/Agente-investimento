@@ -15,11 +15,18 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12.1'
-
-      - name: Instalar o biblioteca
+      
+      - name: Instalar o uv
         run: |
           python -m pip install --upgrade pip
-          make install
+          pip install uv
+      - name: Criar ambiente virtual
+        run: |
+          uv venv
+          .venv/bin/activate
+      - name: Instalar o biblioteca
+        run: |
+          make uv_install
       - name: Verificar formação dos arquivos
         run: |
           make format
