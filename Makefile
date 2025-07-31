@@ -13,7 +13,6 @@ PYTHON_INTERPRETER = python
 
 
 uv_install:
-	pip install uv && \
 	uv pip install --upgrade pip && \
 		uv pip install -r requirements.txt
 
