@@ -23,7 +23,7 @@ jobs:
       - name: Criar ambiente virtual
         run: |
           uv venv
-          .venv/bin/activate
+          source .venv/bin/activate
       - name: Instalar o biblioteca
         run: |
           make uv_install
