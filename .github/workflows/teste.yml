@@ -26,12 +26,12 @@ jobs:
       - name: Verificar lint dos arquivos
         run: |
           make lint
-      - name: Verificar mypy dos arquivos
-        run: |
-          make typemypy
       - name: Verificar pyright dos arquivos
         run: |
           make typepyright
+      - name: Verificar pyrefly dos arquivos
+        run: |
+          make typepyrefly
       - name: Verificar testes dos arquivos
         run: |
           make test
