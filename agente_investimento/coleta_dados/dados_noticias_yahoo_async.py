@@ -111,23 +111,23 @@ class DadosNoticiasBuscadorYahooAsync:
                 if isinstance(titulo, Tag)
             ]
         )
-        return dados_titulo
+        return dados_titulo  # type: ignore
 
     async def pegar_fonte(self, soup: BeautifulSoup) -> List[str]:
-        fontes = soup.find_all(class_="s-source mr-5 cite-co")
+        fontes: List[Tag] = soup.find_all(class_="s-source mr-5 cite-co")  # type: ignore
         fonte_texto = await asyncio.gather(
             # *[self.get_text_async(fonte) for fonte in fontes]
             *[self.get_text_async(fonte) for fonte in fontes if isinstance(fonte, Tag)]
         )
-        return fonte_texto
+        return list(fonte_texto)
 
     async def pegar_data(self, soup: BeautifulSoup) -> List[str]:
-        tempos = soup.find_all(class_="fc-2nd s-time mr-8")
+        tempos: List[Tag] = soup.find_all(class_="fc-2nd s-time mr-8")  # type: ignore
         tempo_texto = await asyncio.gather(
             # *[self.get_text_async(tempo) for tempo in tempos]
             *[self.get_text_async(tempo) for tempo in tempos if isinstance(tempo, Tag)]
         )
-        return tempo_texto
+        return list(tempo_texto)
 
     async def pular_pagina(self, navegador: webdriver.Chrome, number: int) -> None:
         try:

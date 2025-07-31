@@ -39,13 +39,13 @@ class CalculoWACCAsync:
             history_future = executor.submit(self.cache.get_history, self.ticker)
 
             # Aguardar a conclusão
-            self.info = (  # pylint: disable=attribute-defined-outside-init
-                info_future.result()  # pylint: disable=attribute-defined-outside-init
+            self.info = (  # pylint: disable=attribute-defined-outside-init # type: ignore
+                info_future.result()  # pylint: disable=attribute-defined-outside-init # type: ignore
             )  # pylint: disable=attribute-defined-outside-init
-            self.dividends = (  # pylint: disable=attribute-defined-outside-init
+            self.dividends = (  # pylint: disable=attribute-defined-outside-init # type: ignore
                 dividends_future.result()  # pylint: disable=attribute-defined-outside-init
             )  # pylint: disable=attribute-defined-outside-init
-            self.history = (  # pylint: disable=attribute-defined-outside-init
+            self.history = (  # pylint: disable=attribute-defined-outside-init # type: ignore
                 history_future.result()  # pylint: disable=attribute-defined-outside-init
             )  # pylint: disable=attribute-defined-outside-init
 

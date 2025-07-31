@@ -63,4 +63,4 @@ test:
 
 refactor: format lint
 
-all: uv_install format lint typepyright import_format ruff_format ruff_lint test
+all: uv_install format lint typepyright  typepyrefly import_format ruff_format ruff_lint test

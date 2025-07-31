@@ -16,7 +16,7 @@ class PostgresDBConsult:
 
     def get_interactions(
         self, limit: int = 10, tabela: str = "checkpoints"
-    ) -> Optional[Union[Sequence[Row], List[Any]]]:
+    ) -> Optional[Union[Sequence[Row], List[Any]]]:  # type: ignore
         """Recupera as últimas interações do banco de dados."""
         try:
             engine = self.create_db_connection()

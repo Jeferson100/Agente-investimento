@@ -66,7 +66,7 @@ class ValuationModoloGordon:
 
     def juros_livre(self) -> float:
         juros = (
-            ip.timeseries("BMF12_SWAPDI36012")
+            ip.timeseries("BMF12_SWAPDI36012")  # type: ignore
             .rename(columns={"VALUE ((% a.a.))": "swaps"})[["swaps"]]
             .div(100)
             .iloc[-1]

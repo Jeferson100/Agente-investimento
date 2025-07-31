@@ -38,7 +38,7 @@ class ModeloFundamentosComparacaoAsync:
             self.tickers,
         )
         fudamentos_comparacao = await fudamentos_comparacao.coletando_dados_tickers()
-        return fudamentos_comparacao
+        return fudamentos_comparacao  # type: ignore
 
     async def chat_fundamentalistas_comparacao(self) -> str | Iterator[str]:
         print("O modelo usado e o:", self.modelo_llm)

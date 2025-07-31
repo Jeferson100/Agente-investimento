@@ -40,7 +40,7 @@ class ModeloAnaliseTecnicaComparacao:
         ind = TratandoDadosIndicadoresComparacao(
             tickers=self.tickers, periodo=self.periodo, intervalo=self.intervalo
         )
-        return await ind.pegando_indicadores_comparacao()
+        return await ind.pegando_indicadores_comparacao()  # type: ignore
 
     async def chat_analise_tecnica_comparacao(self) -> str | Iterator[str]:
         dados_tecnicas = await self.dados_indicadores_tecnicas()

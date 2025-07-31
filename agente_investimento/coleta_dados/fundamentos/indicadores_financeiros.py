@@ -99,9 +99,9 @@ class IndicadoresFinanceiros:
             )
 
             if isinstance(resultado_margem, (float, int)):
-                return round(resultado_margem, 4)
+                return round(resultado_margem, 4)  # type: ignore
             elif isinstance(resultado_margem, (pd.DataFrame, pd.Series)):
-                return round(resultado_margem.iloc[0], 4)
+                return round(resultado_margem.iloc[0], 4)  # type: ignore
             else:
                 return 0.05
         except ZeroDivisionError:

@@ -20,7 +20,7 @@ def generator_to_string(
         chunks.append(chunk_text)
 
     # Une todos os chunks em uma única string
-    return "".join(chunks), chunks
+    return "".join(chunks), chunks  # type: ignore
 
 
 def string_to_generator(
