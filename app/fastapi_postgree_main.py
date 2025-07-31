@@ -1,8 +1,9 @@
 import logging
 import os
 import sys
-import uvicorn
+
 import psycopg2
+import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from langchain.schema import HumanMessage
@@ -30,8 +31,8 @@ CHECKPOINT_URL = config_env(
     default="postgresql://postgres:postgres@localhost:5433/postgres",
 )
 
-logger.info(
-    f"DB_URI: {CHECKPOINT_URL}"
+logger.info(  # pylint: disable=logging-fstring-interpolation
+    f"DB_URI: {CHECKPOINT_URL}"  # pylint: disable=logging-fstring-interpolation
 )  # pylint: disable=logging-fstring-interpolation
 
 connection_kwargs = {
@@ -135,9 +136,7 @@ async def return_db(thread_id: str = "1"):
         ) as pool:
             checkpointer = AsyncPostgresSaver(pool)  # type:ignore
             await checkpointer.setup()
-            config = {
-                "configurable": {"thread_id": thread_id}
-            }  # pylint: disable=unused-variable
+            config = {"configurable": {"thread_id": thread_id}}  # pylint: disable=unused-variable
             checkpoint = await checkpointer.aget(config)  # type:ignore
             if checkpoint is None:
                 return {"status": "Vazio", "message": "O banco de dados está vazio."}
@@ -237,5 +236,4 @@ async def limpar_memoria(thread_id: str = "2", num_linhas: str = "3"):
 
 
 if __name__ == "__main__":
-
     uvicorn.run("fastapi_postgree_main:app", host="0.0.0.0", port=3000, reload=True)

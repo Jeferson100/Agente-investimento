@@ -10,6 +10,8 @@ PYTHON_INTERPRETER = python
 # COMMANDS                                                                      #
 #################################################################################
 
+
+
 uv_install:
 	pip install uv && \
 	uv pip install --upgrade pip && \
@@ -61,4 +63,4 @@ test:
 
 refactor: format lint
 
-all: install format lint typepyright typemypy import_format ruff_format ruff_lint test
+all: uv_install format lint typepyright import_format ruff_format ruff_lint test

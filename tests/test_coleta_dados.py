@@ -1,13 +1,13 @@
 import os
 
 import pandas as pd
-from coleta_dados import (
+from agente_investimento import (
     DadosFundamentalistas,
     DadosIndicadoresTecnicos,
-    DadosNoticiasBuscadorYahoo,
     DadosNoticiasGoogle,
     LinksExtractorBS4,
 )
+import pytest
 from pydantic import SecretStr
 from selenium import webdriver
 
@@ -48,38 +48,39 @@ def test_pegando_indicadores_tecnicos() -> None:
 
 
 # Test fundamentais
-def test_dados_dre() -> None:
-    df = DadosFundamentalistas("PETR4").dados_dre()
+@pytest.mark.asyncio
+async def test_dados_dre() -> None:
+    df = await DadosFundamentalistas("PETR4").dados_dre()
     assert isinstance(df, pd.DataFrame)
     assert not df.empty
 
-
-def test_dados_capex() -> None:
-    df = DadosFundamentalistas("PETR4").dados_capex()
+@pytest.mark.asyncio
+async def test_dados_capex() -> None:
+    df = await DadosFundamentalistas("PETR4").dados_capex()
     assert isinstance(df, pd.DataFrame)
     assert not df.empty
 
-
-def test_dados_fluxo_caixa() -> None:
-    df = DadosFundamentalistas("PETR4").dados_fluxo_caixa()
+@pytest.mark.asyncio
+async def test_dados_fluxo_caixa() -> None:
+    df = await DadosFundamentalistas("PETR4").dados_fluxo_caixa()
     assert isinstance(df, pd.DataFrame)
     assert not df.empty
 
-
-def test_dados_precos_relativos() -> None:
-    df = DadosFundamentalistas("PETR4").dados_precos_relativos()
+@pytest.mark.asyncio
+async def test_dados_precos_relativos() -> None:
+    df = await DadosFundamentalistas("PETR4").dados_precos_relativos()
     assert isinstance(df, pd.DataFrame)
     assert not df.empty
 
-
-def test_dados_resumo_balanco() -> None:
-    df = DadosFundamentalistas("PETR4").dados_resumo_balanco()
+@pytest.mark.asyncio
+async def test_dados_resumo_balanco() -> None:
+    df = await DadosFundamentalistas("PETR4").dados_resumo_balanco()
     assert isinstance(df, pd.DataFrame)
     assert not df.empty
 
-
-def test_dados_retornos_margens() -> None:
-    df = DadosFundamentalistas("PETR4").dados_retornos_margens()
+@pytest.mark.asyncio
+async def test_dados_retornos_margens() -> None:
+    df = await DadosFundamentalistas("PETR4").dados_retornos_margens()
     assert isinstance(df, pd.DataFrame)
     assert not df.empty
 
@@ -108,21 +109,6 @@ def options_headless() -> webdriver.ChromeOptions:
     options = webdriver.ChromeOptions()
     options.add_argument("--headless")
     return options
-
-
-def test_get_news_yahoo() -> None:
-    result = DadosNoticiasBuscadorYahoo("PETR4", options_headless()).get_news(
-        number_paginas=2
-    )
-    assert isinstance(result, dict)
-    assert "links" in result
-    assert "titulos" in result
-    assert "fontes" in result
-    assert "datas" in result
-    assert len(result["links"]) > 0
-    assert len(result["titulos"]) > 0
-    assert len(result["fontes"]) > 0
-    assert len(result["datas"]) > 0
 
 
 def test_text_bs4() -> None:

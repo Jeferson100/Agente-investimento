@@ -273,9 +273,7 @@ class IndicadoresFinanceirosAsync:
 
     async def necessidade_capital_giro(self) -> float:
         necessidade_capital = NecessidadeCapitalGiroAsync(self.ticker)
-        valor_necesseidade_capital = (
-            await necessidade_capital.necessidade_capital_giro_ativo_circulante_menos_passivo_circulante()
-        )
+        valor_necesseidade_capital = await necessidade_capital.necessidade_capital_giro_ativo_circulante_menos_passivo_circulante()
         return valor_necesseidade_capital
 
     async def todos_indicadores(self) -> Dict[str, Any]:

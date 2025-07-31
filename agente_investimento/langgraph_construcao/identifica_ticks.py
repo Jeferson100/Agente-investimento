@@ -87,5 +87,7 @@ def identifica_ticks(
         return {"ticker": []}  # Retorna lista vazia se não houver mensagens
 
     # Invoca a chain para identificar os tickers
-    resposta_ticker: Tickers = llm_identifica_ticker.invoke({"messages": messages, "empresas_tickers": empresas_tickers})  # type: ignore
+    resposta_ticker: Tickers = llm_identifica_ticker.invoke(
+        {"messages": messages, "empresas_tickers": empresas_tickers}
+    )  # type: ignore
     return {"ticker": resposta_ticker.tickers}

@@ -1,16 +1,15 @@
 import datetime
 import os
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, patch, AsyncMock
+import asyncio
 
 import pytest
-from chat_bots import (
-    ChatAnaliseTecnica,
-    ChatFundamentalistas,
-    ChatLimpaResposta,
-    ChatSentimento,
-    ChatTradutor,
-    ChatValuation,
+from agente_investimento import (
+    ChatAnaliseTecnicaComparacao,
+    ChatFundamentalistasComparacaoAsync,
+    ChatSentimentoComparacao,
+    ChatValuationComparacao,
 )
 from langchain.schema import Document
 from pydantic import SecretStr
@@ -63,14 +62,15 @@ class TestChatBots(unittest.TestCase):
             ),
         ]
 
-        self.dados_valuation = {
-            "precos_atual_valuations": "40.0",
-            "indicadores_valuation_fluxo": "50.0",
-            "valuation_metodo_gordon": "20.0",
-            "valuation_fluxo_caixa": "30.0",
-        }
+        
+        self.valuation_metodo_gordon = {'AMER3.SA': ('|    | ticker   |   dividendo_mediano |   g_sust |   juros_livre |   beta |   capm |   valuation_acao |   preco_atual |   diferenca |\n|---:|:---------|--------------------:|---------:|--------------:|-------:|-------:|-----------------:|--------------:|------------:|\n|  0 | AMER3.SA |              11.591 |        0 |        0.1473 | -0.301 | 0.1653 |            70.13 |          5.26 |     1233.22 |',
+        70.13)}
+        
+        self.valution_metodo_fluxo_caixa = {'AMER3.SA': ('|    |   data |   receita_ano |     ebit_ano |   imposto_ano |   capex_ano |   depreciacao_ano |   ebit_ajustado |   fluxo_caixa |   valor_presente_fluxo |\n|---:|-------:|--------------:|-------------:|--------------:|------------:|------------------:|----------------:|--------------:|-----------------------:|\n|  0 |   2025 |   1.33076e+10 | -2.67217e+09 |  -7.64776e+08 | 5.15005e+08 |       4.29901e+09 |     2.39161e+09 |   1.87661e+09 |            1.35887e+09 |\n|  1 |   2026 |   1.23418e+10 | -2.47824e+09 |  -7.09273e+08 | 4.77629e+08 |       3.98701e+09 |     2.21804e+09 |   1.74041e+09 |            9.12567e+08 |\n|  2 |   2027 |   1.14461e+10 | -2.29838e+09 |  -6.57798e+08 | 4.42966e+08 |       3.69765e+09 |     2.05707e+09 |   1.6141e+09  |            6.12844e+08 |\n|  3 |   2028 |   1.06154e+10 | -2.13158e+09 |  -6.10058e+08 | 4.10818e+08 |       3.4293e+09  |     1.90778e+09 |   1.49696e+09 |            4.11562e+08 |\n|  4 |   2029 |   9.84503e+09 | -1.97688e+09 |  -5.65784e+08 | 3.81003e+08 |       3.18042e+09 |     1.76932e+09 |   1.38832e+09 |            2.76389e+08 |',
+        {'Preco do fluxo de caixa para AMER3.SA': 17.12})}
+        
 
-        self.dados_sentimento = """"
+        self.dados_sentimento = """
          
             \nNew notice\nPetrobras anuncia novos investimentos
             \nNew notice\nResultados trimestrais superam expectativas
@@ -107,130 +107,84 @@ Outra área na África do Sul deve ser perfurada no segundo semestre, acrescento
 © 2000-2025 InfoMoney. Todos os direitos reservados.
 O InfoMoney preza a qualidade da informação e atesta a apuração de todo o conteúdo produzido por sua equipe, ressaltando, no entanto, que não faz qualquer tipo de recomendação de investimento, não se responsabilizando por perdas, danos (diretos, indiretos e incidentais), custos e lucros cessantes."""
 
-    @patch("chat_bots.ChatFundamentalistas")
-    def test_chat_fundamentalistas(self, mock_chat_fundamentalistas: MagicMock) -> None:
-        """Testa a função ChatFundamentalistas com diferentes queries."""
-        mock_chat_fundamentalistas.return_value = "Resposta simulada"
-        for query in [
-            f"Como está a saúde financeira da {self.ticker}",
-            f"Qual a tendência dos resultados da {self.ticker}",
-            f"Análise dos indicadores fundamentalistas da {self.ticker}",
-        ]:
-            result = ChatFundamentalistas(
+
+    async def test_chat_fundamentalistas_sync(self) -> None:
+        """Testa a função ChatFundamentalistas de forma síncrona."""
+        # Mock para simular resposta
+        with patch("agente_investimento.ChatFundamentalistas") as mock_chat:
+            mock_chat.return_value = "Resposta simulada"
+            
+            query = f"Como está a saúde financeira da {self.ticker}"
+            result = await ChatFundamentalistasComparacaoAsync(
                 query=query,
                 dados=[doc.page_content for doc in self.dados_fundamentalistas],
                 api_secret=SecretStr(self.api_secret_groq or ""),
-                modelo_llm="qwen-qwq-32b",
             )
-
+            
+            # Como é uma coroutine, precisamos aguardar
+            result = asyncio.run(result)
+            
             # Verificações
             self.assertIsNotNone(result)
             self.assertIsInstance(result, str)
 
-    @patch("chat_bots.ChatLimpaResposta")
-    def test_chat_limpa_resposta(self, mock_limpa_resposta: MagicMock) -> None:
-        """Testa a função ChatLimpaResposta com diferentes entradas."""
-        # Definir comportamento do mock
+    async def test_chat_analise_tecnica_sync(self) -> None:
+        """Testa a função ChatAnaliseTecnica de forma síncrona."""
+        with patch("agente_investimento.tratando_dados.TratandoDadosIndicadores") as mock_tratando:
+            with patch("agente_investimento.ChatAnaliseTecnica") as mock_chat:
+                mock_tratando.return_value = self.dados_indicadores
+                mock_chat.return_value = "Resposta limpa de análise técnica"
 
-        mock_limpa_resposta.return_value = (
-            "Notícia resumida sobre Petrobras e oportunidades na Argentina."
-        )
+                query = f"Faça uma análise técnica da {self.ticker}"
+                result = await ChatAnaliseTecnicaComparacao( 
+                    query=query,
+                    dados=[doc.page_content for doc in self.dados_indicadores],
+                    api_secret=SecretStr(self.api_secret_groq or ""),
+                )
 
-        # Testar função
-        result = ChatLimpaResposta(
-            query=self.exemplo_noticia,
-            ticke=self.ticker,
-            api_secret=SecretStr(self.api_secret_groq or ""),
-        )
+                # Verificações
+                self.assertIsNotNone(result)
+                self.assertIsInstance(result, str)
+                
 
-        # Verificações
-        self.assertIsNotNone(result)
-        self.assertIsInstance(result, str)
-        self.assertLess(len(result), len(self.exemplo_noticia))
-        self.assertTrue("Petrobras" in mock_limpa_resposta.return_value)
+    async def test_chat_valuation_sync(self) -> None:
+        """Testa a função ChatValuation de forma síncrona."""
+        with patch("agente_investimento.tratando_dados.TratandoDadosValuation") as mock_tratando:
+            with patch("agente_investimento.ChatValuation") as mock_chat:
+                mock_tratando.return_value = self.valuation_metodo_gordon
+                mock_chat.return_value = "Resposta limpa de valuation"
+                
+                query = f"Qual o valor de mercado da {self.ticker}"
+                result = await ChatValuationComparacao(
+                    query=query,
+                    valuation_metodo_gordon=self.valuation_metodo_gordon,
+                    valuation_fluxo_caixa=self.valution_metodo_fluxo_caixa,
+                    api_secret=SecretStr(self.api_secret_groq or ""),
+                )
 
-    @patch("tratando_dados.TratandoDadosIndicadores")
-    @patch("chat_bots.ChatAnaliseTecnica")
-    def test_chat_analise_tecnica(
-        self, mock_limpa_resposta: MagicMock, mock_tratando_dados_indicadores: MagicMock
-    ) -> None:
-        """Testa a função ChatAnaliseTecnica."""
-        mock_tratando_dados_indicadores.return_value = self.dados_indicadores
-        mock_limpa_resposta.return_value = "Resposta limpa de análise técnica"
+                # Verificações
+                self.assertIsNotNone(result)
+                self.assertIsInstance(result, str)
 
-        query = f"Faça uma análise técnica da {self.ticker}"
-        result = ChatAnaliseTecnica(
-            query=query,
-            dados=[doc.page_content for doc in self.dados_indicadores],
-            api_secret=SecretStr(self.api_secret_groq or ""),
-            modelo_llm="qwen-qwq-32b",
-        )
+    async def test_chat_sentimento_sync(self) -> None:
+        """Testa a função ChatSentimento de forma síncrona."""
+        with patch("agente_investimento.tratando_dados.TratarDadosNoticias") as mock_tratando:
+            with patch("agente_investimento.ChatSentimento") as mock_chat:
+                mock_tratando.return_value = self.dados_sentimento
+                mock_chat.return_value = "Resposta limpa de sentimento"
 
-        # Verificações
-        self.assertIsNotNone(result)
-        self.assertIsInstance(result, str)
+                query = f"Qual o sentimento das notícias sobre a {self.ticker}"
+                result = await ChatSentimentoComparacao(
+                    query=query,
+                    noticia=self.dados_sentimento,
+                    api_secret=SecretStr(self.api_secret_groq or ""),
+                )
 
-    @patch("tratando_dados.TratandoDadosValuation")
-    @patch("chat_bots.ChatValuation")
-    def test_chat_valuation(
-        self, mock_chat_valuation: MagicMock, mock_tratando_dados_valuation: MagicMock
-    ) -> None:
-        """Testa a função ChatValuation."""
-        # Configurar mocks
-        mock_tratando_dados_valuation.return_value = self.dados_valuation
-        mock_chat_valuation.return_value = "Resposta limpa de valuation"
-        query = f"Qual o valor de mercado da {self.ticker}"
-        result = ChatValuation(
-            query=query,
-            precos_atual_valuations=self.dados_valuation["precos_atual_valuations"],
-            indicadores_valuation_fluxo=self.dados_valuation[
-                "indicadores_valuation_fluxo"
-            ],
-            valuation_metodo_gordon=self.dados_valuation["valuation_metodo_gordon"],
-            valuation_fluxo_caixa=self.dados_valuation["valuation_fluxo_caixa"],
-            api_secret=SecretStr(self.api_secret_groq or ""),
-            modelo_llm="qwen-qwq-32b",
-        )
+                # Verificações
+                self.assertIsNotNone(result)
+                self.assertIsInstance(result, str)
 
-        # Verificações
-        self.assertIsNotNone(result)
-        self.assertIsInstance(result, str)
 
-    @patch("tratando_dados.TratarDadosNoticias")
-    @patch("chat_bots.ChatSentimento")
-    def test_chat_sentimento(
-        self, mock_chat_sentimento: MagicMock, mock_tratar_dados_noticias: MagicMock
-    ) -> None:
-        """Testa a função ChatSentimento."""
-        # Configurar mocks
-        mock_tratar_dados_noticias.return_value = self.dados_sentimento
-        mock_chat_sentimento.return_value = "Resposta limpa de sentimento"
+if __name__ == '__main__':
+    unittest.main()
 
-        query = f"Qual o sentimento das notícias sobre a {self.ticker}"
-        result = ChatSentimento(
-            query=query,
-            noticia=self.dados_sentimento,
-            api_secret=SecretStr(self.api_secret_groq or ""),
-            modelo_llm="qwen-qwq-32b",
-        )
-
-        # Verificações
-        self.assertIsNotNone(result)
-        self.assertIsInstance(result, str)
-
-    @patch("chat_bots.ChatTradutor")
-    def test_chat_tradutor(self, mock_chat_tradutor: MagicMock) -> None:
-        """Testa a função ChatTradutor."""
-        # Configurar mock
-        mock_chat_tradutor.return_value = "Translated text"
-
-        result = ChatTradutor(
-            query=self.dados_tradutor,
-            api_secret=SecretStr(self.api_secret_groq or ""),
-            modelo_llm="qwen-qwq-32b",
-        )
-
-        # Verificações
-        self.assertIsNotNone(result)
-        self.assertIsInstance(result, str)
-        self.assertGreater(len(result), 0)

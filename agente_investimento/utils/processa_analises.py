@@ -200,7 +200,8 @@ async def analise_investimento(state: State) -> Command[Literal["supervisor"]]:
         if isinstance(dados_input, list):
             dados_input = (
                 "\n".join(
-                    m.content if hasattr(m, "content") else str(m) for m in dados_input  # type: ignore
+                    m.content if hasattr(m, "content") else str(m)  # type: ignore
+                    for m in dados_input  # type: ignore
                 )
                 if dados_input
                 else ""

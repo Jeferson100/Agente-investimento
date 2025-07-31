@@ -1,7 +1,8 @@
-from ipeadatapy import timeseries
-from functools import lru_cache
-import yfinance as yf
 from datetime import datetime
+from functools import lru_cache
+
+import yfinance as yf
+from ipeadatapy import timeseries
 
 
 class DataCache:

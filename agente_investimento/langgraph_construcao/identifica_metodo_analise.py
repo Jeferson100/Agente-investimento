@@ -71,7 +71,9 @@ def identifica_metodo_analise(
     print("Entrei no identifica_metodo_analise")
     messages = state.get("messages", [])[-1]
     # Invoca a chain para identificar os tickers
-    resposta_metodo_analise: MetodoAnalise = llm_identifica_metodo_analise.invoke({"messages": messages})  # type: ignore
+    resposta_metodo_analise: MetodoAnalise = llm_identifica_metodo_analise.invoke(
+        {"messages": messages}
+    )  # type: ignore
 
     if "sem_analise" in resposta_metodo_analise.method_analysis:
         return Command(

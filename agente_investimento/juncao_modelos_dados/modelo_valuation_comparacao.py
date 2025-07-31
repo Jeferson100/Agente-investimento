@@ -55,16 +55,12 @@ class ModeloValuationComparacao:
     async def tratando_dados_valuation(self) -> tuple[Dict[str, str], Dict[str, str]]:
         dados_valuation = await self.dados_valuation()
 
-        # Primeiro, preencher os dicionários com os dados
         metodo_gordon = {}
         metodo_fluxo_caixa = {}
 
-        # Iterar sobre os dados do valuation e preencher os dicionários
         for ticker, valores in dados_valuation.items():
-            metodo_gordon[ticker] = valores[0]  # Primeiro elemento é o método Gordon
-            metodo_fluxo_caixa[ticker] = valores[
-                1
-            ]  # Segundo elemento é o fluxo de caixa
+            metodo_gordon[ticker] = valores[0]
+            metodo_fluxo_caixa[ticker] = valores[1]
 
         return metodo_gordon, metodo_fluxo_caixa
 

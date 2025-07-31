@@ -1,9 +1,9 @@
 import asyncio
+import time
 import warnings
 from typing import Optional
 from urllib.error import HTTPError
 
-import time
 import pandas as pd
 
 from .verificador_ticks import VerificadorTicks
@@ -43,7 +43,7 @@ class DadosFundamentalistas:
                     time.sleep(wait_time)
                 else:
                     raise e
-        raise Exception(f"Falhou após {max_retries} tentativas")  # pylint: disable=raise-missing-from
+        raise RuntimeError(f"Falhou após {max_retries} tentativas")  # pylint: disable=raise-missing-from
 
     async def dados_dre(self) -> pd.DataFrame:
         url = "https://raw.githubusercontent.com/Jeferson100/fundamentalist-stock-brazil/main/dados/dre.csv"

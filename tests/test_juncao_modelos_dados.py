@@ -5,10 +5,10 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 from agente_investimento import (
-    ModeloAnaliseTecnica,
-    ModeloFundamentos,
-    ModeloSentimento,
-    ModeloValuation,
+    ModeloAnaliseTecnicaComparacao,
+    ModeloFundamentosComparacaoAsync,
+    ModeloSentimentoComparacao,
+    ModeloValuationComparacao,
 )
 from pydantic import SecretStr
 
@@ -25,73 +25,72 @@ class TestJuncaoModelosDados(unittest.TestCase):
                 "API secret groq não definida. Configure a variável de ambiente GROQ_API_KEY"
             )
 
-        self.ticker = "PETR4"
+        self.ticker = ["PETR4", "VALE3"]
 
-    @patch("juncao_modelos_dados.ModeloValuation")
+    @patch("agente_investimento.ModeloValuationComparacao")
     def test_modelo_valuation(self, mock_modelo_valuation: MagicMock) -> None:
         mock_modelo_valuation.return_value = "Resposta do modelo de evaluation"
 
         query = f"Qual o valor de mercado da {self.ticker}"
 
-        modelo_valuation_instance = ModeloValuation(
+        modelo_valuation_instance = ModeloValuationComparacao(
             query=query,
-            ticker=self.ticker,
+            tickers=self.ticker,
             api_secret=SecretStr(self.api_secret_groq or ""),
             stream=False,
         )
 
-        result = modelo_valuation_instance.chat_valuation()
+        result = asyncio.run(modelo_valuation_instance.chat_valuation())
 
         self.assertIsNotNone(result)
 
         self.assertIsInstance(result, str)
 
-    @patch("juncao_modelos_dados.ModeloFundamentos")
+    @patch("agente_investimento.ModeloFundamentosComparacaoAsync")
     def test_modelo_fundamentos(self, mock_modelo_fundamentos: MagicMock) -> None:
         mock_modelo_fundamentos.return_value = "Resposta do modelo de fundamentos"
 
         query = f"Como está a saúde financeira da {self.ticker}"
 
-        modelo_fundamentos_instance = ModeloFundamentos(
+        modelo_fundamentos_instance = ModeloFundamentosComparacaoAsync(
             query=query,
-            ticker=self.ticker,
+            tickers=self.ticker,
             api_secret=SecretStr(self.api_secret_groq or ""),
             stream=False,
         )
 
-        response, dados_fundamentalistas = asyncio.run(
-            modelo_fundamentos_instance.chat_fundamentalistas()
+        response = asyncio.run(
+            modelo_fundamentos_instance.chat_fundamentalistas_comparacao()
         )
 
         self.assertIsNotNone(response)
-        self.assertIsNotNone(dados_fundamentalistas)
 
         self.assertIsInstance(response, str)
-        self.assertIsInstance(dados_fundamentalistas, list)
+    
 
-    @patch("juncao_modelos_dados.ModeloSentimento")
+    @patch("agente_investimento.ModeloSentimentoComparacao")
     def test_modelo_sentimento(self, mock_modelo_sentimento: MagicMock) -> None:
         mock_modelo_sentimento.return_value = "Resposta do modelo de sentimento"
 
         query = f"Qual o sentimento das notícias sobre a {self.ticker}"
 
-        modelo_sentimento_instance = ModeloSentimento(
+        modelo_sentimento_instance = ModeloSentimentoComparacao(
             query=query,
-            acao=self.ticker,
+            tickers=self.ticker,
             api_secret_groq=SecretStr(self.api_secret_groq or ""),
             api_secret_serper=SecretStr(self.api_key_serper or ""),
             stream=False,
         )
 
-        response, dados_new = modelo_sentimento_instance.chat_sentimento()
+        response = asyncio.run(modelo_sentimento_instance.chat_sentimento())
 
         self.assertIsNotNone(response)
-        self.assertIsNotNone(dados_new)
+
 
         self.assertIsInstance(response, str)
-        self.assertIsInstance(dados_new, str)
+      
 
-    @patch("juncao_modelos_dados.ModeloAnaliseTecnica")
+    @patch("agente_investimento.ModeloAnaliseTecnicaComparacao")
     def test_modelo_analise_tecnica(
         self, mock_modelo_analise_tecnica: MagicMock
     ) -> None:
@@ -101,19 +100,19 @@ class TestJuncaoModelosDados(unittest.TestCase):
 
         query = f"Faça uma análise técnica da {self.ticker}"
 
-        modelo_analise_tecnica_instance = ModeloAnaliseTecnica(
+        modelo_analise_tecnica_instance = ModeloAnaliseTecnicaComparacao(
             query=query,
-            ticker=self.ticker,
+            tickers=self.ticker,
             api_secret=SecretStr(self.api_secret_groq or ""),
             stream=False,
         )
 
-        response, dados_tecnicas = (
-            modelo_analise_tecnica_instance.chat_analise_tecnica()
+        response = asyncio.run(
+            modelo_analise_tecnica_instance.chat_analise_tecnica_comparacao()
         )
 
         self.assertIsNotNone(response)
-        self.assertIsNotNone(dados_tecnicas)
+
 
         self.assertIsInstance(response, str)
-        self.assertIsInstance(dados_tecnicas, list)
+

@@ -26,8 +26,8 @@ CHECKPOINT_URL = config(
     default="postgresql://postgres:postgres@localhost:5433/postgres",
 )
 
-logger.info(
-    f"DB_URI: {CHECKPOINT_URL}"
+logger.info(  # pylint: disable=logging-fstring-interpolation
+    f"DB_URI: {CHECKPOINT_URL}"  # pylint: disable=logging-fstring-interpolation
 )  # pylint: disable=logging-fstring-interpolation
 
 

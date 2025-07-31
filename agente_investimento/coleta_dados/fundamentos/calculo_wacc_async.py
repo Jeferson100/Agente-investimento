@@ -4,6 +4,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 
 import pandas as pd
+
 from ..data_cache import DataCache
 
 warnings.filterwarnings("ignore")
@@ -38,14 +39,14 @@ class CalculoWACCAsync:
             history_future = executor.submit(self.cache.get_history, self.ticker)
 
             # Aguardar a conclusão
-            self.info = (
-                info_future.result()
+            self.info = (  # pylint: disable=attribute-defined-outside-init
+                info_future.result()  # pylint: disable=attribute-defined-outside-init
             )  # pylint: disable=attribute-defined-outside-init
-            self.dividends = (
-                dividends_future.result()
+            self.dividends = (  # pylint: disable=attribute-defined-outside-init
+                dividends_future.result()  # pylint: disable=attribute-defined-outside-init
             )  # pylint: disable=attribute-defined-outside-init
-            self.history = (
-                history_future.result()
+            self.history = (  # pylint: disable=attribute-defined-outside-init
+                history_future.result()  # pylint: disable=attribute-defined-outside-init
             )  # pylint: disable=attribute-defined-outside-init
 
     async def juros_livre(self) -> float:
@@ -201,10 +202,10 @@ class CalculoWACCAsync:
 
             if wacc <= 0:
                 wacc = juros
-        except (
-            Exception,
-            ValueError,
-            TypeError,
+        except (  # pylint: disable=broad-exception-caught
+            Exception,  # pylint: disable=broad-exception-caught
+            ValueError,  # pylint: disable=broad-exception-caught
+            TypeError,  # pylint: disable=broad-exception-caught
             AttributeError,
         ) as e:  # pylint: disable=broad-exception-caught
             print(f"Erro ao calcular WACC: {e}")
