@@ -16,8 +16,8 @@ def generator_to_string(
             chunk_text = chunk.text
         else:
             chunk_text = str(chunk)
-        if chunk_text is not None and isinstance(chunk_text, str):
-            chunks.append(chunk_text)
+        
+        chunks.append(chunk_text) # type: ignore
 
     # Une todos os chunks em uma única string
     return "".join(chunks), chunks  # type: ignore
