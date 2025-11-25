@@ -1,7 +1,7 @@
 import asyncio
 from typing import Literal
 
-from langchain.schema import HumanMessage
+from langchain_core.messages import HumanMessage
 from langgraph.types import Command
 
 from ..juncao_modelos_dados import (

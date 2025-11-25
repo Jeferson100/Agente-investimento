@@ -14,11 +14,11 @@ PYTHON_INTERPRETER = python
 
 uv_install:
 	uv pip install --upgrade pip && \
-		uv pip install -r requirements.txt
+		uv pip install -r pyproject.toml
 
 install:
 	pip install --upgrade pip && \
-		pip install -r requirements.txt
+		pip install -r pyproject.toml
 
 import_format:
 	uv run isort agente_investimento/ app/ 

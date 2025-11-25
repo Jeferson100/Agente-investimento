@@ -2,7 +2,7 @@ import os
 from typing import Final, List, Literal
 
 from dotenv import load_dotenv
-from langchain.prompts.chat import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate
 from langgraph.types import Command
 from pydantic import BaseModel, Field
 
