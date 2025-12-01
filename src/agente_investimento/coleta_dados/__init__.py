@@ -1,3 +1,4 @@
+from .dados_docling_async import LinksExtractorDoclingLoaderAsync
 from .dados_fundamentalistas import DadosFundamentalistas
 from .dados_indicadores_tecnicos import DadosIndicadoresTecnicos
 from .dados_noticias_google import DadosNoticiasGoogle
@@ -5,6 +6,7 @@ from .dados_noticias_yahoo import DadosNoticiasBuscadorYahoo
 from .dados_noticias_yahoo_async import DadosNoticiasBuscadorYahooAsync
 from .dados_text_bs4 import LinksExtractorBS4
 from .dados_text_html import LinksExtractorHtml
+from .data_cache import DataCache
 from .fundamentos.calculo_wacc import CalculoWACC
 from .fundamentos.calculo_wacc_async import CalculoWACCAsync
 from .fundamentos.indicadores_financeiros import IndicadoresFinanceiros
@@ -28,15 +30,18 @@ from .fundamentos.variacao_receita_async import VariacaoReceitaAsync
 from .verificador_ticks import VerificadorTicks
 
 __all__ = [
+    "DataCache",
     "DadosFundamentalistas",
-    "VerificadorTicks",
-    "DadosNoticiasBuscadorYahoo",
-    "LinksExtractorHtml",
-    "LinksExtractorBS4",
-    "DadosNoticiasGoogle",
     "DadosIndicadoresTecnicos",
+    "DadosNoticiasBuscadorYahoo",
+    "DadosNoticiasBuscadorYahooAsync",
+    "DadosNoticiasGoogle",
     "IndicadoresFinanceiros",
     "IndicadoresFinanceirosAsync",
+    "LinksExtractorBS4",
+    "LinksExtractorDoclingLoaderAsync",
+    "LinksExtractorHtml",
+    "VerificadorTicks",
     "CalculoWACC",
     "CalculoWACCAsync",
     "VariacaoReceita",
@@ -51,5 +56,4 @@ __all__ = [
     "NecessidadeCapitalGiroAsync",
     "ValuationFluxoCaixaDescontado",
     "ValuationFluxoCaixaDescontadoAsync",
-    "DadosNoticiasBuscadorYahooAsync",
 ]

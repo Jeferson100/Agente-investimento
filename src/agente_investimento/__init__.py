@@ -121,6 +121,7 @@ from .utils.processa_analises import (
     process_technical,
     process_valuation,
 )
+from .consulta_banco_postgree import PostgresDBConsult
 
 # utils
 
@@ -202,4 +203,5 @@ __all__ = [
     "ModeloSentimentoComparacao",
     "identifica_metodo_analise",
     "identifica_ticks",
+    "PostgresDBConsult",
 ]

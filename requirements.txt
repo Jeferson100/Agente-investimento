@@ -74,4 +74,4 @@ pyrefly
 chainlit
 pytest-asyncio==1.1.0
 #nest-asyncio==1.6.0
-mkinit==1.10 # Para gerar __init__.py automaticamente
+
